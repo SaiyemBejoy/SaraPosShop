@@ -1,0 +1,5 @@
+E:\SaRa Project\POSSHOP\Models\bin\Debug\Models.dll
+E:\SaRa Project\POSSHOP\Models\bin\Debug\Models.pdb
+E:\SaRa Project\POSSHOP\Models\obj\Debug\Models.csproj.CoreCompileInputs.cache
+E:\SaRa Project\POSSHOP\Models\obj\Debug\Models.dll
+E:\SaRa Project\POSSHOP\Models\obj\Debug\Models.pdb

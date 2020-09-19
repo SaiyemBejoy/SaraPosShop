@@ -1,0 +1,82 @@
+﻿@using Models.AllModel
+@model Models.AllModel.PrivilegeCustomerModelForShop
+@{
+    ViewBag.Title = "PrivilegeCardList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var privilegeCustomerModelForShops = ViewBag.PrivilegeCustomer as List<PrivilegeCustomerModelForShop>;
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Privilege Customer
+                                </h3>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-bordered m-table m-table--border-success" id="privilegeCustomerTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Card Num</th>
+                                        <th>Customer Name</th>
+                                        <th>Contact No</th>
+                                        <th>Email</th>
+                                        <th>Address</th>
+                                        <th>Discount</th>
+                                        <th>Customer Type</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    @if (privilegeCustomerModelForShops != null && privilegeCustomerModelForShops.Count != 0)
+                                    {
+                                        foreach (var data in privilegeCustomerModelForShops)
+                                        {
+                                            <tr>
+                                                <td>@data.CustomerCode</td>
+                                                <td>@data.CustomerName</td>
+                                                <td>@data.ContactNo</td>
+                                                <td>@data.Email</td>
+                                                <td>@data.Address</td>
+                                                <td>@data.Discount</td>
+                                                <td>@data.CustomerType</td>
+                                            </tr>
+                                        }
+                                    }
+                                    </tbody>
+
+                                   
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        var table = $("#privilegeCustomerTable").dataTable();
+    });
+</script>

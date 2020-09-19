@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PosShop", "PosShop\PosShop.csproj", "{EB6F98A5-DA22-4E6E-899C-AAB908B100FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{3946029A-C873-4AFF-9992-9FFE3A5D9335}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{6633DC91-CA6B-497A-B4A4-59528607FF6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{72239D43-ADB5-4CEB-80A1-C1B8BAC78D8B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB6F98A5-DA22-4E6E-899C-AAB908B100FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB6F98A5-DA22-4E6E-899C-AAB908B100FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB6F98A5-DA22-4E6E-899C-AAB908B100FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB6F98A5-DA22-4E6E-899C-AAB908B100FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3946029A-C873-4AFF-9992-9FFE3A5D9335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3946029A-C873-4AFF-9992-9FFE3A5D9335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3946029A-C873-4AFF-9992-9FFE3A5D9335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3946029A-C873-4AFF-9992-9FFE3A5D9335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6633DC91-CA6B-497A-B4A4-59528607FF6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6633DC91-CA6B-497A-B4A4-59528607FF6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6633DC91-CA6B-497A-B4A4-59528607FF6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6633DC91-CA6B-497A-B4A4-59528607FF6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72239D43-ADB5-4CEB-80A1-C1B8BAC78D8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72239D43-ADB5-4CEB-80A1-C1B8BAC78D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72239D43-ADB5-4CEB-80A1-C1B8BAC78D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72239D43-ADB5-4CEB-80A1-C1B8BAC78D8B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {883E9392-F855-42EB-8B3E-AF57C0B554E0}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://masum626.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = PosShop\\PosShop.csproj
+		SccProjectName1 = PosShop
+		SccLocalPath1 = PosShop
+		SccProjectUniqueName2 = Models\\Models.csproj
+		SccProjectName2 = Models
+		SccLocalPath2 = Models
+		SccProjectUniqueName3 = DAL\\DAL.csproj
+		SccProjectName3 = DAL
+		SccLocalPath3 = DAL
+		SccProjectUniqueName4 = BLL\\BLL.csproj
+		SccProjectName4 = BLL
+		SccLocalPath4 = BLL
+	EndGlobalSection
+EndGlobal

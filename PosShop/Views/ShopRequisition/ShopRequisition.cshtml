@@ -1,0 +1,349 @@
+﻿@model Models.AllModel.ShopRequisitionModel
+@{
+    ViewBag.Title = "ShopRequisition";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            <div class="row">
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-6 col-form-label"><b>Requisition No#:</b></label>
+                                                        <div class="col-6">
+                                                            @if (ViewBag.GetMaxrequisitionNumber != null)
+                                                            {
+                                                                <input class="form-control m-input--air m-input--pill" id="requisitionNum" value="@ViewBag.GetMaxrequisitionNumber" readonly="readonly" style="background-color: goldenrod; width: 150px;margin-left: -31px; " type="text">
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="m-alert m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">
+                                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                                                    <strong>Warning!</strong> Internet Connection Is Not Avaiable.
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5 col-form-label"><b>Shop Name#:</b></label>
+                                                        <div class="col-7">
+                                                            @if (ViewBag.ShopList != null)
+                                                            {
+                                                                @Html.DropDownListFor(model => model.ShopId, (IEnumerable<SelectListItem>)ViewBag.ShopList, "--Select Option--", new { @class = "form-control m-input--air m-input--pill", @style = "width: 150px; margin-left: -20px;" })
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="m-alert m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">
+                                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                                                    <strong>Warning!</strong> Internet Connection Is Not Avaiable.
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4" style="position: center">
+                                                    <div class="form-group m-form__group row">
+                                                        <div class="col-6">
+                                                            <button type="button" id="OrderNow" class="btn m-btn--pill m- m-btn--gradient-from-danger m-btn--gradient-to-warning" style="font-size: 15px;font-weight: bold;"> Order Now</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <br />
+                                        <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                            <div class="m-portlet__head">
+                                                <div class="m-portlet__head-caption">
+                                                    <div class="m-portlet__head-title">
+                                                        <span class="m-portlet__head-icon">
+                                                            <i class="la la-thumb-tack"></i>
+                                                        </span>
+                                                        <h3 class="m-portlet__head-text">
+                                                            All Product List
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 10px;margin-right: 10px;">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label"><strong>Search:</strong></label>
+                                                        <div class="col-7">
+                                                            <input type="text" id="styleOrBarcode" class="form-control m-input--air m-input--pill" placeholder="Style/Barcode" style = "width:200px;font-size: 15px;"/>
+                                                            @*@Html.DropDownListFor(model => model.StyleName, (IEnumerable<SelectListItem>) ViewBag.StyleNameList, "Select Style", new {@class = " form-control m-input--air m-input--pill select2", @style = "width:200px"})*@
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet__body">
+                                                <div class="m-section__content">
+                                                    <table class="table table-bordered m-table m-table--border-danger m-table--head-bg-primary table-hover " id="ShopProductStockList">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="display: none">ItemId</th>
+                                                                <th style="display: none">ProductId</th>
+                                                                <th>BarCode</th>
+                                                                <th>Name</th>
+                                                                <th>Price</th>
+                                                                <th>Stock</th>
+                                                                <th>Category</th>
+                                                                <th>Sub Category</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="background-color: gainsboro" id="ShopProductStockListBody"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <div class="m-section__content">
+                                            <table class="table table-bordered m-table m-table--border-success m-table--head-bg-light " id="selectTableForShopRequisition">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>BarCode</th>
+                                                        <th>Name</th>
+                                                        <th>Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="selectTableForShopRequisitionBody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+
+        $('#styleOrBarcode').on('change', function () {
+            var shopId = $("#ShopId").val();
+            var styleName = $("#styleOrBarcode").val();
+            if (shopId !=="") {
+            $('#ShopProductStockList').DataTable().destroy();
+            //var url = '@DAL.DBManager.DatabaseConfiguration.WarehouseApi' + 'ShopToShopRequisition?shopId=' + shopId;
+            var url = '@DAL.DBManager.DatabaseConfiguration.WarehouseApi' + 'ShopToShopProductSearch?shopId=' + shopId + '&styleName=' + styleName;
+            var table = $("#ShopProductStockList").dataTable({
+                processing: true,
+                ajax: { url: url, dataSrc: "" },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                type: "GET",
+                columns: [
+                    {
+                        data: "barcode",
+                        render: function(data, type, object) {
+                            return "<p class ='barcode'>" +
+                                object.barcode +
+                                "</p>" +
+                                " <input type = 'hidden' class ='itemId' value = '" +
+                                object.itemId +
+                                "' />" +
+                                " <input type = 'hidden' class ='productId' value = '" +
+                                object.productId +
+                                "' />";
+
+                        }
+                    },
+                    { data: "itemName" },
+                    { data: "salePrice" },
+                    { data: "quantity" },
+                    { data: "category" },
+                    { data: "subCategory" }
+                ]
+
+            });
+            } else {
+                toastr.error("Select Shop Name!.");
+                $("#styleOrBarcode").val("")
+            }
+        });
+
+        $("body").on("click",
+            "#ShopProductStockListBody tr",
+            function() {
+                var barcode = $(this).find('.barcode').html();
+                var itemName = $(this).find('td:eq(1)').text();
+                var salePrice = $(this).find('td:eq(2)').html();
+                var quantity = $(this).find('td:eq(3)').html();
+                var itemId = $(this).find('.itemId').val();
+                var productId = $(this).find('.productId').val();
+
+                if (parseInt(quantity) == 0 || parseInt(quantity) < 0) {
+                    toastr.warning("Stock Out Product");
+                    return false;
+                }
+                var allItemCode = [];
+                allItemCode.length = 0;
+                var checker = true;
+                $.each($("#selectTableForShopRequisitionBody tr"),
+                    function() {
+                        var value = $(this).find('td:eq(2)').html();
+                        allItemCode.push({
+                            value
+                        });
+                    });
+                if (allItemCode.length > 0) {
+                    $.each(allItemCode,
+                        function(i, val) {
+                            if (barcode === val.value) {
+                                checker = false;
+                            }
+                        });
+                    if (checker) {
+                        appendTableForShopRequisition(barcode, itemName, salePrice, itemId, productId);
+
+                    } else {
+                        toastr.warning("Already Exist ..Enter Quantity.");
+
+                    }
+                } else {
+                    appendTableForShopRequisition(barcode, itemName, salePrice, itemId, productId);
+                }
+
+            });
+
+        // +
+        function appendTableForShopRequisition(barcode, itemName, salePrice, itemId, productId) {
+            $("#selectTableForShopRequisitionBody").append('<tr>' +
+                '<td style="display:none;">' +
+                itemId +
+                '</td>' +
+                '<td style="display:none;">' +
+                productId +
+                '</td>' +
+                '<td>' +
+                barcode +
+                '</td>' +
+                '<td>' +
+                itemName +
+                '</td>' +
+                '<td>' +
+                salePrice +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control input-circle requisitionQuantity" id="requisitionQuantity" value="' +
+                1 +
+                '">' +
+                '</td>' +
+                '<td>' +
+                '<a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a>' +
+                '</td>' +
+                '</tr>');
+        }
+
+        //Delete from grid Table
+        $(document).on('click',
+            'a.deleteItem',
+            function(e) {
+                e.preventDefault();
+                var self = $(this);
+                if (self != null) {
+                    $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800,
+                        function() {
+                            $(this).remove();
+                        });
+                } else {
+                    //t("delete hoi ni");
+                    toastr.error("Data cann't delete");
+                }
+            });
+        //End
+
+        $("#OrderNow").click(function() {
+            allDataSave();
+        });
+
+        function allDataSave() {
+
+            var requisitionNum = $("#requisitionNum").val();
+            var requisitionShopIdFrom = $("#ShopId").val();
+            var allShopRequisitionItem = [];
+            allShopRequisitionItem.length = 0;
+            $.each($("#selectTableForShopRequisitionBody tr"),
+                function() {
+                    allShopRequisitionItem.push({
+                        ItemId: $(this).find('td:eq(0)').html(),
+                        ProductId: $(this).find('td:eq(1)').html(),
+                        Barcode: $(this).find('td:eq(2)').html(),
+                        ItemName: $(this).find('td:eq(3)').text(),
+                        Price: $(this).find('td:eq(4)').html(),
+                        Quantity: $(this).find('#requisitionQuantity').val()
+                    });
+                });
+            var dataObject = {
+                'RequisitionNumber': requisitionNum,
+                'RequisitionShopIdFrom': requisitionShopIdFrom,
+                'ShopToShopRequisitionMainItemList': allShopRequisitionItem
+            }
+            var dataList = JSON.stringify({ objRequisitionMainModel: dataObject });
+            if (allShopRequisitionItem.length) {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("ShopToShopReQuisitionDataSave", "ShopRequisition")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.m  !== null) {
+                        if (data.isRedirect) {
+                            window.setTimeout(function() {
+                                window.location = data.redirectUrl;
+                            },1000);
+                            toastr.success("Save Successfully.");
+                            $('#cover-spin').hide();
+                            }
+                        } else {
+                            toastr.error("Something is wrong !.");
+                            $('#cover-spin').hide();
+                        }
+                    }
+                });
+
+            }
+        }
+    });
+</script>

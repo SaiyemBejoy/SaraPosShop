@@ -1,0 +1,192 @@
+﻿@using DAL.DBManager
+@model Models.ApiModel.ShopModel
+@{
+    ViewBag.Title = "Shop Setup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="jumbotron" style="border: 1px solid crimson">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="row">
+                        @using (Html.BeginForm("Save", "Shop", FormMethod.Post, new { @class = "m-form m-form--fit", @enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @*<form class="m-form m-form--fit">*@
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Shop ID:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="shopId" placeholder="DropdownList korte hobe ">*@
+                                    @*@Html.DropDownListFor(model => model.ShopId, (IEnumerable<SelectListItem>)ViewBag.ShopList, "--Select--", new {@class = "form-control" })*@
+                                    @Html.DropDownListFor(model => model.ShopId, new SelectList(ViewBag.ShopList, "Value", "Text"), "-- Select --", new { @class = "form-control m-input--air m-input--pill" })
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Shop Name:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="name" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.ShopName, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.ShopName)
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Address:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="address" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.ShopAddress, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.ShopAddress)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Contact No:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="contactNo" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.ContactNo, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.ContactNo)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Email:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="email" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.EmailAddress, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.EmailAddress)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">PostalCode:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="postalcode" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.PostalCode, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.PostalCode)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Date Of Enrollment:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="dateOfEnrollment" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.DateOfEnrollment, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.DateOfEnrollment)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">VAT NO:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="vat" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.VatNo, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.VatNo)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">TIN NO:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="tin" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.TINNo, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.TINNo)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">BIN NO:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="bin" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.BINNo, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.BINNo)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">FAX NO:</label>
+                                <div class="col-8">
+                                    @*<input class="form-control m-input--air m-input--pill" type="text" id="fax" readonly="readonly">*@
+                                    @Html.TextBoxFor(c => c.FAXNo, new { @class = "form-control m-input--air m-input--pill", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(c => c.FAXNo)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label"></label>
+                                <div class="col-md-8">
+                                    @Html.HiddenFor(c => c.CountryId)
+                                    @Html.HiddenFor(c => c.CountryName)
+                                    @Html.HiddenFor(c => c.WareHouseId)
+                                    @Html.HiddenFor(c => c.WareHouseName)
+                                    <button type="submit" class="btn m-btn--air circle" id="save" style="width: 120px"> Save</button>
+                                </div>
+
+                            </div>
+                            @*</form>*@
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+
+
+            </div>
+        </div>
+        <!--end::Portlet-->
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#ShopId").change(function () {
+            var shopId = $("#ShopId").val();
+            var url = '@DatabaseConfiguration.WarehouseApi';
+            $.ajax({
+                type: 'GET',
+                url: url + 'Shop',
+                dataType: 'json',
+                data: { shopId: shopId },
+                success: function (data) {
+                    console.log(data);
+                    if (data) {
+                        $("#ShopName").val(data[0].shopName);
+                        $("#ShopAddress").val(data[0].shopAddress);
+                        $("#ContactNo").val(data[0].contactNo);
+                        $("#EmailAddress").val(data[0].emailAddress);
+                        $("#PostalCode").val(data[0].postalCode);
+                        $("#DateOfEnrollment").val(data[0].dateOfEnrollment);
+                        $("#VatNo").val(data[0].vatNo);
+                        $("#TINNo").val(data[0].tinNo);
+                        $("#BINNo").val(data[0].binNo);
+                        $("#FAXNo").val(data[0].faxNo);
+                        $("#CountryId").val(data[0].countryId);
+                        $("#CountryName").val(data[0].countryName);
+                        $("#WareHouseId").val(data[0].wareHouseId);
+                        $("#WareHouseName").val(data[0].wareHouseName);
+                    } else {
+                        alert("Data Nai !");
+                    }
+
+
+                }
+
+            });
+
+        });
+
+        $("#save").click(function (e) {
+            var shopId = $("#ShopId").val();
+            var shopName = $("#ShopName").val();
+            var shopAddress = $("#ShopAddress").val();
+            var contactNo = $("#ContactNo").val();
+            var emailAddress = $("#EmailAddress").val();
+            var postalCode = $("#PostalCode").val();
+            var dateOfEnrollment = $("#DateOfEnrollment").val();
+            var vatNo = $("#VatNo").val();
+            var tINNo = $("#TINNo").val();
+            var bINNo = $("#BINNo").val();
+            var fAXNo = $("#FAXNo").val();
+
+
+        });
+
+    });
+</script>

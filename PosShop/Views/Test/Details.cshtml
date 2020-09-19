@@ -1,0 +1,58 @@
+﻿@model Models.AllModel.TestModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TestModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TestId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TestId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TestName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TestName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TestAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TestAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TestPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TestPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TestDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TestDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

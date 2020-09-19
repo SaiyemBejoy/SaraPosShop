@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{72239D43-ADB5-4CEB-80A1-C1B8BAC78D8B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BLL</RootNamespace>
+    <AssemblyName>BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IManager\IAuthManager.cs" />
+    <Compile Include="IManager\IDamageProductManager.cs" />
+    <Compile Include="IManager\IDashboardManager.cs" />
+    <Compile Include="IManager\IDataExchangeManager.cs" />
+    <Compile Include="IManager\IDropdownManager.cs" />
+    <Compile Include="IManager\IEmployeeManager.cs" />
+    <Compile Include="IManager\IInvoiceSearchManager.cs" />
+    <Compile Include="IManager\IPointOfSaleManager.cs" />
+    <Compile Include="IManager\IPriceChangeAndPromotionManager.cs" />
+    <Compile Include="IManager\IProductSearchManager.cs" />
+    <Compile Include="IManager\IReportManager.cs" />
+    <Compile Include="IManager\IRequisitionManager.cs" />
+    <Compile Include="IManager\IShopManager.cs" />
+    <Compile Include="IManager\IShopReceiveManager.cs" />
+    <Compile Include="IManager\IShopRequisitionManager.cs" />
+    <Compile Include="IManager\IStockTransferManager.cs" />
+    <Compile Include="IManager\IStoreHouseRequestManager.cs" />
+    <Compile Include="IManager\ITestManager.cs" />
+    <Compile Include="IManager\ITransitProductManager.cs" />
+    <Compile Include="IManager\IWareHouseDashboardManager.cs" />
+    <Compile Include="Manager\AuthManager.cs" />
+    <Compile Include="Manager\DamageProductManager.cs" />
+    <Compile Include="Manager\DashboardManager.cs" />
+    <Compile Include="Manager\DataExchangeManager.cs" />
+    <Compile Include="Manager\DropdownManager.cs" />
+    <Compile Include="Manager\EmployeeManager.cs" />
+    <Compile Include="Manager\InvoiceSearchManager.cs" />
+    <Compile Include="Manager\PointOfSaleManager.cs" />
+    <Compile Include="Manager\PriceChangeAndPromotionManager.cs" />
+    <Compile Include="Manager\ProductSearchManager.cs" />
+    <Compile Include="Manager\ReportManager.cs" />
+    <Compile Include="Manager\RequisitionManager.cs" />
+    <Compile Include="Manager\ShopManager.cs" />
+    <Compile Include="Manager\ShopReceiveManager.cs" />
+    <Compile Include="Manager\ShopRequisitionManager.cs" />
+    <Compile Include="Manager\StockTransferManager.cs" />
+    <Compile Include="Manager\StoreHouseRequestManager.cs" />
+    <Compile Include="Manager\TestManager.cs" />
+    <Compile Include="Manager\TransitProductManager.cs" />
+    <Compile Include="Manager\WareHouseDashboardManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{6633DC91-CA6B-497A-B4A4-59528607FF6E}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{3946029A-C873-4AFF-9992-9FFE3A5D9335}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

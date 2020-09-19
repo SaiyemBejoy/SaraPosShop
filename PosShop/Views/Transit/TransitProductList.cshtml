@@ -1,0 +1,95 @@
+﻿@using Models.AllModel
+@model Models.AllModel.TransitProductModel
+@{
+    ViewBag.Title = "TransitProductList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var objTransitModelList = ViewBag.TransitModelList;
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Transit Challan List
+                                </h3>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-bordered m-table m-table--border-danger" id="transitChallanTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Transit Challan Num</th>
+                                            <th>Transit Date</th>
+                                            <th>Transit By</th>
+                                            <th>Transit From</th>
+                                            <th>Transit To</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (objTransitModelList != null)
+                                        {
+                                            int counter = 1;
+                                            foreach (var data in objTransitModelList)
+                                            {
+                                                <tr>
+                                                    <td>@counter</td>
+                                                    <td>@data.TransitChallnNo</td>
+                                                    <td>@data.CreatedDate</td>
+                                                    <td>@data.CreateddByName</td>
+                                                    <td>@data.ShopName</td>
+                                                    <td>@data.MarketPlaceName</td>
+                                                    <td>
+                                                        @*<a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-accent m-btn--gradient-to-success damageItem" data-toggle="modal" href="#viewItemModal" data-id="@data.DamageChallanNo" id="damageItem">
+                                                            <i class="fa fa-eye"></i>
+                                                            View Item
+                                                        </a>*@
+                                                        <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger transitItemReport" href="" data-id="@data.TransitChallnNo" id="transitItemReport">
+                                                            <i class="fa fa-print"></i>
+                                                            Show Report
+                                                        </a>
+                                                        </td>
+                                                </tr>
+                                                counter = counter + 1;
+                                            }
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function () {
+        var datatable = $("#transitChallanTable").dataTable();
+        $("#transitChallanTable").on('click','.transitItemReport',function () {
+            var transitChallnNumber = $(this).data('id');
+            if (transitChallnNumber !== null) {
+                window.open('/Transit/ShowReport?transitChallanNo=' + transitChallnNumber, '_blank');
+            }
+        });
+    });
+    
+</script>

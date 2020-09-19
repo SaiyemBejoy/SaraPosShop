@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "allowJs": true,
+    "sourceMap": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "./src/**/*.js",
+    "./src/**/*.ts", "../../../Controllers/AdminHome", "../../../Utility/UtilityClass.cs", "../../../../Models/ApiModel/ShopModel.cs", "../../../../BLL/Manager/RequisitionManager.cs", "../../../../Models/AllModel/RequisitionMainModel.cs", "../../../../Models/AllModel/DamageMainItemModel.cs", "../../../Reports/Transfer/DamageTransferDetails.cs", "../../../Reports/SubReport/SubTransferDetails1.cs", "../../../Reports/Stock/StyleWiseHistory.cs"
+  ]
+}

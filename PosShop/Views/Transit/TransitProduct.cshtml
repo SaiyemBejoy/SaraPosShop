@@ -1,0 +1,655 @@
+﻿@model Models.AllModel.TransitProductModel
+@{
+    ViewBag.Title = "TransitProduct";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+</style>
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    Product Transit
+                                </h3>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                    <div class="m-portlet__body">
+                                        <div class="row">
+
+                                            <div class="col-md-4">
+                                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                                    <div class="m-portlet__body">
+                                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                                            <div class="form-group m-form__group row">
+                                                                <div class="col-1"></div>
+                                                                <label class="col-4 col-form-label">Scan Product:</label>
+                                                                <div class="col-7">
+                                                                    <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" id="scanProduct" placeholder="Scan Product">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group m-form__group row">
+                                                                <div class="col-1"></div>
+                                                                <label class="col-4 col-form-label">Growing Precent(%):</label>
+                                                                <div class="col-7">
+                                                                    <input class="form-control m-input--air m-input--pill growingPercentTxt" autocomplete="off" type="number" id="growingPercentTxt" value="0">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group m-form__group row">
+                                                                <div class="col-1"></div>
+                                                                <label class="col-4 col-form-label">Today Dollar Rate:</label>
+                                                                <div class="col-7">
+                                                                    <input class="form-control m-input--air m-input--pill dollarRatetxt" autocomplete="off" type="number" id="dollarRatetxt" value="0">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group m-form__group row">
+                                                                <div class="col-1"></div>
+                                                                <label class="col-4 col-form-label">Market Place:</label>
+                                                                <div class="col-7">
+                                                                    @Html.DropDownListFor(model => model.MarketPalceId, (IEnumerable<SelectListItem>)ViewBag.MarketPlaceNameList, "---Select---", new { @class = "form-control m-input--air m-input--pill" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-4"></div>
+                                                            <div class="col-4 text-center">
+                                                                <button type="button" id="Save" class="btn m-btn--pill btn-primary m-btn--wide">Save</button>
+                                                            </div>
+                                                            <div class="col-4"></div>
+                                                        </div>
+                                                        <br />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                                    <div class="m-portlet__head">
+                                                        <div class="m-portlet__head-caption">
+                                                            <div class="row">
+                                                                <div class="col-md-1"></div>
+                                                                <div class="col-md-5">
+
+                                                                    <div class="form-group m-form__group row">
+                                                                        <label class="col-7 col-form-label"><b>Total:</b></label>
+                                                                        <div class="col-5">
+                                                                            <strong>
+                                                                                <input type="text" class="form-control m-input--air m-input--pill" id="totalItemCount" style="width: 350%; background-color: yellow" readonly="readonly" />
+                                                                            </strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="m-portlet__body">
+                                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="m-section">
+                                                                        <div class="m-section__content">
+                                                                            <table class="table table-bordered m-table m-table--border-danger" id="ProductDetailsTable">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>BarCode</th>
+                                                                                        <th>Product Name</th>
+                                                                                        <th>Sale Price</th>
+                                                                                        <th>Growing(%)</th>
+                                                                                        <th>Growing price</th>
+                                                                                        <th>Dollar Rate</th>
+                                                                                        <th>USDollar($)</th>
+                                                                                        <th>QTY</th>
+                                                                                        <th>Stock</th>
+                                                                                        <th>Action</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody id="ProductDetailsTableBody"></tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        $("#scanProduct").focus();
+        //LocalStorage data auto Load
+        var localStorageData = JSON.parse(localStorage.getItem('transitProduct'));
+        if (localStorageData != null) {
+            tableBodyGenerateForLocalStorage(localStorageData);
+        }
+        //End
+        totalItemCount();
+
+        $("#ProductDetailsTableBody").on('change', '.transitQuantity', function () {
+            var thisRow = $(this);
+            deliveryQuantityValidation(thisRow);
+            totalItemCount();
+        });
+
+        $("#Save").click(function() {
+            transitDataSave();
+        });
+        //Barcode Scan
+        $('#scanProduct').on('change', function () {
+            var barcode = $("#scanProduct").val();
+            GetItemDetailsByBarCode(barcode);
+
+        });
+        //End
+        //Barcode Scan
+        $('#dollarRatetxt, #growingPercentTxt').on('change', function () {
+
+            var growingPercentTxt = parseFloat($(".growingPercentTxt").val());
+            var dollarRateTxt = parseFloat($(".dollarRatetxt").val());
+
+            $.each($("#ProductDetailsTableBody tr"), function () {
+                var salePrice = parseInt($(this).find('#salePrice').val());
+                var growingPrice = parseInt($(this).find('#growingPrice').val());
+                parseFloat($(this).find('#growingPercent').val(growingPercentTxt));
+
+                var resultForDiscount = (salePrice * growingPercentTxt) / 100;
+                var result = parseFloat(salePrice + resultForDiscount);
+                parseInt($(this).find('#growingPrice').val(result));
+
+                parseFloat($(this).find('.dollarRate').val(dollarRateTxt.toFixed(2)));
+                var dollar = (parseFloat(result / dollarRateTxt)).toFixed(2);
+                parseInt($(this).find('#usDollar').val(dollar));
+              
+            });
+
+        });
+        //End
+
+        $("#ProductDetailsTableBody").on('change', '.growingPercent', function () {
+            var thisRow = $(this);
+            rowDataCalculation(thisRow);
+        });
+        $("#ProductDetailsTableBody").on('keyup', '.dollarRate', function () {
+            var thisRow = $(this);
+            rowDataCalculation(thisRow);
+        });
+    });
+    function deliveryQuantityValidation(data2) {
+        var barcode = data2.parents('tr').find('td:eq(2)').text();
+        var quantity = parseInt(data2.parents('tr').find('.transitQuantity').val());
+        var currentStock = parseInt(data2.parents('tr').find('.currentStock').val());
+
+        if (quantity > currentStock) {
+            toastr.error("Transit Quantity Must Be Equal Or Less Than CurrentStock");
+            data2.parents('tr').find('.transitQuantity').val(currentStock);
+            var quantity = currentStock;
+        }
+        //for local storage a save
+        LocalStorageUpdateData = {
+            'Barcode': barcode,
+            'TransitQuantity': quantity
+        };
+        manageGridUpdateDelete(null, LocalStorageUpdateData);
+        //end
+
+    }
+    function scrollStopNumberField() {
+        $('input[type=number]').on('mousewheel', function (e) {
+            $(e.target).blur();
+        });
+    }
+    function totalItemCount() {
+        var total = 0;
+        $("#ProductDetailsTableBody tr").each(function () {
+            total += parseInt($(this).find('#transitQuantity').val());
+
+        });
+        $("#totalItemCount").val(total);
+    }
+    function GetItemDetailsByBarCode(barcode) {
+
+        $.ajax({
+            type: 'GET',
+            url: '/Transit/GetProductInfoByBarcode/',
+            dataType: 'json',
+            data: { barcode: barcode },
+            success: function (data) {
+                if (data !== 0) {
+                    //for local storage a save
+                    manageGridForScan(data);
+                    //end
+
+
+                    var barcode = $('#scanProduct').val();
+
+                    var allProductItemCode = [];
+                    allProductItemCode.length = 0;
+                    var checker = true;
+
+                    $.each($("#ProductDetailsTableBody tr"), function () {
+                        var value = $(this).find('td:eq(2)').text();
+                        var quantity = $(this).find('#transitQuantity').val();
+                        allProductItemCode.push({
+                            value, quantity
+                        });
+                    });
+
+                    if (allProductItemCode.length > 0) {
+
+                        $.each(allProductItemCode, function (i, val) {
+                            if (data.Barcode.toLowerCase() === val.value.toLowerCase()) {
+                                checker = false;
+                            }
+                        });
+                        if (checker) {
+                            if (!isNaN(data.ItemId) && data.ItemId) {
+                                if (data.RoundQuantity !== 0 && data.RoundQuantity > 0) {
+
+                                    tableBodyGenerate(data);
+                                    $("#scanProduct").val("");
+                                    totalItemCount();
+                                } else {
+                                    toastr.info("This Product is not Available!");
+                                    $("#scanProduct").val("");
+
+                                }
+
+                            } else {
+                                toastr.error("Invalid BarCode!!.");
+                                $("#scanProduct").val("");
+
+                            }
+                        } else {
+                            $.each($("#ProductDetailsTableBody tr"), function () {
+                                var value = $(this).find('td:eq(2)').text();
+                                var quantity = parseInt($(this).find('#transitQuantity').val());
+                                var currentStock = parseInt($(this).find('#currentStock').val());
+                                if (barcode.toLowerCase() === value.toLowerCase()) {
+                                    if (quantity < currentStock) {
+                                        $(this).find('#transitQuantity').val(parseInt(quantity) + 1);
+
+                                        totalItemCount();
+                                        toastr.success(" Add Same Item.");
+                                        $("#scanProduct").val("");
+                                    } else {
+                                        toastr.error(" Product Stock Out!");
+                                        $("#scanProduct").val("");
+                                        //for local storage a  Product Stockout hole oo save hossilo ai jonno
+                                        var quantity = currentStock;
+                                        LocalStorageUpdateData = {
+                                            'Barcode': barcode,
+                                            'TransitQuantity': quantity
+                                        };
+                                        manageGridUpdateDelete(null,LocalStorageUpdateData);
+                                        //end
+                                        return false;
+                                    }
+
+                                }
+                            });
+
+                        }
+                    } else {
+                        if (!isNaN(data.ItemId) && data.ItemId) {
+
+                            if (data.RoundQuantity !== 0 && data.RoundQuantity > 0) {
+                                tableBodyGenerate(data);
+                                $("#scanProduct").val("");
+                                totalItemCount();
+                            } else {
+                                toastr.info("This Product is not Available!");
+                                $("#scanProduct").val("");
+                            }
+
+                        } else {
+                            toastr.error("Invalid BarCode!!.");
+                            $("#scanProduct").val("");
+
+                        }
+
+                    }
+                } else {
+                    $("#scanProduct").val("");
+                    toastr.error("Invalid BarCode!!.");
+                }
+
+            }
+
+        });
+    }
+
+    function tableBodyGenerate(data) {
+
+        $("#ProductDetailsTableBody").append('<tr>' +
+            '<td style="display:none;">' +
+            data.ProductId +
+            '</td>' +
+            '<td style="display:none;">' +
+            data.ItemId +
+            '</td>' +
+            '<td>' +
+            data.Barcode +
+            '</td>' +
+            '<td>' +
+            data.ItemName +
+            '</td>' +
+            '<td>' +
+            '<input type="number" class="form-control input-circle salePrice" readonly="readonly" id="salePrice" step="0.01" value="' + data.SalePrice + '"' +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle growingPercent" id="growingPercent" step="0.01" value="' + 0 + '"' +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle growingPrice" readonly="readonly"  id="growingPrice" step="0.01" value="' + data.SalePrice + '"' +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle dollarRate" id="dollarRate" readonly="readonly" step="0.01" value="' + 0 + '"' +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle usDollar" readonly="readonly" id="usDollar" step="0.01" value="' + 0 + '"' +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle transitQuantity" id="transitQuantity" value="' + 1 + '"' +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle currentStock" readonly="readonly" id="currentStock" value="' + data.RoundQuantity + '"' +
+            '</td>' +
+
+            '<td><a href="#" class="deleteItem btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove</a></td>' +
+            '</tr>');
+        $("#scanProduct").val("");
+        scrollStopNumberField();
+    }
+
+    function validationCheckWithStock() {
+        var MarketPalceId = $("#MarketPalceId").val();
+        var growingPercentTxt = parseFloat($("#growingPercentTxt").val());
+        var dollarRatetxt = parseFloat($("#dollarRatetxt").val());
+
+        var totalCurrentStock = 0;
+        var totalTransitItem = 0;
+        $("#ProductDetailsTableBody tr").each(function () {
+            totalCurrentStock += parseInt($(this).find('.currentStock').val());
+            totalTransitItem += parseInt($(this).find('.transitQuantity').val());
+        });
+        if (totalTransitItem > totalCurrentStock || totalTransitItem === 0) {
+            toastr.info("Transit Quantity Must Be Equal Or Less Than CurrentStock");
+            return false;
+        }
+        if (isNaN(dollarRatetxt) || dollarRatetxt === 0) {
+            toastr.error("Enter Today Dollar Rate!.");
+            return false;
+        }
+        if (MarketPalceId === "---Select---" || MarketPalceId === "" ) {
+            toastr.error("Select Market Place!.");
+            return false;
+        }
+       
+
+        return true;
+    }
+
+    function tableBodyGenerateForLocalStorage(data) {
+
+        var transitData = data.length;
+        $("#ProductDetailsTableBody").html("");
+        if (transitData !== 0) {
+            for (var i = 0; i < transitData; i++) {
+                $("#ProductDetailsTableBody").append('<tr>' +
+                    '<td style="display:none;">' +
+                    data[i].ProductId +
+                    '</td>' +
+                    '<td style="display:none;">' +
+                    data[i].ItemId +
+                    '</td>' +
+                    '<td>' +
+                    data[i].Barcode +
+                    '</td>' +
+                    '<td>' +
+                    data[i].ItemName +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle salePrice" readonly="readonly" id="salePrice" step="0.01" value="' + data[i].SalePrice + '"' +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle growingPercent" id="growingPercent" step="0.01" value="' + 0 + '"' +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle growingPrice" readonly="readonly"  id="growingPrice" step="0.01" value="' + data[i].SalePrice + '"' +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle dollarRate" readonly="readonly" id="dollarRate" step="0.01" value="' + 0 + '"' +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle usDollar" readonly="readonly" id="usDollar" step="0.01" value="' + 0 + '"' +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle transitQuantity"  id="transitQuantity" value="' + data[i].TransitQuantity + '"' +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle currentStock" readonly="readonly" id="currentStock" value="' + data[i].CurrentStock + '"' +
+                    '</td>' +
+                    '<td><a href="#" class="deleteItem btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove</a></td>' +
+                    '</tr>');
+                scrollStopNumberField();
+            }
+        }
+    }
+    // Local Storage a add
+    function manageGridForScan(addItem) {
+        if (addItem.RoundQuantity > 0) {
+            filterData = {
+                'ItemId': addItem.ItemId,
+                'ProductId': addItem.ProductId,
+                'Barcode': addItem.Barcode,
+                'ItemName': addItem.ItemName,
+                'TransitQuantity': 1,
+                'CurrentStock': addItem.RoundQuantity,
+                'SalePrice': addItem.SalePrice,
+                'GrowingPrice': addItem.SalePrice,
+                'GrowingPercent': 0,
+                'USDollar': 0,
+                'USDollarRate': 0,
+
+            };
+            var productItemList = JSON.parse(localStorage.getItem('transitProduct'));
+            if (filterData) {
+                if (productItemList == null) {
+                    productItemList = [];
+                    productItemList.push(filterData);
+                } else {
+                    var checker = true;
+                    var barcode = filterData.Barcode;
+                    for (var i = 0; i < productItemList.length; i++) {
+                        if (productItemList[i].Barcode === barcode) {
+                            var transitQty = parseInt(productItemList[i].TransitQuantity);
+                            productItemList[i].TransitQuantity = transitQty + 1;
+                            checker = false;
+                            //toastr.success("Add Same Item.");
+                        }
+                    }
+                    if (checker) {
+                        productItemList.push(filterData);
+                    }
+                }
+            }
+
+            localStorage.setItem('transitProduct', JSON.stringify(productItemList));
+        }
+
+    };
+
+    function manageGridUpdateDelete(deleteItem, updateItem) {
+        var tableRowDataForUpdate = JSON.parse(localStorage.getItem('transitProduct'));
+
+        if (tableRowDataForUpdate) {
+            if (deleteItem) {
+                for (var l = 0; l < tableRowDataForUpdate.length; l++) {
+                    if (tableRowDataForUpdate[l].Barcode === deleteItem) {
+                        tableRowDataForUpdate.splice(l, 1);
+                    }
+                }
+            }
+            if (updateItem) {
+                var productCode1 = updateItem.Barcode;
+                var quantity1 = updateItem.TransitQuantity;
+                for (var j = 0; j < tableRowDataForUpdate.length; j++) {
+                    if (tableRowDataForUpdate[j].Barcode === productCode1) {
+                        tableRowDataForUpdate[j].TransitQuantity = quantity1;
+                    }
+                }
+            }
+        }
+
+        if (tableRowDataForUpdate) {
+            localStorage.setItem('transitProduct', JSON.stringify(tableRowDataForUpdate));
+        }
+
+        //End
+    }
+
+    function transitDataSave() {
+        var MarketPalceId = $("#MarketPalceId").val();
+
+         var allTransitItem = [];
+        allTransitItem.length = 0;
+        $.each($("#ProductDetailsTableBody tr"),
+            function() {
+                allTransitItem.push({
+                    ProductId: $(this).find('td:eq(0)').text(),
+                    ItemId: $(this).find('td:eq(1)').text(),
+                    Barcode: $(this).find('td:eq(2)').text(),
+                    ItemName: $(this).find('td:eq(3)').text(),
+                    SalePrice: $(this).find('.salePrice').val(),
+                    GrowingPrice: $(this).find('.growingPrice').val(),
+                    Quantity: $(this).find('.transitQuantity').val(),
+                    GrowingPercent: $(this).find('.growingPercent').val(),
+                    DollarRate: $(this).find('.dollarRate').val(),
+                    USDollar: $(this).find('.usDollar').val()
+
+                });
+            });
+
+        var dataObject = {
+            'MarketPalceId': MarketPalceId,
+            'TransitProductItemList': allTransitItem
+        }
+        var dataList = JSON.stringify({ objTransitProductModel: dataObject });
+        if (allTransitItem.length) {
+            if (validationCheckWithStock()) {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("SaveTransitData", "Transit")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.m  !== null) {
+                            if (data.isRedirect) {
+                                window.open('/Transit/ShowReport?transitChallanNo=' + data.m, '_blank');
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                                localStorage.removeItem('transitProduct');
+                            }else {
+                                toastr.error("Something is wrong !.");
+                                $('#cover-spin').hide();
+                            }
+
+                        } else {
+                            toastr.error("Something is wrong.Please ReCheck your Challan Details !.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+            }
+        } else {
+            toastr.error("Table Data Cann't Be Empty!");
+            $('#cover-spin').hide();
+        }
+    }
+
+    function rowDataCalculation(data) {
+        var barcode = data.parents('tr').find('td:eq(2)').text();
+        var salePrice = parseFloat(data.parents('tr').find('.salePrice').val());
+        var growingPrice = parseFloat(data.parents('tr').find('.growingPrice').val());
+        var growingPercent = parseFloat(data.parents('tr').find('.growingPercent').val());
+
+        var resultForDiscount = (salePrice * growingPercent) / 100;
+        var result = parseFloat(salePrice + resultForDiscount);
+
+        data.parents('tr').find('.growingPrice').val(result.toFixed(2));
+        var dollarRate = parseFloat(data.parents('tr').find('.dollarRate').val());
+        var dollar = (parseFloat(result / dollarRate)).toFixed(2);
+        data.parents('tr').find('.usDollar').val(dollar);
+
+
+    }
+
+    //Delete from grid Table
+    $(document).on('click', 'a.deleteItem', function (e) {
+        e.preventDefault();
+        var self = $(this);
+        var barcode = self.parents('tr').find('td:eq(2)').text();
+        if (self) {
+            $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+                $(this).remove();
+                totalItemCount();
+                manageGridUpdateDelete(barcode, null)
+            });
+        } else {
+
+            toastr.error("Data cann't delete");
+        }
+    });
+    //end
+</script>

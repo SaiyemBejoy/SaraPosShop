@@ -1,0 +1,410 @@
+﻿@using Models.AllModel
+@model Models.AllModel.UserMenuManageModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">User Role:</label>
+                                                        <div class="col-6">
+                                                            @Html.DropDownListFor(model => model.UserRole, (IEnumerable<SelectListItem>)ViewBag.UserRoleList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Menu:</label>
+                                                        <div class="col-6">
+                                                            @Html.DropDownListFor(model => model.MainMenu, (IEnumerable<SelectListItem>)ViewBag.MenuList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill " })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Controller:</label>
+                                                        <div class="col-6">
+                                                            <select class="form-control m-input--air m-input--pill" id="controllerList"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Action:</label>
+                                                        <div class="col-6">
+                                                            <select class="form-control m-input--air m-input--pill" id="actionList"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label"></label>
+                                                        <div class="col-8">
+                                                            <button type="button" id="AddGridMain" class="btn m-btn--pill m-btn m-btn--gradient-from-info m-btn--gradient-to-accent"> Add Grid</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">User Role:</label>
+                                                        <div class="col-6">
+                                                            @Html.DropDownListFor(model => model.UserRole, (IEnumerable<SelectListItem>)ViewBag.UserRoleList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill userRoleForSub" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Menu:</label>
+                                                        <div class="col-6">
+                                                            @Html.DropDownListFor(model => model.MainMenu, (IEnumerable<SelectListItem>)ViewBag.MenuListHaveSubMenu, "--Select Option--", new { @class = " form-control m-input--air m-input--pill mainMenu" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">SubMenu:</label>
+                                                        <div class="col-6">
+                                                            <select class="form-control m-input--air m-input--pill" id="subMenuList"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Controller:</label>
+                                                        <div class="col-6">
+                                                            <select class="form-control m-input--air m-input--pill" id="controllerListForSub"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Action:</label>
+                                                        <div class="col-6">
+                                                            <select class="form-control m-input--air m-input--pill" id="actionListForSub"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label"></label>
+                                                        <div class="col-8">
+                                                            <button type="button" id="AddGridSub" class="btn m-btn--pill m-btn m-btn--gradient-from-info m-btn--gradient-to-accent"> Add Grid</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    Main Menu Section
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="m-portlet__body">
+                                        <div id="table-wrapper">
+                                            <div id="table-scroll">
+                                                <table class="table table-bordered table-striped table-hover MainMenuPermision" id="MainMenuPermisionTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Role</th>
+                                                        <th>Menu</th>
+                                                        <th>Controller</th>
+                                                        <th>Action</th>
+                                                        <th>#</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="MainMenuPermisionTableBody" class="table-scroll"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    Sub Menu Section
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="m-portlet__body">
+                                        <div id="table-wrapper">
+                                            <div id="table-scroll">
+                                                <table class="table table-bordered table-striped table-hover SubMenuPermision" id="SubMenuPermisionTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Role</th>
+                                                            <th>SubMenu</th>
+                                                            <th>Menu</th>
+                                                            <th>Controller</th>
+                                                            <th>Action</th>
+                                                            <th>#</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="SubMenuPermisionTableBody" class="table-scroll"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-7"> <button type="button" id="saveNow" class="btn m-btn--pill m-btn m-btn--gradient-from-success m-btn--gradient-to-accent"> Save Now</button></div>
+                            <div class="col-md-1"></div>
+                        </div>
+                       
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function() {
+        //Controller
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            url: '@Url.Action("ControllerList", "UserMenuManage")',
+            success: function (data) {
+                $("#controllerList").append('<option>--Select Option--</option>');
+                for (var i = 0; i < data.length; i++) {
+                    $("#controllerList").append('<option  value="' + data[i] + '">' + data[i] + '</option>');
+                }
+
+                $("#controllerListForSub").append('<option>--Select Option--</option>');
+                for (var j = 0; j < data.length; j++) {
+                    $("#controllerListForSub").append('<option  value="' + data[j] + '">' + data[j] + '</option>');
+                }
+            }
+        });
+
+        //End
+        $("#controllerList").change(function () {
+            var controllerName = $("#controllerList").val();
+            $("#actionList").empty("");
+            $.ajax({
+                type: 'GET',
+                url: '/UserMenuManage/GetActionName/',
+                dataType: 'json',
+                data: { controllerName: controllerName },
+                success: function (data) {
+                    $("#actionList").append('<option>--Select Option--</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#actionList").append('<option  value="' + data[i].Action + '">' + data[i].Action + '</option>');
+                    }
+                }
+            });
+        });
+        $("#controllerListForSub").change(function () {
+            var controllerName = $("#controllerListForSub").val();
+            $("#actionListForSub").empty("");
+            $.ajax({
+                type: 'GET',
+                url: '/UserMenuManage/GetActionName/',
+                dataType: 'json',
+                data: { controllerName: controllerName },
+                success: function (data) {
+                    $("#actionListForSub").append('<option>--Select Option--</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#actionListForSub").append('<option  value="' + data[i].Action + '">' + data[i].Action + '</option>');
+                    }
+                }
+            });
+        });
+
+        $("#AddGridMain").click(function () {
+            var userRole = $("#UserRole").val();
+            var mainMenuId = $("#MainMenu").val();
+            var mainMenu = $("#MainMenu option:selected").text();
+            var controller = $("#controllerList").val();
+            var action = $("#actionList").val();
+            
+         
+            if (controller == null || controller === "--Select Option--" && action == null || action === "--Select Option--") {
+                controller = '#';
+                action = '#';
+            } else {
+                controller = controller;
+                action = action;
+            }
+            
+            $("#MainMenuPermisionTableBody").append('<tr>' +
+                '<td style="display:none;">' +
+                 mainMenuId +
+                '</td>' +
+                '<td>' +
+                userRole +
+                '</td>' +
+                '<td>' +
+                mainMenu +
+                '</td>' +
+                '<td>' +
+                controller +
+                '</td>' +
+                '<td>' +
+                action +
+                '</td>' +
+                '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                '</tr>');
+            $("#UserRole").val("");
+             $("#MainMenu ").val("");
+            $("#controllerList").val("");
+            $("#actionList").val("");
+
+        });
+
+        $("#AddGridSub").click(function () {
+            var userRole = $(".userRoleForSub").val();
+            var mainMenuId = $(".mainMenu").val();
+            var mainMenu = $(".mainMenu option:selected").text();
+            var subMenuId = $("#subMenuList").val();
+            var subMenu = $("#subMenuList option:selected").text();
+            var controller = $("#controllerListForSub").val();
+            var action = $("#actionListForSub").val();
+            $("#SubMenuPermisionTableBody").append('<tr>' +
+                '<td style="display:none;">' +
+                mainMenuId +
+                '</td>' +
+                '<td style="display:none;">' +
+                subMenuId +
+                '</td>' +
+                '<td>' +
+                userRole +
+                '</td>' +
+                '<td>' +
+                subMenu +
+                '</td>' +
+                '<td>' +
+                mainMenu +
+                '</td>' +
+                '<td>' +
+                controller +
+                '</td>' +
+                '<td>' +
+                action +
+                '</td>' +
+                '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                '</tr>');
+            $(".userRoleForSub").val("");
+            $(".mainMenu ").val("");
+            $("#subMenuList ").val("");
+            $("#controllerListForSub").val("");
+            $("#actionListForSub").val("");
+
+        });
+
+        $(".mainMenu").change(function () {
+            var manuId = $(".mainMenu").val();
+            $("#subMenuList").empty("");
+            $.ajax({
+                type: 'GET',
+                url: '/UserMenuManage/GetSubMenuListByMenuId/',
+                dataType: 'json',
+                data: { menuId: manuId },
+                success: function (data) {
+                    $("#subMenuList").append('<option>--Select Option--</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#subMenuList").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                    }
+                }
+            });
+        });
+
+        $("#saveNow").click(function() {
+            dataSave();
+        });
+
+        function dataSave() {
+            var allMainMenu = [];
+            allMainMenu.length = 0;
+            $.each($("#MainMenuPermisionTableBody tr"),
+                function() {
+                    allMainMenu.push({
+                        MainMenuId: $(this).find('td:eq(0)').text(),
+                        UserRole: $(this).find('td:eq(1)').text(),
+                        ControllerName: $(this).find('td:eq(3)').text(),
+                        ActionName: $(this).find('td:eq(4)').text()
+                    });
+                });
+            //---------------
+            var allSubMainMenu = [];
+            allSubMainMenu.length = 0;
+            $.each($("#SubMenuPermisionTableBody tr"),
+                function () {
+                    allSubMainMenu.push({
+                        MainMenuId: $(this).find('td:eq(0)').text(),
+                        SubMenuId: $(this).find('td:eq(1)').text(),
+                        UserRole: $(this).find('td:eq(2)').text(),
+                        ControllerName: $(this).find('td:eq(5)').text(),
+                        ActionName: $(this).find('td:eq(6)').text()
+                    });
+                });
+            //-------------------------------------
+            var dataList = JSON.stringify({ obMainMenuPermisionModels: allMainMenu, obSubMenuPermisionModels: allSubMainMenu });
+        
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("SaveAllData", "UserMenuManage")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.isRedirect) {
+                            window.setTimeout(function() {
+                                window.location = data.redirectUrl;
+                            },1000);
+                            toastr.success("Save Successfully.");
+                        }
+                    }
+                });
+            
+        }
+        //Delete from grid Table
+        $(document).on('click', 'a.deleteItem', function (e) {
+            e.preventDefault();
+            var self = $(this);
+            if (self) {
+                $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+                    $(this).remove();
+                });
+            } else {
+                //t("delete hoi ni");
+                toastr.error("Data cann't delete");
+            }
+        });
+    });
+</script>

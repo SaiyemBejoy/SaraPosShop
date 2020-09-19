@@ -1,0 +1,567 @@
+﻿@using Models.ApiModel
+
+@{
+    ViewBag.Title = "ShopRequisitionList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-6">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    Shop Requisition  List
+                                </h3>
+                                &nbsp; &nbsp; &nbsp;
+                                <h3>
+                                    <a href="@Url.Action("ShopRequisition", "ShopRequisition")" class="btn m-btn--pill    btn-success"><i class="fa fa-plus-circle"></i> New Requisition</a>
+
+                                </h3>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-bordered m-table m-table--border-success" id="requisitionToTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Requisition Number</th>
+                                            <th>Requisition To</th>
+                                            <th>Requisition Date</th>
+                                            <th>Created By</th>
+                                            <th>Delivery Status</th>
+                                            <th>Action</th>
+                                            <th>Report</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="requisitionToTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+
+            <div class="col-lg-6">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    Shop Requisition  From
+                                </h3>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-bordered m-table m-table--border-primary" id="requisitionFromTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Requisition Number</th>
+                                            <th>Requisition From</th>
+                                            <th>Requisition Date</th>
+                                            <th>Created By</th>
+                                            <th style="display: none">Requisition From Shop Id</th>
+                                            <th>Action</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="requisitionFromTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade show" id="ViewItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <span class="m-portlet__head-icon">
+                                            <i class="la la-thumb-tack"></i>
+                                        </span>
+                                        <h3 class="m-portlet__head-text">
+                                            Shop Requisition Item
+                                        </h3>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="m-portlet__body">
+
+                                <table class="table table-bordered m-table m-table--border-success" id="requItemListTable">
+                                    <thead>
+                                        <tr>
+
+                                            <th>BarCode</th>
+                                            <th>ItemName</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="requItemListTableBody"></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!-- Modal -->
+<div class="modal fade show" id="ViewFromItemModal" tabindex="-1" role="dialog" aria-labelledby="example2ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-striped- table-bordered table-hover dataTable dtr-inline" id="requFromItemListTable">
+                            <thead>
+                                <tr>
+
+                                    <th>BarCode</th>
+                                    <th>ItemName</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requFromItemListTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!-- Modal -->
+<div class="modal fade show" id="ViewDeliveryItemModal" tabindex="-1" role="dialog" aria-labelledby="example3ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-striped- table-bordered table-hover dataTable dtr-inline" id="requFromDeliveryItemListTable">
+                            <thead>
+                                <tr>
+
+                                    <th>BarCode</th>
+                                    <th>ItemName</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requFromDeliveryItemTableBody"></tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6 text-right">
+                                <button type="button" class="btn m-btn--pill  btn-success btn-lg m-btn m-btn--custom" id="deliveryItem">Delivery</button>
+                                <input type="hidden" name="requisitionNum" id="requisitionNum" />
+                                <input type="hidden" name="deliveryToShopId" id="deliveryToShopId" />
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<script>
+    var itemObject = {};
+    var fromItemObject = {};
+    $(document).ready( function () {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("ShopRequisitionAndItemList", "ShopRequisition")',
+            dataType: "json",
+            success: function (data) {
+                itemObject = data.toReQuisition;
+                fromItemObject = data.fromRequisition;
+                var requisitionList = data.toReQuisition.length;
+                $("#requisitionToTableBody").html("");
+                for (var i = 0; i < requisitionList; i++) {
+                    $("#requisitionToTableBody").append('<tr>' +
+                        '<td>' +
+                        data.toReQuisition[i].RequisitionNumber +
+                        '</td>' +
+                        '<td>' +
+                        data.toReQuisition[i].RequisitionShopNameTo +
+                        '</td>' +
+                        '<td>' +
+                        data.toReQuisition[i].RequisitionDate +
+                        '</td>' +
+                        '<td>' +
+                        data.toReQuisition[i].CreatedBy +
+                        '</td>' +
+                        (data.toReQuisition[i].DeliveryStatus === 'N' ? '<td> <a href="#" class="btn btn-danger m-btn m-btn--icon m-btn--pill status"  value = "' + 0 + '"><span><i class="fa fa-calendar-check-o"></i><span> <i class="fa fa-times-circle"></i> NO</span></span></a></td>' : '<td><a href="#" class="btn btn-success m-btn m-btn--icon m-btn--pill status" value = "' + 1+'"><span><i class="fa fa-calendar-check-o"></i><span>YES</span></span></a></td>' ) +
+                        '<td>' +
+                        ' <a class="btn m-btn--pill m-btn--air btn-warning m-btn--wide ViewItem" style = "font-weight: bold;" data-id="' + data.toReQuisition[i].RequisitionId + '" id="viewItem">' +
+                        ' <input type="hidden" name="requisitionNumber" value="' + data.toReQuisition[i].RequisitionNumber + '">'+
+                        ' <i class="fa fa-eye"></i> View Item'+
+                        '</a>' +
+                        '</td>' +
+                        '<td>' +
+                        ' <a class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--wide ShowReport" style = "font-weight: bold;" data-id="' + data.toReQuisition[i].RequisitionNumber + '" id="showReport">' +
+                        ' <i class="m-menu__link-icon flaticon-technology"></i>'+
+                        '</a>'+
+                        '</td>' +
+                        '</tr>');
+                }
+                $('#requisitionToTable').DataTable();
+
+                $("#requisitionFromTableBody").html("");
+
+                for (var j = 0; j < fromItemObject.length; j++) {
+                    $("#requisitionFromTableBody").append('<tr>' +
+                        '<td>' +
+                        fromItemObject[j].RequisitionNumber +
+                        '</td>' +
+                        '<td>' +
+                        fromItemObject[j].RequisitionShopNameFrom +
+                        '</td>' +
+                        '<td>' +
+                        fromItemObject[j].RequisitionDate +
+                        '</td>' +
+                        '<td>' +
+                        fromItemObject[j].CreatedBy +
+                        '</td>' +
+                        '<td style="display:none">' +
+                        fromItemObject[j].RequisitionShopIdFrom +
+                        '</td>' +
+                        '<td>' +
+                        ' <a class="btn m-btn--pill m-btn--air btn-warning m-btn--wide ViewFromItem" style = "font-size: 15px; font-weight: bold;" data-id="' + fromItemObject[j].RequisitionId + '" id="viewItem2">' +
+                        ' <i class="fa fa-eye"></i> View Item' +
+                        '</a>' +
+                        '</td>' +
+                        '<td>' +
+                        ' <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-success m-btn--gradient-to-accent ViewDeliveryFromItem" style = "font-size: 15px; font-weight: bold;" data-id="' + fromItemObject[j].RequisitionId + '" id="viewItem2">' +
+                        '<i class="fa fa-arrow-right"></i> Transfer Challan' +
+                        '</a>' +
+
+                        '</td>' +
+                        '</tr>');
+                }
+                $('#requisitionFromTable').DataTable();
+            }
+
+        });
+    });
+
+    $('#requisitionToTable').on('click', '.ShowReport', function () {
+        var requisitionNumber = $(this).data('id');
+        window.open('/ShopRequisition/ShowReport?requisitionChallanNo=' + requisitionNumber, '_blank');
+    });
+
+    $('#requisitionToTable').on('click', '.ViewItem', function () {
+        var requisitionId = $(this).data('id');
+        var requisitionNumber = $(this).parents('tr').find('input[name="requisitionNumber"]').val();
+        var deliveryStatus = "";
+        $("#requItemListTableBody").html("");
+        for (var i = 0; i < itemObject.length; i++) {
+            if (itemObject[i].RequisitionId === requisitionId) {
+
+                deliveryStatus = itemObject[i].DeliveryStatus;
+
+                for (var j = 0; j < itemObject[i].ShopToShopRequisitionMainItemList.length; j++) {
+                    $("#requItemListTableBody").append('<tr>' +
+                        '<td>' +
+                        itemObject[i].ShopToShopRequisitionMainItemList[j].Barcode +
+                        '</td>' +
+                        '<td>' +
+                        itemObject[i].ShopToShopRequisitionMainItemList[j].ItemName +
+                        '</td>' +
+                        '<td>' +
+                        itemObject[i].ShopToShopRequisitionMainItemList[j].Price +
+                        '</td>' +
+                        '<td>' +
+                        itemObject[i].ShopToShopRequisitionMainItemList[j].Quantity +
+                        '</td>' +
+                        '</tr>');
+                }
+            }
+        }
+        if (deliveryStatus === 'N') {
+            toastr.error("Delivery Status No;");
+        } 
+
+        $("#ViewItemModal").modal('show');
+    });
+
+    $('#requisitionFromTable').on('click',
+        '.ViewFromItem',
+        function(e) {
+            var requisitionId = $(this).data('id');
+            $("#requFromItemListTableBody").html("");
+            for (var i = 0; i < fromItemObject.length; i++) {
+                if (fromItemObject[i].RequisitionId === requisitionId) {
+                    for (var j = 0; j < fromItemObject[i].ShopToShopRequisitionMainItemList.length; j++) {
+                        $("#requFromItemListTableBody").append('<tr>' +
+                            '<td>' +
+                            fromItemObject[i].ShopToShopRequisitionMainItemList[j].Barcode +
+                            '</td>' +
+                            '<td>' +
+                            fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemName +
+                            '</td>' +
+                            '<td>' +
+                            fromItemObject[i].ShopToShopRequisitionMainItemList[j].Price +
+                            '</td>' +
+                            '<td>' +
+                            fromItemObject[i].ShopToShopRequisitionMainItemList[j].Quantity +
+                            '</td>' +
+                            '</tr>');
+                    }
+                }
+            }
+
+            $("#ViewFromItemModal").modal('show');
+        });
+
+    $('#requisitionFromTable').on('click',
+        '.ViewDeliveryFromItem',
+        function(e) {
+            var requisitionId = $(this).data('id');
+            var requisitionNumber = $(this).parents('tr').find('td:eq(0)').text();
+            var requisitionShopIdFrom = $(this).parents('tr').find('td:eq(4)').text();
+            $("#requisitionNum").val(requisitionNumber);
+            $("#deliveryToShopId").val(requisitionShopIdFrom);
+            var ObjectForLocalStorage = [];
+            $("#requFromDeliveryItemTableBody").html("");
+            for (var i = 0; i < fromItemObject.length; i++) {
+                if (fromItemObject[i].RequisitionId === requisitionId) {
+                    for (var j = 0; j < fromItemObject[i].ShopToShopRequisitionMainItemList.length; j++) {
+                        filterDataForArray = {
+                            'ShopToShoprequisitionNum': requisitionNumber,
+                            'ItemId': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemId,
+                            'ProductId': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ProductId,
+                            'Barcode': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Barcode,
+                            'ItemName': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemName,
+                            'TransferQuantity': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Quantity,
+                            'CurrentStock': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemStock,
+                            'SalePrice': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Price,
+                            'Umo': '',
+                            'Vat': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Vat
+                        };
+                        ObjectForLocalStorage.push(filterDataForArray);
+                    }
+                }
+            }
+            localStorage.removeItem('transferProduct');
+            localStorage.setItem('transferProduct', JSON.stringify(ObjectForLocalStorage));
+            window.open('/StockTransfer/StockTransfer', '_blank');
+
+            //for (var i = 0; i < fromItemObject.length; i++) {
+            //    if (fromItemObject[i].RequisitionId === requisitionId) {
+            //        for (var j = 0; j < fromItemObject[i].ShopToShopRequisitionMainItemList.length; j++) {
+            //            $("#requFromDeliveryItemTableBody").append('<tr>' +
+            //                '<td style="display:none">' +
+            //                fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemId +
+            //                '</td>' +
+            //                '<td style="display:none">' +
+            //                fromItemObject[i].ShopToShopRequisitionMainItemList[j].ProductId +
+            //                '</td>' +
+            //                '<td>' +
+            //                fromItemObject[i].ShopToShopRequisitionMainItemList[j].Barcode +
+            //                '</td>' +
+            //                '<td>' +
+            //                fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemName +
+            //                '</td>' +
+            //                '<td>' +
+            //                fromItemObject[i].ShopToShopRequisitionMainItemList[j].Price +
+            //                '</td>' +
+            //                '<td style="width: 13%">' +
+            //                '<input type="number" class="form-control input-circle deliveryQuantity" id="deliveryQuantity" value="' +
+            //                fromItemObject[i].ShopToShopRequisitionMainItemList[j].Quantity +
+            //                '">' +
+            //                '</td>' +
+            //                '<td>' +
+            //                '<a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a>' +
+            //                '</td>' +
+            //                '</tr>');
+            //        }
+            //    }
+            //}
+
+            //$("#ViewDeliveryItemModal").modal('show');
+        });
+
+    $("#ReceiveForDeliveryItem").click(function() {
+        receiveDeliveryAllDataSave();
+    });
+
+    $("#deliveryItem").click(function() {
+        deliveryAllDataSave();
+    });
+
+    function deliveryAllDataSave() {
+        var requisitionNum = $('input[name="requisitionNum"]').val();
+        var deliveryShopToId = $('input[name="deliveryToShopId"]').val();
+
+        var allDeliveryItem = [];
+        allDeliveryItem.length = 0;
+        $.each($("#requFromDeliveryItemTableBody tr"),
+            function() {
+                allDeliveryItem.push({
+                    ItemId: $(this).find('td:eq(0)').html(),
+                    ProductId: $(this).find('td:eq(1)').html(),
+                    Barcode: $(this).find('td:eq(2)').html(),
+                    ItemName: $(this).find('td:eq(3)').text(),
+                    Price: $(this).find('td:eq(4)').html(),
+                    Quantity: $(this).find('.deliveryQuantity').val()
+                });
+            });
+        var dataObject = {
+            'RequisitionNumber': requisitionNum,
+            'DeliveryShopIdTo': deliveryShopToId,
+            'ShopToShopRequDeliveryItemModelList': allDeliveryItem
+        }
+        var dataList = JSON.stringify({ objShopToShopDeliveryModel: dataObject });
+        if (allDeliveryItem.length) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveAllShopToShopDeliveryData", "ShopRequisition")',
+                data: dataList,
+                success: function(data) {
+                    if (data.isRedirect) {
+                        window.setTimeout(function() {
+                                window.location = data.redirectUrl;
+                            },
+                            1000);
+                        toastr.success("Save Successfully.");
+                    }
+                }
+            });
+        } else {
+            toastr.error("Table Data Cann't Be Empty!");
+        }
+
+    }
+
+    function receiveDeliveryAllDataSave() {
+        var requisitionNumber = $("#RequisitionNumber").val();
+        var deliveryNumber = $("#DeliveryNumber").val();
+
+        var allReceiveItem = [];
+        allReceiveItem.length = 0;
+        $.each($("#requItemDeliveryListTableBody tr"),
+            function() {
+                allReceiveItem.push({
+                    ItemId: $(this).find('td:eq(0)').html(),
+                    ProductId: $(this).find('td:eq(1)').html(),
+                    Barcode: $(this).find('td:eq(2)').html(),
+                    ItemName: $(this).find('td:eq(3)').html(),
+                    Price: $(this).find('td:eq(4)').html(),
+                    Quantity: $(this).find('td:eq(5)').html()
+                });
+            });
+        var dataObject = {
+            'RequisitionNumber': requisitionNumber,
+            'DeliveryNumber': deliveryNumber,
+            'ShopToShopShopToShopReceiveItemList': allReceiveItem
+        }
+        var dataList = JSON.stringify({ objShopToShopReceiveMainModel: dataObject });
+        if (dataList != null) {
+
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveAllShopToShopReceiveData", "ShopRequisition")',
+            data: dataList,
+            success: function (data) {
+                if (data.isRedirect) {
+                    window.setTimeout(function() {
+                        window.location = data.redirectUrl;
+                    },1000);
+                    toastr.success("Save Successfully.");
+                }
+            }
+            });
+        } else {
+            toastr.error("Data NOt found!.");
+        }
+    } 
+    //Delete from grid Table
+    $(document).on('click', 'a.deleteItem', function (e) {
+        e.preventDefault();
+        var self = $(this);
+        if (self != null) {
+            $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+                $(this).remove();
+            });
+        } else {
+            //t("delete hoi ni");
+            toastr.error("Data cann't delete");
+        }
+    });
+    //End
+   
+</script>

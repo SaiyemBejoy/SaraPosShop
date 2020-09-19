@@ -1,0 +1,161 @@
+﻿@model Models.AllModel.Report.StockReportModel
+@{
+    ViewBag.Title = "StockDetails";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h2 class="m-portlet__head-text">
+                                    Stock Report
+                                </h2>
+
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+
+                                        @using (Html.BeginForm("StockDetails", "AllReport", FormMethod.Post, new { @class = "m-form m-form--fit" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                        <div class="row">
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-3">
+                                                <div class="form-group m-form__group row" id="categoryHideDiv">
+                                                    <label class="col-4 col-form-label"><strong> Category:</strong></label>
+                                                    <div class="col-8">
+                                                        @Html.DropDownListFor(model => model.CategoryName, (IEnumerable<SelectListItem>)ViewBag.CategoryList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group m-form__group row" id="subCategoryHideDiv">
+                                                    <label class="col-4 col-form-label"><strong>Sub Category:</strong></label>
+                                                    <div class="col-8">
+                                                        @*@Html.DropDownListFor(model => model.SubCategoryName, (IEnumerable<SelectListItem>)ViewBag.SubCategoryList, "-Select Option-", new { @class = " form-control m-input--air m-input--pill" })*@
+                                                        <select name="subcategoryName" id="subcategoryName" class="form-control m-input--air m-input--pill">
+                                                            <option value="">--SubCategory--</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group m-form__group row" id="styleDiv">
+                                                    <label class="col-4 col-form-label"><strong> Style:</strong></label>
+                                                    <div class="col-8">
+                                                        @Html.DropDownListFor(model => model.ProductStyle, (IEnumerable<SelectListItem>)ViewBag.ProductStyleList, "--Select Option--", new { @class = "select2 form-control m-input--air m-input--pill" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group m-form__group row">
+                                                    <div class="col-4"></div>
+                                                    <div class="col-8">
+                                                        <button type="submit" formtarget="_blank" class="btn m-btn m-btn--gradient-from-danger m-btn--gradient-to-warning"><i class="m-menu__link-icon flaticon-technology"></i> Show Now</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           <div class="col-md-2"></div>
+                                            <div class="col-md-3">
+                                                <h2>Options:</h2>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-5"><b> Current Stock:</b></label>
+                                                    <div class="col-7">
+                                                        @Html.RadioButtonFor(model => model.RadioFor, "CS", new { @checked = true, @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+                                                    </div>
+                                                    <label class="col-5"><b> Style Wise Stock:</b></label>
+                                                    <div class="col-7">
+                                                        @Html.RadioButtonFor(model => model.RadioFor, "SWS", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+                                                    </div>
+                                                    <label class="col-5"><b> Low Stock:</b></label>
+                                                    <div class="col-7">
+                                                        @Html.RadioButtonFor(model => model.RadioFor, "LS", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+                                                    </div>
+                                                    <label class="col-5"><b> Style Stock Summary:</b></label>
+                                                    <div class="col-7">
+                                                        @Html.RadioButtonFor(model => model.RadioFor, "SSS", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+                                                    </div>
+                                                    <label class="col-5"><b> Style Wise History:</b></label>
+                                                    <div class="col-7">
+                                                        @Html.RadioButtonFor(model => model.RadioFor, "SWH", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    jQuery(document).ready(function () {
+        $("#ProductStyle").prop("disabled", true);
+
+        $("#CategoryName").change(function () {
+            var categoryName = $("#CategoryName").val();
+            $.ajax({
+                type: 'GET',
+                url: '/AllReport/GetAllSubCategoryName/',
+                dataType: 'json',
+                data: { categoryName: categoryName },
+                success: function (data) {
+                    if (data != null) {
+                        $("#subcategoryName").val(0).text("");
+                        $("#subcategoryName").append('<option value="">--SubCategory--</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $("#subcategoryName").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                        }
+
+                    } else {
+                        toastr.error("No Data Found.");
+                    }
+
+                }
+            });
+
+        });
+
+        $(':radio[name=RadioFor]').change(function () {
+            var value = $(this).val();
+            if (value === 'SWS') {
+                $("#CategoryName").prop("disabled", true);
+                $("#subcategoryName").prop("disabled", true);
+                $("#ProductStyle").prop("disabled", false);
+            } else if (value === 'SWH') {
+                $("#CategoryName").prop("disabled", true);
+                $("#subcategoryName").prop("disabled", true);
+                $("#ProductStyle").prop("disabled", false);
+            } 
+            else {
+                $("#CategoryName").prop("disabled", false);
+                $("#subcategoryName").prop("disabled", false);
+                $("#ProductStyle").prop("disabled", true);
+            }
+        });
+    });
+</script>

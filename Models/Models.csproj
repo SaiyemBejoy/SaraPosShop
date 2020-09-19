@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3946029A-C873-4AFF-9992-9FFE3A5D9335}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Models</RootNamespace>
+    <AssemblyName>Models</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AllModel\AuthModel.cs" />
+    <Compile Include="AllModel\ChangePasswordModel.cs" />
+    <Compile Include="AllModel\CustomerInfoModel.cs" />
+    <Compile Include="AllModel\CustomerSaleModel.cs" />
+    <Compile Include="AllModel\DamageMainItemModel.cs" />
+    <Compile Include="AllModel\DamageMainModel.cs" />
+    <Compile Include="AllModel\DashboardModel.cs" />
+    <Compile Include="AllModel\DataTableAjaxPostModel.cs" />
+    <Compile Include="AllModel\ExchangeHistoryModel.cs" />
+    <Compile Include="AllModel\GiftVoucherModel.cs" />
+    <Compile Include="AllModel\HotSaleAndLowStockModel.cs" />
+    <Compile Include="AllModel\ItemInfoModel.cs" />
+    <Compile Include="AllModel\ItemInfoShopReceiveModel.cs" />
+    <Compile Include="AllModel\MainMenuPermisionModel.cs" />
+    <Compile Include="AllModel\MenuMainModel.cs" />
+    <Compile Include="AllModel\MenuSubModel.cs" />
+    <Compile Include="AllModel\OtherCompanyOfferModel.cs" />
+    <Compile Include="AllModel\PointOfSaleModel.cs" />
+    <Compile Include="AllModel\PrivilegeCustomerModelForShop.cs" />
+    <Compile Include="AllModel\ProductSearchModel.cs" />
+    <Compile Include="AllModel\Report\SaleReportModel.cs" />
+    <Compile Include="AllModel\Report\SalesManReportModel.cs" />
+    <Compile Include="AllModel\RequisitionMainItemModel.cs" />
+    <Compile Include="AllModel\RequisitionMainModel.cs" />
+    <Compile Include="AllModel\ReturnSaleInfoModel.cs" />
+    <Compile Include="AllModel\SaleInfoModel.cs" />
+    <Compile Include="AllModel\SaleItemModel.cs" />
+    <Compile Include="AllModel\SalePaymentInfoModel.cs" />
+    <Compile Include="AllModel\SearchHintsModel.cs" />
+    <Compile Include="AllModel\ShopRequisitionModel.cs" />
+    <Compile Include="AllModel\ShopToShopReceiveItemModel.cs" />
+    <Compile Include="AllModel\ShopToShopReceiveMainModel.cs" />
+    <Compile Include="AllModel\StockCalculateSummary.cs" />
+    <Compile Include="AllModel\StockTransferItemModel.cs" />
+    <Compile Include="AllModel\StockTransferModel.cs" />
+    <Compile Include="AllModel\StoreHouseItemModel.cs" />
+    <Compile Include="AllModel\StoreHouseModel.cs" />
+    <Compile Include="AllModel\StoreHouseProductSearchModel.cs" />
+    <Compile Include="AllModel\StoreHouseRequestItemModelSubmit.cs" />
+    <Compile Include="AllModel\StoreHouseRequestMain.cs" />
+    <Compile Include="AllModel\StoreHouseRequestMainItem.cs" />
+    <Compile Include="AllModel\StoreHouseRequestMainItemConfirm.cs" />
+    <Compile Include="AllModel\SubMenuPermisionModel.cs" />
+    <Compile Include="AllModel\TransitProductItem.cs" />
+    <Compile Include="AllModel\TransitProductModel.cs" />
+    <Compile Include="AllModel\UserMenuManageModel.cs" />
+    <Compile Include="ApiModel\CircularDiscountPromotionModel.cs" />
+    <Compile Include="ApiModel\CircularPriceChangeMain.cs" />
+    <Compile Include="ApiModel\CircularPriceChangeSub.cs" />
+    <Compile Include="ApiModel\DamageTransferItem.cs" />
+    <Compile Include="ApiModel\DamageTransferMain.cs" />
+    <Compile Include="ApiModel\DcProductSearchModel.cs" />
+    <Compile Include="ApiModel\DeliveredProduct.cs" />
+    <Compile Include="AllModel\EmployeeModel.cs" />
+    <Compile Include="ApiModel\GiftVoucherDeliveryModel.cs" />
+    <Compile Include="ApiModel\HotSaleItemModel.cs" />
+    <Compile Include="ApiModel\SalesManWiseSaleReportForDc.cs" />
+    <Compile Include="ApiModel\SaleInfoWarehouseUpdate.cs" />
+    <Compile Include="ApiModel\ShopModel.cs" />
+    <Compile Include="AllModel\StoreReceiveItem.cs" />
+    <Compile Include="AllModel\StoreReceiveModel.cs" />
+    <Compile Include="AllModel\TestModel.cs" />
+    <Compile Include="ApiModel\CustomerModel.cs" />
+    <Compile Include="ApiModel\ShopToShopDeliveryModel.cs" />
+    <Compile Include="ApiModel\ShopToShopExchangeMain.cs" />
+    <Compile Include="ApiModel\ShopToShopExItem.cs" />
+    <Compile Include="ApiModel\ShopToShopRequisitionModel.cs" />
+    <Compile Include="ApiModel\TransferReturnProduct.cs" />
+    <Compile Include="DropDown.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

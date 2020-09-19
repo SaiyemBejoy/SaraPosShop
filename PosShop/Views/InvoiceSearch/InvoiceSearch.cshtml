@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "InvoiceSearch";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Invoice List
+                                </h3>
+
+                            </div>
+                            <div class="m-portlet__head-tools">
+                                <ul class="m-portlet__nav">
+                                    <li class="m-portlet__nav-item">
+                                        <button type="submit" id="ProcessDataSave" class="m-portlet__nav-link btn btn-success m-btn m-btn--pill m-btn--air">Process Data</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="invoiceSearchTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice Num</th>
+                                            <th>Invoice Date</th>
+                                            <th>Invoice Style</th>
+                                            <th>Srvd.By</th>
+                                            <th>Total Item</th>
+                                            <th>Dis Percent</th>
+                                            <th>Discount Amount</th>
+                                            <th>Customer Name</th>
+                                            <th>Customer Phone</th>
+                                            <th>Shop Name</th>
+                                            <th>Net Amount</th>
+                                            <th>Payment Info</th>
+                                            <th>Exchange</th>
+                                            <th>Exchange Shop</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+    jQuery(document).ready(function () {
+        //var table = $("#invoiceSearchTable").dataTable();
+        var vForm = $('#__AjaxAntiForgeryForm');
+        var vToken = $('input[name="__RequestVerificationToken"]', vForm).val();
+
+        var table = $("#invoiceSearchTable").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "searchHighlight": true,
+            "order": [[0, "desc"]],
+            "ajax": {
+                data: {
+                    __RequestVerificationToken: vToken
+                },
+                url: '@Url.Action("GetAllSaleInfoForDataTable", "InvoiceSearch")',
+                type: 'POST'
+            },
+            "columns": [
+                {
+                    "data": "InvoiceNumber"
+                    //render: function (data, type, object) {
+                    //    return "<input type ='checkbox' class ='checker' id='checkbox2' value='" + object.Barcode +"'/>" +
+                    //        "<input type = 'hidden' class ='itemId' value = '" + object.ItemId + "' />"+
+                    //        "<input type = 'hidden' class ='productId' value = '" + object.ProductId + "' />";
+                    //}
+                },
+                {
+                    "data": "InvoiceDate"
+                },
+                {
+                    "data": "InvoiceStyleName"
+                },
+                {
+                    "data": "SalesManName"
+                },
+                {
+                    "data": "TotalItem"
+                },
+                {
+                    "data": "DiscountPercent"
+                },
+                {
+                    "data": "DiscountAmount"
+                },
+                {
+                    "data": "CustomerName"
+                },
+                {
+                    "data": "CustomerContactNO"
+                },
+                {
+                    "data": "ShopName"
+                },
+                {
+                    "data": "NetAmount"
+                },
+                {
+                    "data": "PaymentInfo"
+                },
+                {
+                    "data": "ExchangeYN"
+                },
+                {
+                    "data": "ExchangeShopName"
+                }
+            ]
+        });
+
+        $("#ProcessDataSave").click(function () {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("ProcessAllDataForDataTable", "InvoiceSearch")',
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                success: function (data) {
+                    if (data.m !== null) {
+                        if (data.isRedirect) {
+                            window.setTimeout(function() {
+                                window.location = data.redirectUrl;
+                            },1000);
+                            toastr.warning("Data Process Successfully.");
+                        }
+                        
+                    }
+                   
+                }
+            });
+        });
+    });
+
+
+</script>

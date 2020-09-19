@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Models.AllModel.TestModel>
+@{
+    ViewBag.Title = "ViewAll";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>ViewAll</h2>
+
+<p>
+    @Html.ActionLink("Check For Repository Pattern ", "ViewAllData")
+    
+    @if (Model.Any())
+    {
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var testModel in Model)
+                {
+                    <tr>
+                        <td>@testModel.TestId</td>
+                        <td>@testModel.TestName</td>
+                        <td>@testModel.TestPhone</td>
+                        <td>@testModel.TestAddress</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        
+    }
+</p>
+

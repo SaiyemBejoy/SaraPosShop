@@ -1,0 +1,356 @@
+﻿@using Models.AllModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Damage Product List
+                                </h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="@Url.Action("DamageProduct","DamageProduct")" class="btn m-btn--pill m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger"><i class="fa fa-plus-circle"></i> Damage Entry</a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="DamageProductTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Damage Challan No</th>
+                                            <th> Date</th>
+                                            <th>Created By</th>
+                                            <th>Shop Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.DamageMainList != null)
+                                        {
+                                            int counter = 1;
+                                            foreach (var data in ViewBag.DamageMainList)
+                                            {
+                                                <tr>
+                                                    <td>@counter</td>
+                                                    <td>@data.DamageChallanNo</td>
+                                                    <td>@data.CreatedDate</td>
+                                                    <td>@data.EmployeeName</td>
+                                                    <td>@data.ShopName</td>
+                                                    <td style="width: 30%">
+                                                        <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-accent m-btn--gradient-to-success damageItem" data-toggle="modal" href="#viewItemModal" data-id="@data.DamageChallanNo" id="damageItem">
+                                                            <i class="fa fa-eye"></i>
+                                                            View Item
+                                                        </a>
+                                                        <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger damageItemReport" href="" data-id="@data.DamageChallanNo" id="damageItemReport">
+                                                            <i class="fa fa-print"></i>
+                                                            Show Report
+                                                        </a>
+                                                        
+                                                        <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger transferToDc" data-toggle="modal" href="#viewTransferItemModal" data-id="@data.DamageChallanNo" id="transferToDc">
+                                                            <i class="fa fa-arrow-right"></i>
+                                                            Transfer To DC
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                counter = counter + 1;
+                                            }
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade show" id="viewItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-striped- table-bordered table-hover dataTable dtr-inline" id="">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>BarCode</th>
+                                    <th>ItemName</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="damageTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!-- Modal -->
+<div class="modal fade show" id="viewTransferItemModal" tabindex="-1" role="dialog" aria-labelledby="example2ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group">
+                                    <label class="col-md-6 col-form-label">Damage ChallanNo#:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control m-input--air m-input--pill" value="" readonly="readonly" style="width: 200px; background-color: yellow" id="damageChallanNo" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped- table-bordered table-hover dataTable dtr-inline" id="">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>BarCode</th>
+                                <th>ItemName</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Remarks</th>
+                            </tr>
+                            </thead>
+                            <tbody id="TransferDamageTableBody"></tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6 text-right">
+                                <button type="button" id="Confirm" class="btn m-btn--pill  btn-success"><b>Confirm</b></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
+
+<script>
+    jQuery(document).ready(function () {
+        $("#DamageProductTable").dataTable();
+
+
+        $(".damageItem").click(function () {
+            var challanNo = $(this).data('id');
+            damageItemList(challanNo);
+        });
+
+        $(".transferToDc").click(function () {
+            var challanNo = $(this).data('id');
+            transferDamageItemList(challanNo);
+        });
+        $("#Confirm").click(function () {
+           
+            ConfirmAndTransDmgList();
+        });
+    });
+
+    $("#DamageProductTable").on('click',
+        '.damageItemReport',
+        function() {
+            var damageChallanNo = $(this).data('id');
+            if (damageChallanNo !== "") {
+                window.open('/DamageProduct/ShowReport?challanNo=' + damageChallanNo, '_blank');
+            }
+        });
+
+    function damageItemList(challanNo) {
+        var dataId = JSON.stringify({ challanNo: challanNo });
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("GetAllDamageItemByChallanNo", "DamageProduct")',
+                data: dataId,
+                success: function (data) {
+                    var tableQuantity = data.length;
+                    $("#damageTableBody").html("");
+                    for (var i = 0; i < tableQuantity; i++) {
+                        $("#damageTableBody").append('<tr>' +
+                            '<td>' +
+                            parseInt(i+1) +
+                            '</td>' +
+                            '<td>' +
+                            data[i].Barcode +
+                            '</td>' +
+                            '<td>' +
+                            data[i].ItemName +
+                            '</td>' +
+                            '<td>' +
+                            data[i].Price +
+                            '</td>' +
+                            '<td>' +
+                            data[i].Quantity +
+                            '</td>' +
+                            '<td>' +
+                            data[i].Remarks +
+                            '</td>' +
+
+                            '</tr>'
+                        );
+                    }
+                }
+            });
+    }
+    function transferDamageItemList(challanNo) {
+        var dataId = JSON.stringify({ challanNo: challanNo });
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            url: '@Url.Action("GetAllDamageInfoForTransfer", "DamageProduct")',
+            data: dataId,
+           
+            success: function (data) {
+                $("#damageChallanNo").val(data.DmgData.DamageChallanNo);
+                var tableQuantity = data.DmgData.DamageMainItemList.length;
+                $("#TransferDamageTableBody").html("");
+                for (var i = 0; i < tableQuantity; i++) {
+                    $("#TransferDamageTableBody").append('<tr>' +
+                        '<td>' +
+                        parseInt(i+1) +
+                        '</td>' +
+                        '<td style="display:none;">' +
+                        data.DmgData.DamageMainItemList[i].ProductId +
+                        '</td>' +
+                        '<td style="display:none;">' +
+                        data.DmgData.DamageMainItemList[i].ItemId +
+                        '</td>' +
+                        '<td>' +
+                        data.DmgData.DamageMainItemList[i].Barcode +
+                        '</td>' +
+                        '<td>' +
+                        data.DmgData.DamageMainItemList[i].ItemName +
+                        '</td>' +
+                        '<td>' +
+                        data.DmgData.DamageMainItemList[i].Price +
+                        '</td>' +
+                        '<td>' +
+                        data.DmgData.DamageMainItemList[i].Quantity +
+                        '</td>' +
+                        '<td>' +
+                        data.DmgData.DamageMainItemList[i].Remarks +
+                        '</td>' +
+                       
+                        '</tr>'
+                    );
+                }
+            }
+        });
+    }
+    
+    function ConfirmAndTransDmgList() {
+            var damageChallanNo = $("#damageChallanNo").val();
+          
+                var allDamageItem = [];
+                allDamageItem.length = 0;
+                $.each($("#TransferDamageTableBody tr"),
+                    function() {
+                        allDamageItem.push({
+                            ProductId: $(this).find('td:eq(1)').html(),
+                            ItemId: $(this).find('td:eq(2)').html(),
+                            Barcode: $(this).find('td:eq(3)').html(),
+                            ItemName: $(this).find('td:eq(4)').text(),
+                            Price: $(this).find('td:eq(5)').html(),
+                            Quantity: $(this).find('td:eq(6)').html(),
+                            Remarks: $(this).find('td:eq(7)').html()
+
+                        });
+                    });
+                var dataObject = {
+                    'RequisitionNo': damageChallanNo,
+                    'DamageTransferItemList': allDamageItem
+                }
+                var dataList = JSON.stringify({ objDamageTransferMainModel: dataObject });
+                if (allDamageItem.length) {
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        url: '@Url.Action("SaveDamageTransferData", "StockTransfer")',
+                        data: dataList,
+                        beforeSend: function () {
+                            $('#cover-spin').show();
+                        },
+                        success: function (data) {
+                            if (data.m !==null) {
+                                if (data.isRedirect) {
+                                    window.setTimeout(function() {
+                                        window.location = data.redirectUrl;
+                                    },1000);
+                                    toastr.success("Save Successfully.");
+                                    if (damageChallanNo !== "") {
+                                        window.open('/DamageProduct/ShowReport?challanNo=' + damageChallanNo, '_blank');
+                                    }
+                                }
+                            } else {
+                                toastr.error("Data Can't Save!.");
+                                $('#cover-spin').hide();
+                            }
+                           
+                        } 
+                });
+            } else {
+                    toastr.error("Table Data Cann't Be Empty!");
+                    $('#cover-spin').hide();
+                }
+          
+    }
+</script>
