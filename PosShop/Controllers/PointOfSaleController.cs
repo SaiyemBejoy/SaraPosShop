@@ -59,9 +59,11 @@ namespace PosShop.Controllers
             LoadSession();
             SaleInfoModel obj = new SaleInfoModel();
             var data = await _dropdownManager.GetAllEmployeeInfo();
+            var marketPlaceData = await _dropdownManager.GetAllMarketPlaceList();
             var shopId = UtilityClass.ShopId;
             //var shopName = await _dropdownManager.GetAllShopListForExchange(shopId);
             ViewBag.employeelist = data;
+            ViewBag.marketPlaceList = marketPlaceData;
             //ViewData["shopList"] = shopName;
             var maxInvoiceNumber = await _manager.GetMaxInvoiceNumber(UtilityClass.ShopId);
             ViewBag.maxInvoice = maxInvoiceNumber;

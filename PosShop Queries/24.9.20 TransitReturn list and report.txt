@@ -1,0 +1,193 @@
+/* Formatted on 24-Sep-20 9:34:02 AM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_TRANSIT_RTN_PRODUCT_MAIN
+(
+   TRANSIT_PRODUCT_RETURN_ID,
+   TRANSIT_RETURN_CHALLAN_NUM,
+   MARKET_PLACE_ID,
+   MARKETPLACE_NAME,
+   CREATED_BY,
+   CREATED_BY_NAME,
+   CREATED_DATE,
+   UPDATED_BY,
+   UPDATED_BY_NAME,
+   UPDATED_DATE,
+   SHOP_ID,
+   FROM_SHOP_NAME
+)
+AS
+   SELECT TRANSIT_PRODUCT_RETURN_ID,
+          TRANSIT_RETURN_CHALLAN_NUM,
+          MARKET_PLACE_ID,
+          (SELECT MARKETPLACE_NAME
+             FROM L_MARKETPLACE
+            WHERE MARKETPLACE_ID = M.MARKET_PLACE_ID)
+             MARKETPLACE_NAME,
+          CREATED_BY,
+          (SELECT EMPLOYEE_NAME
+             FROM EMPLOYEE_DISTRIBUTION
+            WHERE EMPLOYEE_ID = M.CREATED_BY)
+             CREATED_BY_NAME,
+          CREATED_DATE,
+          UPDATED_BY,
+          (SELECT EMPLOYEE_NAME
+             FROM EMPLOYEE_DISTRIBUTION
+            WHERE EMPLOYEE_ID = M.CREATED_BY)
+             UPDATED_BY_NAME,
+          UPDATED_DATE,
+          SHOP_ID,
+          (SELECT SHOP_NAME
+             FROM SHOP
+            WHERE SHOP_ID = M.SHOP_ID)
+             FROM_SHOP_NAME
+     FROM TRANSIT_PRODUCT_RETURN_MAIN M;
+
+================================================================
+================================================================
+
+/* Formatted on 24-Sep-20 10:40:12 AM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_RPT_TRNSIT_RTN_PROD_DTAILS
+(
+   RPT_TITLE,
+   TRANSIT_RETURN_CHALLAN_NUM,
+   MARKET_PLACE_ID,
+   MARKETPLACE_NAME,
+   BRAND_NAME,
+   CENTRAL_BIN,
+   SHOP_ID,
+   FROM_SHOP_NAME,
+   FROM_SHOP_ADDRESS,
+   CREATED_BY,
+   CREATED_BY_NAME,
+   CREATED_DATE,
+   UPDATED_BY,
+   UPDATED_BY_NAME,
+   UPDATED_DATE,
+   TRANSIT_PRODUCT_RETURN_ITEM_ID,
+   PRODUCT_ID,
+   ITEM_ID,
+   BARCODE,
+   ITEM_NAME,
+   STYLE_NAME,
+   SALE_PRICE,
+   QUANTITY
+)
+AS
+   SELECT '' RPT_TITLE,
+          M.TRANSIT_RETURN_CHALLAN_NUM,
+          M.MARKET_PLACE_ID,
+          (SELECT MARKETPLACE_NAME
+             FROM L_MARKETPLACE
+            WHERE MARKETPLACE_ID = M.MARKET_PLACE_ID)
+             MARKETPLACE_NAME,
+          'SaRa Lifestyle Ltd.' BRAND_NAME,
+          'Central BIN : 001168308-0401' Central_BIN,
+          M.SHOP_ID,
+          (SELECT SHOP_NAME
+             FROM SHOP
+            WHERE SHOP_ID = M.SHOP_ID)
+             FROM_SHOP_NAME,
+          (SELECT SHOP_ADDRESS
+             FROM SHOP
+            WHERE SHOP_ID = M.SHOP_ID)
+             FROM_SHOP_ADDRESS,
+          M.CREATED_BY,
+          (SELECT EMPLOYEE_NAME
+             FROM EMPLOYEE_DISTRIBUTION
+            WHERE EMPLOYEE_ID = M.CREATED_BY)
+             CREATED_BY_NAME,
+          M.CREATED_DATE,
+          M.UPDATED_BY,
+          (SELECT EMPLOYEE_NAME
+             FROM EMPLOYEE_DISTRIBUTION
+            WHERE EMPLOYEE_ID = M.CREATED_BY)
+             UPDATED_BY_NAME,
+          M.UPDATED_DATE,
+          S.TRANSIT_PRODUCT_RETURN_ITEM_ID,
+          S.PRODUCT_ID,
+          S.ITEM_ID,
+          S.BARCODE,
+          S.ITEM_NAME,
+          (SELECT REGEXP_REPLACE (S.ITEM_NAME, '(((\w+)\s){1}).*', '\1')
+             FROM DUAL)
+             STYLE_NAME,
+          S.SALE_PRICE,
+          S.QUANTITY
+     FROM    TRANSIT_PRODUCT_RETURN_ITEM s
+          LEFT JOIN
+             TRANSIT_PRODUCT_RETURN_MAIN m
+          ON s.TRANSIT_RETURN_CHALLAN_NUM = m.TRANSIT_RETURN_CHALLAN_NUM;
+
+========================================================================
+========================================================================
+
+/* Formatted on 24-Sep-20 4:33:31 PM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_RPT_TRANSIT_PRODUCT_INFO
+(
+   RPT_TITLE,
+   BRAND_NAME,
+   CENTRAL_BIN,
+   FROM_SHOP_NAME,
+   FROM_SHOP_ADDRESS,
+   MARKET_PLACE_ID,
+   MARKETPLACE_NAME,
+   PRODUCT_ID,
+   ITEM_ID,
+   BARCODE,
+   ITEM_NAME,
+   STYLE_NAME,
+   TRANSIT_QTY,
+   TRANSIT_RETURN_QTY,
+   TRANSIT_SALE_QTY,
+   TRANSIT_BLANCE,
+   SALE_PRICE
+)
+AS
+     SELECT '' RPT_TITLE,
+            'SaRa Lifestyle Ltd.' BRAND_NAME,
+            'Central BIN : 001168308-0401' Central_BIN,
+            (SELECT SHOP_NAME FROM SHOP) FROM_SHOP_NAME,
+            (SELECT SHOP_ADDRESS FROM SHOP) FROM_SHOP_ADDRESS,
+            M.MARKET_PLACE_ID,
+            (SELECT MARKETPLACE_NAME
+               FROM L_MARKETPLACE
+              WHERE MARKETPLACE_ID = M.MARKET_PLACE_ID)
+               MARKETPLACE_NAME,
+            S.PRODUCT_ID,
+            S.ITEM_ID,
+            S.BARCODE,
+            S.ITEM_NAME,
+            (SELECT REGEXP_REPLACE (S.ITEM_NAME, '(((\w+)\s){1}).*', '\1')
+               FROM DUAL)
+               STYLE_NAME,
+            NVL (SUM (S.QUANTITY), 0) TRANSIT_QTY,
+            (SELECT NVL (SUM (QUANTITY), 0)
+               FROM    TRANSIT_PRODUCT_RETURN_ITEM i
+                    JOIN
+                       TRANSIT_PRODUCT_RETURN_MAIN r
+                    ON (i.TRANSIT_RETURN_CHALLAN_NUM =
+                           r.TRANSIT_RETURN_CHALLAN_NUM)
+              WHERE i.ITEM_ID = S.ITEM_ID
+                    AND R.MARKET_PLACE_ID = M.MARKET_PLACE_ID)
+               TRANSIT_RETURN_QTY,
+            '' TRANSIT_SALE_QTY, ----Transit Sale Koto Hoise Ata Pore Daka Lagbe
+            (NVL (SUM (S.QUANTITY), 0)
+             - (SELECT NVL (SUM (QUANTITY), 0)
+                  FROM    TRANSIT_PRODUCT_RETURN_ITEM i
+                       JOIN
+                          TRANSIT_PRODUCT_RETURN_MAIN r
+                       ON (i.TRANSIT_RETURN_CHALLAN_NUM =
+                              r.TRANSIT_RETURN_CHALLAN_NUM)
+                 WHERE i.ITEM_ID = S.ITEM_ID
+                       AND R.MARKET_PLACE_ID = M.MARKET_PLACE_ID))
+               TRANSIT_BLANCE,
+            S.SALE_PRICE
+       FROM    TRANSIT_PRODUCT_ITEM s
+            JOIN
+               TRANSIT_PRODUCT_MAIN m
+            ON (s.TRANSIT_CHALLAN_NUM = m.TRANSIT_CHALLAN_NUM)
+   GROUP BY M.MARKET_PLACE_ID,
+            S.PRODUCT_ID,
+            S.ITEM_ID,
+            S.BARCODE,
+            S.ITEM_NAME,
+            S.SALE_PRICE;

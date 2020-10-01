@@ -125,7 +125,7 @@
                                                                                         <th>Dollar Rate</th>
                                                                                         <th>USDollar($)</th>
                                                                                         <th>QTY</th>
-                                                                                        <th>Stock</th>
+                                                                                        <th>Transit Stock</th>
                                                                                         <th>Action</th>
                                                                                     </tr>
                                                                                 </thead>
@@ -287,7 +287,7 @@
                         });
                         if (checker) {
                             if (!isNaN(data.ItemId) && data.ItemId) {
-                                if (data.RoundQuantity !== 0 && data.RoundQuantity > 0) {
+                                if (data.TransitForStock !== 0 && data.TransitForStock > 0) {
 
                                     tableBodyGenerate(data);
                                     $("#scanProduct").val("");
@@ -336,7 +336,7 @@
                     } else {
                         if (!isNaN(data.ItemId) && data.ItemId) {
 
-                            if (data.RoundQuantity !== 0 && data.RoundQuantity > 0) {
+                            if (data.TransitForStock !== 0 && data.TransitForStock > 0) {
                                 tableBodyGenerate(data);
                                 $("#scanProduct").val("");
                                 totalItemCount();
@@ -396,7 +396,7 @@
             '<input type="number" class="form-control input-circle transitQuantity" id="transitQuantity" value="' + 1 + '"' +
             '</td>' +
             '<td style ="width: 10%">' +
-            '<input type="number" class="form-control input-circle currentStock" readonly="readonly" id="currentStock" value="' + data.RoundQuantity + '"' +
+            '<input type="number" class="form-control input-circle currentStock" readonly="readonly" id="currentStock" value="' + data.TransitForStock + '"' +
             '</td>' +
 
             '<td><a href="#" class="deleteItem btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove</a></td>' +
@@ -481,14 +481,14 @@
     }
     // Local Storage a add
     function manageGridForScan(addItem) {
-        if (addItem.RoundQuantity > 0) {
+        if (addItem.TransitForStock > 0) {
             filterData = {
                 'ItemId': addItem.ItemId,
                 'ProductId': addItem.ProductId,
                 'Barcode': addItem.Barcode,
                 'ItemName': addItem.ItemName,
                 'TransitQuantity': 1,
-                'CurrentStock': addItem.RoundQuantity,
+                'CurrentStock': addItem.TransitForStock,
                 'SalePrice': addItem.SalePrice,
                 'GrowingPrice': addItem.SalePrice,
                 'GrowingPercent': 0,

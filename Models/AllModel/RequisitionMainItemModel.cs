@@ -14,6 +14,7 @@ namespace Models.AllModel
         public string Barcode { get; set; }
         public string ItemName { get; set; }
         public string Price { get; set; }
+        public string RqsnQuantity { get; set; }
 
         public static RequisitionMainItemModel ConvertRequisitionMainItemModel(DataRow row)
         {
@@ -23,8 +24,8 @@ namespace Models.AllModel
                 RequisitionId = row.Table.Columns.Contains("REQUISITION_ID") ? Convert.ToInt32(row["REQUISITION_ID"]) : 0,
                 Barcode = row.Table.Columns.Contains("BARCODE") ? Convert.ToString(row["BARCODE"]) : "",
                 ItemName = row.Table.Columns.Contains("ITEM_NAME") ? Convert.ToString(row["ITEM_NAME"]) : "",
-                Price = row.Table.Columns.Contains("PRICE") ? Convert.ToString(row["PRICE"]) : ""
-
+                Price = row.Table.Columns.Contains("PRICE") ? Convert.ToString(row["PRICE"]) : "",
+                RqsnQuantity = row.Table.Columns.Contains("QUANTITY") ? Convert.ToString(row["QUANTITY"]) : ""
             };
         }
     }

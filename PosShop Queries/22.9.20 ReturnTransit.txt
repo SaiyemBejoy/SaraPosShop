@@ -1,0 +1,180 @@
+/* Formatted on 22-Sep-20 9:56:28 AM (QP5 v5.149.1003.31008) */
+CREATE TABLE POSSHOP.TRANSIT_PRODUCT_RETURN_MAIN
+(
+   TRANSIT_PRODUCT_RETURN_ID    NUMBER NOT NULL,
+   TRANSIT_RETURN_CHALLAN_NUM   VARCHAR2 (500 BYTE),
+   MARKET_PLACE_ID              NUMBER NOT NULL,
+   CREATED_BY                   VARCHAR2 (50 BYTE),
+   CREATED_DATE                 DATE,
+   UPDATED_BY                   VARCHAR2 (50 BYTE),
+   UPDATED_DATE                 DATE,
+   SHOP_ID                      NUMBER NOT NULL
+)
+
+===========================================================
+===========================================================
+
+/* Formatted on 22-Sep-20 9:59:45 AM (QP5 v5.149.1003.31008) */
+CREATE TABLE POSSHOP.TRANSIT_PRODUCT_RETURN_ITEM
+(
+   TRANSIT_PRODUCT_RETURN_ITEM_ID   NUMBER NOT NULL,
+   TRANSIT_RETURN_CHALLAN_NUM       VARCHAR2 (500 BYTE),
+   PRODUCT_ID                       NUMBER,
+   ITEM_ID                          NUMBER,
+   BARCODE                          VARCHAR2 (500 BYTE),
+   ITEM_NAME                        VARCHAR2 (1000 BYTE),
+   SALE_PRICE                       NUMBER,
+   QUANTITY                         NUMBER
+)
+
+============================================================
+============================================================
+
+/* Formatted on 22-Sep-20 11:15:57 AM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE PROCEDURE POSSHOP.PRO_TRANSIT_PRODUCT_RTN_SAVE (
+   P_TRANSIT_PRODUCT_RETURN_ID    IN     VARCHAR2,
+   P_TRANSIT_RETURN_CHALLAN_NUM          VARCHAR2,
+   P_MARKET_PLACE_ID                     VARCHAR2,
+   P_SHOP_ID                             VARCHAR2,
+   P_CREATED_BY                          VARCHAR2,
+   P_MESSAGE                         OUT VARCHAR2)
+AS
+   V_TRANSIT_PRODUCT_RETURN_ID    INT;
+   V_TRANSIT_RETURN_CHALLAN_NUM   NUMBER;
+   v_count                        INT;
+BEGIN
+   SELECT COUNT (*)
+     INTO v_count
+     FROM TRANSIT_PRODUCT_RETURN_MAIN
+    WHERE TRANSIT_PRODUCT_RETURN_ID = P_TRANSIT_PRODUCT_RETURN_ID;
+
+   IF v_count > 0
+   THEN
+      P_MESSAGE := 'DATA NOT SAVE';
+      RETURN;
+   ELSE
+      SELECT NVL (MAX (TRANSIT_PRODUCT_RETURN_ID), 0) + 1
+        INTO V_TRANSIT_PRODUCT_RETURN_ID
+        FROM TRANSIT_PRODUCT_RETURN_MAIN;
+
+      --Challan Number Max Kora Hoise
+      SELECT    TO_CHAR (SYSDATE, 'yy')
+             || LPAD (TO_CHAR (SYSDATE, 'MM'), 2, 0)
+             || LPAD (TO_CHAR (SYSDATE, 'dd'), 2, 0)
+             || LPAD ( (SELECT SHOP_ID FROM Shop), 2, 0)
+             || (SELECT LPAD (
+                           NVL (
+                              MAX (
+                                 SUBSTR ( (TRANSIT_RETURN_CHALLAN_NUM), 9, 8)),
+                              0)
+                           + 1,
+                           8,
+                           0)
+                   FROM TRANSIT_PRODUCT_RETURN_MAIN)
+        INTO V_TRANSIT_RETURN_CHALLAN_NUM
+        FROM DUAL;
+
+      ------------------------End---------------
+
+      INSERT INTO TRANSIT_PRODUCT_RETURN_MAIN (TRANSIT_PRODUCT_RETURN_ID,
+                                               TRANSIT_RETURN_CHALLAN_NUM,
+                                               MARKET_PLACE_ID,
+                                               CREATED_BY,
+                                               CREATED_DATE,
+                                               UPDATED_BY,
+                                               UPDATED_DATE,
+                                               SHOP_ID)
+           VALUES (V_TRANSIT_PRODUCT_RETURN_ID,
+                   V_TRANSIT_RETURN_CHALLAN_NUM,
+                   P_MARKET_PLACE_ID,
+                   P_CREATED_BY,
+                   SYSDATE,
+                   P_CREATED_BY,
+                   SYSDATE,
+                   P_SHOP_ID);
+
+      COMMIT;
+      P_MESSAGE := V_TRANSIT_RETURN_CHALLAN_NUM;
+      RETURN;
+   END IF;
+END;
+/
+
+===============================================================
+===============================================================
+
+/* Formatted on 22-Sep-20 11:29:15 AM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE PROCEDURE POSSHOP.PRO_TRANSIT_PROD_RTN_ITEM_SAVE (
+   P_TRANSIT_PROD_RTN_ITEM_ID     IN     VARCHAR2,
+   P_TRANSIT_RETURN_CHALLAN_NUM          VARCHAR2,
+   P_PRODUCT_ID                          VARCHAR2,
+   P_ITEM_ID                             VARCHAR2,
+   P_ITEM_NAME                           VARCHAR2,
+   P_BARCODE                             VARCHAR2,
+   P_QUANTITY                            VARCHAR2,
+   P_SALE_PRICE                          VARCHAR2,
+   P_MESSAGE                         OUT VARCHAR2)
+AS
+   V_TRANSIT_PROD_RTN_ITEM_ID   INT;
+   v_count                      INT;
+BEGIN
+   SELECT COUNT (*)
+     INTO v_count
+     FROM TRANSIT_PRODUCT_RETURN_MAIN
+    WHERE TRANSIT_RETURN_CHALLAN_NUM = P_TRANSIT_RETURN_CHALLAN_NUM;
+
+   IF v_count <= 0
+   THEN
+      P_MESSAGE := 'DATA NOT SAVE';
+      RETURN;
+   ELSE
+      SELECT NVL (MAX (TRANSIT_PRODUCT_RETURN_ITEM_ID), 0) + 1
+        INTO V_TRANSIT_PROD_RTN_ITEM_ID
+        FROM TRANSIT_PRODUCT_RETURN_ITEM;
+
+      INSERT
+        INTO TRANSIT_PRODUCT_RETURN_ITEM (TRANSIT_PRODUCT_RETURN_ITEM_ID,
+                                          TRANSIT_RETURN_CHALLAN_NUM,
+                                          PRODUCT_ID,
+                                          ITEM_ID,
+                                          BARCODE,
+                                          ITEM_NAME,
+                                          SALE_PRICE,
+                                          QUANTITY)
+      VALUES (V_TRANSIT_PROD_RTN_ITEM_ID,
+              P_TRANSIT_RETURN_CHALLAN_NUM,
+              P_PRODUCT_ID,
+              P_ITEM_ID,
+              P_BARCODE,
+              P_ITEM_NAME,
+              P_SALE_PRICE,
+              P_QUANTITY);
+
+      COMMIT;
+      P_MESSAGE := 'INSERTED SUCCESSFULLY';
+      RETURN;
+   END IF;
+END;
+/
+
+=============================================================
+=============================================================
+
+/* Formatted on 22-Sep-20 12:13:47 PM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE PROCEDURE POSSHOP.PRO_TRANSIT_PRODUCT_RTN_DELETE (
+   P_TRANSIT_RTN_CHALLAN_NUM   IN     VARCHAR2,
+   P_MESSAGE                      OUT VARCHAR2)
+AS
+   V_TRANSIT_RTN_CHALLAN_NUM   INT;
+   v_count                     INT;
+BEGIN
+   DELETE TRANSIT_PRODUCT_RETURN_ITEM
+    WHERE TRANSIT_RETURN_CHALLAN_NUM = P_TRANSIT_RTN_CHALLAN_NUM;
+
+   DELETE TRANSIT_PRODUCT_RETURN_MAIN
+    WHERE TRANSIT_RETURN_CHALLAN_NUM = P_TRANSIT_RTN_CHALLAN_NUM;
+
+   P_MESSAGE := '';
+   RETURN;
+END;
+/

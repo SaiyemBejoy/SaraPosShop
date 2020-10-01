@@ -268,6 +268,12 @@
       <DependentUpon>SaleSummaryByCtgySubCtgy.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Sale\VoidInvoiceHistory.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VoidInvoiceHistory.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\ShopToShop\ShopToShopRequisition.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -338,6 +344,18 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TransitProductDetails.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Transit\TransitReturnProductDetails.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransitReturnProductDetails.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Transit\TransitStock.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransitStock.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utility\UserRoleFilter.cs" />
@@ -4849,6 +4867,9 @@
     <Content Include="Views\Transit\TransitProductList.cshtml" />
     <Content Include="Views\GiftVoucher\GiftVoucherDeposit.cshtml" />
     <Content Include="Views\SaleReturnProduct\SaleReturnProduct.cshtml" />
+    <Content Include="Views\Transit\TransitProductReturn.cshtml" />
+    <Content Include="Views\Transit\TransitReturnProductList.cshtml" />
+    <Content Include="Views\AllReport\TransitReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -4941,6 +4962,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>SaleSummaryByCtgySubCtgy.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Sale\VoidInvoiceHistory.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>VoidInvoiceHistory.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\ShopToShop\ShopToShopRequisition.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ShopToShopRequisition.cs</LastGenOutput>
@@ -4988,6 +5013,14 @@
     <EmbeddedResource Include="Reports\Transit\TransitProductDetails.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>TransitProductDetails.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Transit\TransitReturnProductDetails.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>TransitReturnProductDetails.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Transit\TransitStock.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>TransitStock.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -14,15 +14,18 @@ namespace PosShop
     public class JobClass : IJob
     {
         private readonly IDataExchangeManager _manager;
+        private readonly IShopRequisitionManager _shopRequisitionManager;
 
         public JobClass()
         {
             _manager = new DataExchangeManager();
+            _shopRequisitionManager = new ShopRequisitionManager();
         }
         public Task Execute(IJobExecutionContext context)
         {
             var value1 = WareHouseDeliveryProductAsync();
             var value2 = GetCustomerListAsync();
+            var shopRequisitionData = GetShopRequisitionDataForNotificationAsync();
             //var value3 = GetEmployeeDistributionListAsync();
             //DataBaseBackup();
 
@@ -81,7 +84,10 @@ namespace PosShop
                 }
             }
         }
-
+        private async Task GetShopRequisitionDataForNotificationAsync()
+        {
+            var requisitiondata = await _shopRequisitionManager.GetAllFromRequisitionData(UtilityClass.ShopId);
+        }
         //private void DataBaseBackup()
         //{
         //    System.Diagnostics.Process proc = new System.Diagnostics.Process();

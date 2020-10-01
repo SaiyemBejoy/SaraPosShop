@@ -106,6 +106,62 @@ namespace PosShop.Controllers
 
         }
 
+        #region "Transit Product Return"
+        [UserRoleFilter]
+        public async Task<ActionResult> TransitProductReturn()
+        {
+            TransitProductReturnModel model = new TransitProductReturnModel();
+            ViewBag.MarketPlaceNameList = await _dropdownManager.GetAllMarketPlaceList();
+            return View(model);
+        }
+
+        public async Task<ActionResult> SaveTransitReturnData(TransitProductReturnModel objTransitReturnProductModel)
+        {
+            LoadSession();
+            objTransitReturnProductModel.ShopId = UtilityClass.ShopId;
+            objTransitReturnProductModel.CreateddBy = _employeeId;
+            var data = await _transitManager.SaveTransitReturnData(objTransitReturnProductModel);
+            if (!string.IsNullOrWhiteSpace(data))
+            {
+                var returnData = new
+
+                {
+                    m = data,
+                    isRedirect = true,
+                    redirectUrl = Url.Action("TransitProductReturn")
+                };
+                return Json(returnData, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var returnData = new
+                {
+                    m = "",
+                    isRedirect = false,
+                    redirectUrl = Url.Action("TransitProductReturn")
+                };
+                return Json(returnData, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public async Task<ActionResult> GetProductReturnInfoByBarcode(string barcode, int marketPlaceId)
+        {
+            var dataInfo = await _manager.GetProductReturnInfoByBarcode(barcode, marketPlaceId);
+            if (dataInfo == null)
+                return Json(0, JsonRequestBehavior.AllowGet);
+            return Json(dataInfo, JsonRequestBehavior.AllowGet);
+        }
+
+        [UserRoleFilter]
+        public async Task<ActionResult> TransitReturnProductList()
+        {
+            var objTarnsitReturnModel = await _transitManager.ViewAllReturnData();
+            ViewBag.TransitReturnModelList = objTarnsitReturnModel;
+            return View();
+        }
+        #endregion
+
         #region Report
         private readonly ReportDocument _objReportDocument = new ReportDocument();
         private ExportFormatType _objExportFormatType = ExportFormatType.NoFormat;
@@ -139,6 +195,45 @@ namespace PosShop.Controllers
             Response.ContentType = "application/pdf";
 
             string pFileDownloadName = "Shop Receive Report.pdf";
+
+            Response.BinaryWrite(byteArray);
+            Response.Flush();
+            Response.Close();
+            _objReportDocument.Close();
+            _objReportDocument.Dispose();
+
+            return File(oStream, Response.ContentType, pFileDownloadName);
+        }
+
+        public async Task<ActionResult> ShowTransitReturnReport(string transitReturnChallanNo)
+        {
+            _objExportFormatType = ExportFormatType.PortableDocFormat;
+            ExportOptions option = new ExportOptions();
+            option.ExportFormatType = ExportFormatType.PortableDocFormat;
+            string strPath = Path.Combine(Server.MapPath("~/Reports/Transit/TransitReturnProductDetails.rpt"));
+            _objReportDocument.Load(strPath);
+
+            DataSet objDataSet = (await _rptManager.GetallShopTransitReturnItem(transitReturnChallanNo));
+
+            _objReportDocument.Load(strPath);
+            _objReportDocument.SetDataSource(objDataSet);
+            _objReportDocument.SetDatabaseLogon("POSSHOP", "POSSHOP");
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.Clear();
+            Response.Buffer = true;
+
+            _objExportFormatType = ExportFormatType.PortableDocFormat;
+
+            Stream oStream = _objReportDocument.ExportToStream(_objExportFormatType);
+            byte[] byteArray = new byte[oStream.Length];
+            oStream.Read(byteArray, 0, Convert.ToInt32(oStream.Length - 1));
+
+            Response.ContentType = "application/pdf";
+
+            string pFileDownloadName = "Transit Return Report.pdf";
 
             Response.BinaryWrite(byteArray);
             Response.Flush();

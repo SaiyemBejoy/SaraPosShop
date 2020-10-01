@@ -14,6 +14,8 @@ namespace Models.AllModel
         public string InvoiceDate { get; set; }
         public string SalesManId { get; set; }
         public string SalesManName { get; set; }
+        public int MarketPlaceId { get; set; }
+        public string MarketPlaceName { get; set; }
         public int TotalItem { get; set; }
         public double TotalAmount { get; set; }
         public double Vat { get; set; }

@@ -1,0 +1,243 @@
+﻿
+@{
+    ViewBag.Title = "VoidInvoiceList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Void Invoice List
+                                </h3>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-bordered m-table m-table--border-danger" id="voidInvoiceListTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice Number</th>
+                                            <th>Invoice Date</th>
+                                            <th>Salesman</th>
+                                            <th>Total Item</th>
+                                            <th>Total Amount</th>
+                                            <th>Vat</th>
+                                            <th>Discount %</th>
+                                            <th>Discount Amount</th>
+                                            <th>Sub Total</th>
+                                            <th>Net Amount</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade show" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-striped- table-bordered table-hover dataTable dtr-inline" id="InvoiceItemTable">
+                            <thead>
+                                <tr>
+                                    <th>BarCode</th>
+                                    <th>ItemName</th>
+                                    <th>Qty</th>
+                                    <th>Sale Price</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+                                    <th>VAT</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoiceItemTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8">
+                        <div class="form-group m-form__group row">
+                            <label class="col-md-3 control-label"><strong>Total Item:</strong></label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control m-input--air m-input--pill" id="totalReceiveItem" style="width: 150px; background-color: yellow" readonly="readonly" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
+<script>
+    jQuery(document).ready(function() {
+
+        var vForm = $('#__AjaxAntiForgeryForm');
+        var vToken = $('input[name="__RequestVerificationToken"]', vForm).val();
+
+        var table = $("#voidInvoiceListTable").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "searchHighlight": true,
+            "ajax": {
+                data: {
+                    __RequestVerificationToken: vToken
+                },
+                url: '@Url.Action("GetAllVoidInvoiceForDataTable", "VoidInvoice")',
+                type: 'POST'
+            },
+            "columns": [
+                {
+                    "data": "InvoiceNumber"
+                },
+                {
+                    "data": "InvoiceDate"
+                },
+                {
+                    "data": "SalesmanId"
+                },
+                {
+                    "data": "TotalItem"
+                },
+                {
+                    "data": "TotalAmount"
+                },
+                {
+                    "data": "Vat"
+                },
+                {
+                    "data": "DiscountPercentage"
+                },
+                {
+                    "data": "DiscountAmount"
+                },
+                {
+                    "data": "SubTotal"
+                },
+                {
+                    "data": "NetAmount"
+                },
+                {
+                    "data": "SaleInfoId",
+                    "orderable": false,
+                    render: function (data, type, voidInvoiceGrid) {
+                        return "<a href='#' class='btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info showVoidInvoiceItem' data-id=" + voidInvoiceGrid.SaleInfoId + "><i class='fa fa-eye'></i> Show Item</a>" +
+                            "&nbsp; &nbsp;" +
+                            //"<a href='#' class='btn m-btn m-btn--gradient-from-danger m-btn--gradient-to-info showVoidInvoiceReport' data-id=" + voidInvoiceGrid.SaleInfoId + "><i class='m-menu__link-icon flaticon-technology'></i> Show Report</a>";
+
+                    }
+                }
+
+            ]
+        });
+    });
+
+    $("#voidInvoiceListTable").on('click',
+        '.showVoidInvoiceItem',
+        function() {
+
+            var saleInfoId = $(this).data('id');
+            voidInvoiceItemList(saleInfoId);
+        });
+
+    //work on progress
+    function voidInvoiceItemList(saleInfoId) {
+        var dataId = JSON.stringify({ saleInfoId: saleInfoId });
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            url: '@Url.Action("ViewAllVoidInvoiceItemBySaleInfoId", "VoidInvoice")',
+            data: dataId,
+            success: function (data) {
+                var tableQuantity = data.length;
+                $("#invoiceItemTableBody").html("");
+                for (var i = 0; i < tableQuantity; i++) {
+                    $("#invoiceItemTableBody").append('<tr>' +
+                        '<td>' +
+                        data[i].Barcode +
+                        '</td>' +
+                        '<td>' +
+                        data[i].StyleName +
+                        '</td>' +
+                        '<td>' +
+                        data[i].Quantity +
+                        '</td>' +
+                        '<td>' +
+                        data[i].Price +
+                        '</td>' +
+                        '<td>' +
+                        data[i].ProductCategory +
+                        '</td>' +
+                        '<td>' +
+                        data[i].ProductSubcategory +
+                        '</td>' +
+                        '<td>' +
+                        data[i].Vat +
+                        '</td>' +
+                        '</tr>'
+                    );
+                    $("#itemModal").modal("show");
+                    totalItemCount();
+                }
+
+            }
+        });
+    }
+    function totalItemCount() {
+        var total = 0;
+        $("#invoiceItemTableBody tr").each(function() {
+            total += parseInt($(this).find('td:eq(2)').html());
+
+        });
+        $("#totalReceiveItem").val(total);
+    }
+
+    //$("#voidInvoiceListTable").on('click',
+    //    '.showVoidInvoiceReport',
+    //    function() {
+    //        var storeReceiveChallanNo = $(this).data('id');
+    //        if (storeReceiveChallanNo !== "") {
+    //            window.open('/ProductReceive/ShowReport?storeReceiveChallanNo=' + storeReceiveChallanNo, '_blank');
+    //        }
+    //    });
+
+</script>
+
+

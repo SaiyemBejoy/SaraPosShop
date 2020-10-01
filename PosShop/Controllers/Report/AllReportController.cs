@@ -172,6 +172,10 @@ namespace PosShop.Controllers.Report
             {
                 await GenerateTimeWiseSaleDetails(objSaleReportModel);
             }
+            else if (objSaleReportModel.RadioFor == "VIH")
+            {
+                await GenerateVoidInvoiceHistory(objSaleReportModel);
+            }
 
             return RedirectToAction("SaleReport");
         }
@@ -271,7 +275,21 @@ namespace PosShop.Controllers.Report
             var msg = await _reportManager.SaleSummarySave(objSaleReportModel);
             return "o";
         }
-        
+
+        private async Task<int> GenerateVoidInvoiceHistory(SaleReportModel objSaleReportModel)
+        {
+            string strPath = Path.Combine(Server.MapPath("~/Reports/Sale/VoidInvoiceHistory.rpt"));
+            _objReportDocument.Load(strPath);
+            DataSet objDataSet = await _reportManager.GenerateVoidInvoiceHistory(objSaleReportModel);
+
+            _objReportDocument.Load(strPath);
+            _objReportDocument.SetDataSource(objDataSet);
+            _objReportDocument.SetDatabaseLogon("POSSHOP", "POSSHOP");
+
+            ShowReport(objSaleReportModel.ReportType, "Void Invoice History Report");
+            return 0;
+        }
+
         #endregion
 
         #region StockDetails
@@ -420,7 +438,42 @@ namespace PosShop.Controllers.Report
         }
         #endregion
 
- 
+        #region "Transit Report"
+        public async Task<ActionResult> TransitReport()
+        {
+            var data = await _dropdownManager.GetAllMarketPlaceList();
+            ViewBag.MarketPlaceList = data;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> TransitReport(TransitReportModel objTransitReportModel)
+        {
+
+            objTransitReportModel.ReportType = "PDF";
+            if (objTransitReportModel.RadioFor == "TPS")
+            {
+                await GenerateTransitStock(objTransitReportModel);
+            }
+
+            return RedirectToAction("TransitReport");
+        }
+
+        private async Task<int> GenerateTransitStock(TransitReportModel objTransitReportModel)
+        {
+            
+            string strPath = Path.Combine(Server.MapPath("~/Reports/Transit/TransitStock.rpt"));
+            _objReportDocument.Load(strPath);
+            DataSet objDataSet = await _reportManager.TransitStock(objTransitReportModel);
+            _objReportDocument.Load(strPath);
+            _objReportDocument.SetDataSource(objDataSet);
+            _objReportDocument.SetDatabaseLogon("POSSHOP", "POSSHOP");
+
+            ShowReport(objTransitReportModel.ReportType, "Transit Stock Report");
+            return 0;
+        }
+        #endregion
 
     }
 }

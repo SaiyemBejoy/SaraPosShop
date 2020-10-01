@@ -69,6 +69,7 @@
     <Compile Include="AllModel\ProductSearchModel.cs" />
     <Compile Include="AllModel\Report\SaleReportModel.cs" />
     <Compile Include="AllModel\Report\SalesManReportModel.cs" />
+    <Compile Include="AllModel\Report\TransitReportModel.cs" />
     <Compile Include="AllModel\RequisitionMainItemModel.cs" />
     <Compile Include="AllModel\RequisitionMainModel.cs" />
     <Compile Include="AllModel\ReturnSaleInfoModel.cs" />
@@ -90,8 +91,11 @@
     <Compile Include="AllModel\StoreHouseRequestMainItem.cs" />
     <Compile Include="AllModel\StoreHouseRequestMainItemConfirm.cs" />
     <Compile Include="AllModel\SubMenuPermisionModel.cs" />
+    <Compile Include="AllModel\TransferItemInfoModel.cs" />
     <Compile Include="AllModel\TransitProductItem.cs" />
     <Compile Include="AllModel\TransitProductModel.cs" />
+    <Compile Include="AllModel\TransitProductReturnItem.cs" />
+    <Compile Include="AllModel\TransitProductReturnModel.cs" />
     <Compile Include="AllModel\UserMenuManageModel.cs" />
     <Compile Include="ApiModel\CircularDiscountPromotionModel.cs" />
     <Compile Include="ApiModel\CircularPriceChangeMain.cs" />

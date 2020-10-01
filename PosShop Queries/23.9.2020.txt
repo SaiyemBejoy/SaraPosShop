@@ -1,0 +1,258 @@
+DROP VIEW POSSHOP.VEW_ALL_TRANSIT_ITEM_INFO;
+
+/* Formatted on 23-Sep-20 9:42:36 AM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_ALL_TRANSIT_ITEM_INFO
+(
+   MARKET_PLACE_ID,
+   PRODUCT_ID,
+   ITEM_ID,
+   BARCODE,
+   ITEM_NAME,
+   SALE_PRICE,
+   TRANSIT_QTY,
+   TRANSIT_RETURN_QTY,
+   STOCK
+)
+AS
+     SELECT M.MARKET_PLACE_ID,
+            i.PRODUCT_ID,
+            i.ITEM_ID,
+            i.BARCODE,
+            i.ITEM_NAME,
+            i.SALE_PRICE,
+            NVL (SUM (i.QUANTITY), 0) TRANSIT_QTY,
+            SUM ( (SELECT NVL (SUM (QUANTITY), 0)
+                     FROM TRANSIT_PRODUCT_RETURN_ITEM
+                    WHERE BARCODE = i.BARCODE))
+               TRANSIT_RETURN_QTY,
+            NVL ( (SUM (i.QUANTITY)
+                   - (SELECT NVL (SUM (QUANTITY), 0)
+                        FROM TRANSIT_PRODUCT_RETURN_ITEM
+                       WHERE BARCODE = i.BARCODE)),
+                 0)
+               STOCK
+       FROM    TRANSIT_PRODUCT_ITEM i
+            JOIN
+               TRANSIT_PRODUCT_MAIN M
+            ON (I.TRANSIT_CHALLAN_NUM = M.TRANSIT_CHALLAN_NUM)
+   GROUP BY M.MARKET_PLACE_ID,
+            i.PRODUCT_ID,
+            i.ITEM_ID,
+            i.BARCODE,
+            i.ITEM_NAME,
+            i.SALE_PRICE;
+
+==================================================================
+==================================================================
+
+DROP VIEW POSSHOP.VEW_ITEM_INFO;
+
+/* Formatted on 23-Sep-20 9:44:08 AM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_ITEM_INFO
+(
+   ITEMID,
+   PRODUCTID,
+   ITEMNAME,
+   PRODUCTSTYLENAME,
+   BARCODE,
+   RECEIVEQUANTITY,
+   SALEQUANTITY,
+   DAMAGEQUANTITY,
+   SHOPTOSHOPRECEIVEQTY,
+   SHOPTOSHOPDELIVERYQTY,
+   WAREHOUSETRANSFERQTY,
+   PENDINGTRANSFERQTY,
+   TRANSITQTY,
+   TRANSITRETURNQTY,
+   STOCKFORTRANSIT,
+   ROUNDQTY,
+   QUANTITY,
+   CATEGORY_NAME,
+   SUB_CATEGORY_NAME,
+   SALEPRICE,
+   UMO,
+   VAT,
+   TOTALROWCOUNT
+)
+AS
+   SELECT ITEMID,
+          PRODUCTID,
+          ITEMNAME,
+          PRODUCTSTYLENAME,
+          BARCODE,
+          RECEIVEQUANTITY,
+          SALEQUANTITY,
+          DAMAGEQUANTITY,
+          SHOPTOSHOPRECEIVEQTY,
+          SHOPTOSHOPDELIVERYQTY,
+          WAREHOUSETRANSFERQTY,
+          PENDINGTRANSFERQTY,
+          TRANSITQTY,
+          TRANSITRETURNQTY,
+          NVL (
+             ( (QUANTITY - PENDINGTRANSFERQTY) - TRANSITQTY)
+             + TRANSITRETURNQTY,
+             0)
+             STOCKFORTRANSIT,
+          NVL ( (QUANTITY - PENDINGTRANSFERQTY), 0) ROUNDQTY,
+          QUANTITY,
+          CATEGORY_NAME,
+          SUB_CATEGORY_NAME,
+          CASE
+             WHEN (SELECT COUNT (*)
+                     FROM CIR_DIS_PROMOTION_INFO
+                    WHERE BARCODE = SI.BARCODE
+                          AND (VALID_FROM <= SYSDATE AND VALID_TO >= SYSDATE)) >
+                     0
+             THEN
+                (SELECT NEW_SALE_PRICE
+                   FROM CIR_DIS_PROMOTION_INFO
+                  WHERE BARCODE = SI.BARCODE
+                        AND (VALID_FROM <= SYSDATE AND VALID_TO >= SYSDATE))
+             ELSE
+                SALEPRICE
+          END
+             SALEPRICE,
+          UMO,
+          VAT,
+          TOTALROWCOUNT
+     FROM VEW_ALL_ITEM_INFO SI;
+
+================================================================================
+================================================================================
+
+DROP VIEW POSSHOP.VEW_ALL_ITEM_INFO;
+
+/* Formatted on 23-Sep-20 9:44:44 AM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_ALL_ITEM_INFO
+(
+   ITEMID,
+   PRODUCTID,
+   ITEMNAME,
+   PRODUCTSTYLENAME,
+   BARCODE,
+   RECEIVEQUANTITY,
+   SALEQUANTITY,
+   DAMAGEQUANTITY,
+   SHOPTOSHOPRECEIVEQTY,
+   SHOPTOSHOPDELIVERYQTY,
+   WAREHOUSETRANSFERQTY,
+   PENDINGTRANSFERQTY,
+   TRANSITQTY,
+   TRANSITRETURNQTY,
+   QUANTITY,
+   CATEGORY_NAME,
+   SUB_CATEGORY_NAME,
+   SALEPRICE,
+   UMO,
+   VAT,
+   TOTALROWCOUNT
+)
+AS
+     SELECT ITEM_ID,
+            PRODUCT_ID,
+            ITEM_NAME,
+            (SELECT REGEXP_REPLACE (S.ITEM_NAME, '(((\w+)\s){1}).*', '\1')
+               FROM DUAL)
+               PRODUCT_STYLE_NAME,
+            BARCODE,
+            (SELECT NVL (SUM (RECEIVE_QUANTITY), 0)
+               FROM STORE_RECEIVE_ITEM
+              WHERE BARCODE = S.BARCODE)
+               RECEIVE_QUANTITY,
+            (SELECT NVL (SUM (QUANTITY), 0)
+               FROM SALE_ITEM
+              WHERE BARCODE = S.BARCODE AND SHOP_TO_SHOP_EX_YN IS NULL)
+               SALE_QUANTITY,
+            (SELECT NVL (SUM (DMI.QUANTITY), 0)
+               FROM    DAMAGE_MAIN_ITEM DMI
+                    JOIN
+                       DAMAGE_MAIN DM
+                    ON (DMI.DAMAGE_CHALLAN_NO = DM.DAMAGE_CHALLAN_NO)
+              WHERE DM.RECEIVED_YN = 'Y' AND DMI.BARCODE = S.BARCODE)
+               DAMAGE_QUANTITY,
+            (SELECT NVL (SUM (QUANTITY), 0)
+               FROM SHOP_TO_SHOP_RECEIVE_ITEM
+              WHERE BARCODE = S.BARCODE)
+               SHOP_TO_SHOP_RECEIVE,
+            (SELECT NVL (SUM (DI.QUANTITY), 0)
+               FROM    SHOP_REQ_DELIVERY_ITEM DI
+                    JOIN
+                       SHOP_REQ_DELIVERY_MAIN DM
+                    ON (DI.DELIVERY_ID = DM.DELIVERY_ID)
+              WHERE     DM.RECEIVED_YN = 'Y'
+                    AND DM.RETURN_YN = 'N'
+                    AND DI.BARCODE = S.BARCODE)
+               SHOP_TO_SHOP_DELIVERY,
+            (SELECT NVL (SUM (STI.TRANSFER_QUANTITY), 0)
+               FROM    STOCK_TRANSFER_ITEM STI
+                    JOIN
+                       STOCK_TRANSFER_MAIN STM
+                    ON (STI.STOCK_TRANSFER_ID = STM.STOCK_TRANSFER_ID)
+              WHERE STM.RECEIVE_YN = 'Y' AND STI.BARCODE = S.BARCODE)
+               TRANSFER_QUANTITY,
+            (SELECT NVL (SUM (STI.TRANSFER_QUANTITY), 0)
+               FROM    STOCK_TRANSFER_ITEM STI
+                    JOIN
+                       STOCK_TRANSFER_MAIN STM
+                    ON (STI.STOCK_TRANSFER_ID = STM.STOCK_TRANSFER_ID)
+              WHERE STM.RECEIVE_YN = 'N' AND STI.BARCODE = S.BARCODE)
+               PENDING_TRANSFER_QUANTITY,
+            (SELECT NVL (SUM (QUANTITY), 0)
+               FROM TRANSIT_PRODUCT_ITEM
+              WHERE BARCODE = S.BARCODE)
+               TRANSIT_QTY,
+            (SELECT NVL (SUM (QUANTITY), 0)
+               FROM TRANSIT_PRODUCT_RETURN_ITEM
+              WHERE BARCODE = S.BARCODE)
+               TRANSIT_RETURN_QTY,
+            ( ( (SELECT NVL (SUM (RECEIVE_QUANTITY), 0)
+                   FROM STORE_RECEIVE_ITEM
+                  WHERE BARCODE = S.BARCODE)
+               + (SELECT NVL (SUM (QUANTITY), 0)
+                    FROM SHOP_TO_SHOP_RECEIVE_ITEM
+                   WHERE BARCODE = S.BARCODE))
+             - ( (SELECT NVL (SUM (QUANTITY), 0)
+                    FROM SALE_ITEM
+                   WHERE BARCODE = S.BARCODE AND SHOP_TO_SHOP_EX_YN IS NULL)
+                + (SELECT NVL (SUM (DMI.QUANTITY), 0)
+                     FROM    DAMAGE_MAIN_ITEM DMI
+                          JOIN
+                             DAMAGE_MAIN DM
+                          ON (DMI.DAMAGE_CHALLAN_NO = DM.DAMAGE_CHALLAN_NO)
+                    WHERE DM.RECEIVED_YN = 'Y' AND DMI.BARCODE = S.BARCODE)
+                + (SELECT NVL (SUM (DI.QUANTITY), 0)
+                     FROM    SHOP_REQ_DELIVERY_ITEM DI
+                          JOIN
+                             SHOP_REQ_DELIVERY_MAIN DM
+                          ON (DI.DELIVERY_ID = DM.DELIVERY_ID)
+                    WHERE     DM.RECEIVED_YN = 'Y'
+                          AND DM.RETURN_YN = 'N'
+                          AND DI.BARCODE = S.BARCODE)
+                + (SELECT NVL (SUM (STI.TRANSFER_QUANTITY), 0)
+                     FROM    STOCK_TRANSFER_ITEM STI
+                          JOIN
+                             STOCK_TRANSFER_MAIN STM
+                          ON (STI.STOCK_TRANSFER_ID = STM.STOCK_TRANSFER_ID)
+                    WHERE STM.RECEIVE_YN = 'Y' AND STI.BARCODE = S.BARCODE)))
+               QUANTITY,
+            CATEGORY_NAME,
+            SUB_CATEGORY_NAME,
+            SALE_PRICE,
+            UMO,
+            VAT,
+            (SELECT COUNT (*) FROM STORE_RECEIVE_ITEM) TotalRowCount
+       FROM STORE_RECEIVE_ITEM S
+   GROUP BY ITEM_ID,
+            PRODUCT_ID,
+            ITEM_NAME,
+            BARCODE,
+            CATEGORY_NAME,
+            SUB_CATEGORY_NAME,
+            SALE_PRICE,
+            UMO,
+            VAT;
+
+===========================================================================
+===========================================================================
+

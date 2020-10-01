@@ -148,6 +148,7 @@
                                                             <th>BarCode</th>
                                                             <th>Name</th>
                                                             <th>Price</th>
+                                                            <th>Qty</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
@@ -192,9 +193,10 @@
             $.each($("#selectedTableBody tr"),
                 function() {
                     allRequisitionItem.push({
-                        Barcode: $(this).find('td:eq(0)').html(),
-                        ItemName: $(this).find('td:eq(1)').html(),
-                        Price: $(this).find('td:eq(2)').html()
+                        Barcode: $(this).find('td:eq(0)').text(),
+                        ItemName: $(this).find('td:eq(1)').text(),
+                        Price: $(this).find('td:eq(2)').text(),
+                        RqsnQuantity: $(this).find('.RqsnQuantity').val()
                     });
                 });
             var dataObject = {
@@ -242,11 +244,23 @@
             '<td>' +
             price +
             '</td>' +
+            '<td style ="width: 20%">' +
+            '<input type="number" class="form-control input-circle RqsnQuantity" id="RqsnQuantity" value="' + 1 + '"' +
+            '</td>' +
             '<td>' +
             '<a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a>' +
             '</td>' +
             '</tr>');
+
+        scrollStopNumberField();
     }
+
+    function scrollStopNumberField() {
+        $('input[type=number]').on('mousewheel', function (e) {
+            $(e.target).blur();
+        });
+    }
+
     jQuery(document).ready(function () {
         $("#styleName").focus();
 

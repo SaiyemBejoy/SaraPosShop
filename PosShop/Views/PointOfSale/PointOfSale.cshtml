@@ -24,15 +24,15 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-5 col-form-label">Sales Man: <span style="color: red"><b>*</b></span></label>
+                                                    <label class="col-5 col-form-label" style="font-size: 15px; font-weight: bold;">Sales Man: <span style="color: red"><b>*</b></span></label>
                                                     <div class="col-7" style="margin-left: -12px;">
-                                                        @Html.DropDownListFor(model => model.SalesManName, (IEnumerable<SelectListItem>)ViewBag.employeelist, "Select Option", new { @class = " form-control m-input--air m-input--pill select2", @style = "display:none;" })
+                                                        @Html.DropDownListFor(model => model.SalesManName, (IEnumerable<SelectListItem>)ViewBag.employeelist, "-Select Sales Man-", new { @class = " form-control m-input--air m-input--pill select2", @style = "display:none;" })
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label">Barcode:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Barcode:</label>
                                                     <div class="col-8">
                                                         <input class="form-control m-input--air m-input--pill" type="text" id="barcode" style="width: 150px" autocomplete="off">
                                                     </div>
@@ -44,7 +44,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label">Date:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Date:</label>
                                                     <div class="col-8">
                                                         <input class="form-control m-input--air m-input--pill" type="text" id="date" disabled="disabled" style="background-color: gold; width: 100px;font-weight: bold;">
                                                     </div>
@@ -52,7 +52,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label">InVoice NO#:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">InVoice NO#:</label>
                                                     <div class="col-8">
                                                         <input type="hidden" name="saleInfoId" id="saleInfoId" />
                                                         <input type="hidden" name="exchange" id="exchangeHiddenField" />
@@ -76,19 +76,19 @@
                                             <div class="col-md-6">
                                                 <input type="hidden" id="customerInfoId" />
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label">Customer Code:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Customer Code:</label>
                                                     <div class="col-4">
                                                         <input class="form-control m-input--air m-input--pill" type="text" id="customerCode">
                                                     </div>
                                                     <div class="col-4">
-                                                        <label class="m-checkbox" style="margin-top: 11px">
+                                                        <label class="m-checkbox" style="margin-top: 11px;font-size: 15px; font-weight: bold;">
                                                             <input type="checkbox" id="checkbox"> Active Code
                                                             <span></span>
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label">Mobile:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Mobile:</label>
                                                     <div class="col-8">
                                                         <input class="form-control m-input--air m-input--pill" autocomplete="off" type="number" id="mobile" maxlength="11" tabindex="2">
                                                     </div>
@@ -96,13 +96,13 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label">Customer Name:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Customer Name:</label>
                                                     <div class="col-8">
                                                         <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" id="customerName" placeholder="Customer Name (Select For F3) " tabindex="1">
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label">Address:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px;"><b>Address:</b></label>
                                                     <div class="col-8">
                                                         <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" id="address">
                                                     </div>
@@ -110,17 +110,19 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            @*use hoi na tai hide kore raksi*@
+                                            @*<div class="col-md-6">
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-4 col-form-label" style="font-size: 11px;">Old Barcode(Ex):</label>
                                                     <div class="col-8">
                                                         <input class="form-control m-input--air m-input--pill" type="text" style="width: 200px" id="BarcodeForExchange" placeholder="Exchange Barcode">
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>*@
+                                           @*End*@
                                             <div class="col-md-6">
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label" style="font-size: 11px;">Medium:</label>
+                                                    <label class="col-4 col-form-label" style="font-size: 15px;"><b>Medium:</b></label>
                                                     <div class="col-8">
                                                         <select class="form-control m-input--air m-input--pill customerMedium" id="customerMedium" style="width: 200px">
                                                             <option value="0">--Select Option--</option>
@@ -134,6 +136,15 @@
                                                 </div>
 
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px;"><b>MarketPlace:</b></label>
+                                                    <div class="col-8">
+                                                        @Html.DropDownListFor(model => model.MarketPlaceId, (IEnumerable<SelectListItem>)ViewBag.marketPlaceList, "--MarketPlace--", new { @class = " form-control m-input--air m-input--pill"})
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -142,7 +153,7 @@
                                 <div class="m-portlet__body">
                                     <div class="table-responsive">
                                         <table class="table m-table m-table--head-bg-success" id="gridTable">
-                                            <thead>
+                                            <thead style="font-size: 15px; font-weight: bold;">
                                                 <tr>
                                                     @*<th>SL No</th>*@
                                                     <th>BarCode</th>
@@ -189,43 +200,43 @@
                                 <div class="m-portlet__body">
                                     <form class="m-form m-form--fit">
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">Total Item:</label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Total Item:</label>
                                             <div class="col-8">
                                                 <input class="form-control m-input--air m-input--pill" type="text" id="totalItem" readonly="readonly" style="background-color: yellow; font-weight: bold; font-size: 15px;">
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">Total:</label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Total:</label>
                                             <div class="col-8">
                                                 <input class="form-control m-input--air m-input--pill" type="text" id="total" readonly="readonly" style="background-color: yellow; font-weight: bold;font-size: 15px;">
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">VAT:</label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">VAT:</label>
                                             <div class="col-8">
                                                 <input class="form-control m-input--air m-input--pill" type="text" id="vatAmt" readonly="readonly" style="background-color: yellow; font-weight: bold;">
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">Discount(%):</label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Discount(%):</label>
                                             <div class="col-8">
                                                 <input class="form-control m-input--air m-input--pill" type="number" min="0" id="discount" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length===2) return false;" tabindex="3" autocomplete="off">
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">Discount:</label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Discount:</label>
                                             <div class="col-8">
                                                 <input class="form-control m-input--air m-input--pill" type="text" id="discountAmount" readonly="readonly">
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">Bag Discount:</label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Bag Discount:</label>
                                             <div class="col-8">
                                                 <input class="form-control m-input--air m-input--pill" type="number" min="0" id="BagPrice" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length===6) return false;" tabindex="4">
                                             </div>
                                         </div>
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">Sub-Total: <span style="color: red"><b>*</b></span></label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Sub-Total: <span style="color: red"><b>*</b></span></label>
                                             <div class="col-8">
                                                 <input type="hidden" name="excGrandTotal" id="excGrandTotalForHidden" />
                                                 <input class="form-control m-input--air m-input--pill" type="text" id="grandTotal" readonly="readonly" style="background-color: yellow; font-weight: bold;font-size: 20px;">
@@ -233,7 +244,7 @@
                                         </div>
 
                                         <div class="form-group m-form__group row">
-                                            <label class="col-4 col-form-label">Return Amount:</label>
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Return Amount:</label>
                                             <div class="col-8">
                                                 <input class="form-control m-input--air m-input--pill" id="returnAmount" type="text" readonly="readonly" style="background-color: yellow; font-weight: bold;">
                                             </div>
@@ -268,7 +279,7 @@
 <!-- Modal -->
 <div class="modal fade show" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 125% !important;">
 
             <div class="modal-body">
                 <div class="row">
@@ -298,6 +309,8 @@
                                     <th>Pending Tr.</th>
                                     <th>Stock</th>
                                     <th>VAT</th>
+                                    <th>Category</th>
+                                    <th>SubCategory</th>
                                 </tr>
                             </thead>
                             <tbody id="searchTableBody"></tbody>
@@ -885,6 +898,7 @@
         var returnInvoice = $('input[name="return"]').val();
         var hiddenShopId = $('input[name="shopName"]').val();
         var saleManId = $("#SalesManName").val();
+        var marketPlaceId = $("#MarketPlaceId").val();
         var invoiceNo = $("#invoiceNo").val();
         var totalItem = $("#totalItem").val();
         var totalAmount = $("#total").val();
@@ -933,6 +947,7 @@
             'InvoiceNumber': invoiceNo,
             'SaleInfoId': saleInfoId,
             'SalesManId': saleManId,
+            'MarketPlaceId':marketPlaceId,
             'TotalItem': totalItem,
             'TotalAmount': totalAmount,
             'Vat': vat,
@@ -1315,6 +1330,7 @@
         //Reprint
         $("#rePrint").click(function () {
             var invoiceNumber = localStorage.getItem("invoiceNumber");
+            invoiceNumber = invoiceNumber.replace(/^"(.*)"$/, '$1');
             var counterName = localStorage.getItem("counterName");
             if (invoiceNumber == null)
                 invoiceNumber = "";
@@ -2122,20 +2138,26 @@
                                             '<td style="text-align: center">' +
                                             data[i].Barcode +
                                             '</td>' +
-                                            '<td style="background-color: red; width: 90%; text-align: left">' +
+                                            '<td style="background-color: red; width: 100%; text-align: left">' +
                                             data[i].StyleName +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%;text-align: center">' +
                                             data[i].Price +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%; text-align: center">' +
                                             data[i].PendingTrQty +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%;text-align: center">' +
                                             data[i].RoundQuantity +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%; text-align: center">' +
                                             data[i].Vat +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].CategoryName +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].SubCategoryName +
                                             '</td>' +
                                             '</tr>');
                                     } else {
@@ -2146,20 +2168,26 @@
                                             '<td style="text-align: center">' +
                                             data[i].Barcode +
                                             '</td>' +
-                                            '<td style="width: 90%; text-align: left">' +
+                                            '<td style="width: 100%; text-align: left">' +
                                             data[i].StyleName +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%;text-align: center">' +
                                             data[i].Price +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%; text-align: center">' +
                                             data[i].PendingTrQty +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%;text-align: center">' +
                                             data[i].RoundQuantity +
                                             '</td>' +
-                                            '<td style="text-align: center">' +
+                                            '<td style="width: 10%; text-align: center">' +
                                             data[i].Vat +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].CategoryName +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].SubCategoryName +
                                             '</td>' +
                                             '</tr>');
                                     }

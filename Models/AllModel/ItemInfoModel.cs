@@ -12,6 +12,9 @@ namespace Models.AllModel
         public int Quantity { get; set; }
         public int RoundQuantity { get; set; }
         public int PendingTransferQuantity { get; set; }
+        public int TransitQty { get; set; }
+        public int TransitReturnQty { get; set; }
+        public int TransitForStock { get; set; }
         public int TotalRowCount { get; set; }
 
         public static ItemInfoModel ConvertItemInfoModel(DataRow row)
@@ -25,6 +28,9 @@ namespace Models.AllModel
                 Quantity = row.Table.Columns.Contains("Quantity") ? Convert.ToInt32(row["Quantity"]) : 0,
                 PendingTransferQuantity = row.Table.Columns.Contains("PENDINGTRANSFERQTY") ? Convert.ToInt32(row["PENDINGTRANSFERQTY"]) : 0,
                 RoundQuantity = row.Table.Columns.Contains("ROUNDQTY") ? Convert.ToInt32(row["ROUNDQTY"]) : 0,
+                TransitQty = row.Table.Columns.Contains("TRANSITQTY") ? Convert.ToInt32(row["TRANSITQTY"]) : 0,
+                TransitReturnQty = row.Table.Columns.Contains("TRANSITRETURNQTY") ? Convert.ToInt32(row["TRANSITRETURNQTY"]) : 0,
+                TransitForStock = row.Table.Columns.Contains("STOCKFORTRANSIT") ? Convert.ToInt32(row["STOCKFORTRANSIT"]) : 0,
                 SalePrice = row.Table.Columns.Contains("SalePrice") ? Convert.ToDouble(row["SalePrice"]) : 0.0,
                 Umo = row.Table.Columns.Contains("Umo") ? Convert.ToString(row["Umo"]) : "",
                 Vat = row.Table.Columns.Contains("Vat") ? Convert.ToDouble(row["Vat"]) : 0.0

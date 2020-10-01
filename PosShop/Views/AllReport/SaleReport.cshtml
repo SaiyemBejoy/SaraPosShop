@@ -24,7 +24,7 @@
                                             @Html.AntiForgeryToken()
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div class="form-group m-form__group row">
+                                                    <div class="form-group m-form__group row" id="fromDateDiv">
                                                         <label class="col-4 col-form-label">From Date:</label>
                                                         <div class="col-8">
                                                             @*<input class="form-control m-input--air m-input--pill datepicker" value="@ViewBag.dateTime" style="width: 160px;">*@
@@ -32,7 +32,7 @@
                                                             @Html.ValidationMessageFor(c => c.FromDate)
                                                         </div>
                                                     </div>
-                                                    <div class="form-group m-form__group row">
+                                                    <div class="form-group m-form__group row" id="toDateDiv">
                                                         <label class="col-4 col-form-label">To Date:</label>
                                                         <div class="col-8">
                                                             @*<input class="form-control m-input--air m-input--pill datepicker" value="@ViewBag.dateTime" style="width: 160px;" >*@
@@ -40,13 +40,13 @@
                                                             @Html.ValidationMessageFor(c => c.ToDate)
                                                         </div>
                                                     </div>
-                                                    <div class="form-group m-form__group row">
+                                                    <div class="form-group m-form__group row" id="categoryDiv">
                                                         <label class="col-4 col-form-label"> Category:</label>
                                                         <div class="col-8">
                                                             @Html.DropDownListFor(model => model.CategoryName, (IEnumerable<SelectListItem>)ViewBag.CategoryList, "-Select Option-", new { @class = " form-control m-input--air m-input--pill", style = "width: 268px;" })
                                                         </div>
                                                     </div>
-                                                    <div class="form-group m-form__group row">
+                                                    <div class="form-group m-form__group row" id="subCategoryDiv">
                                                         <label class="col-4 col-form-label">Sub Category:</label>
                                                         <div class="col-8">
                                                             <select name="subcategoryName" id="subcategoryName" class="form-control m-input--air m-input--pill" style="width: 268px;">
@@ -99,7 +99,7 @@
 
                                                         </div>
                                                     </div>
-                                                    <div class="form-group m-form__group row" >
+                                                    <div class="form-group m-form__group row">
                                                         <label class="col-5"><b>Cashier Sale Details:</b></label>
                                                         <div class="col-7">
                                                             @Html.RadioButtonFor(model => model.RadioFor, "CSD", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
@@ -110,6 +110,13 @@
                                                         <label class="col-5"><b>Time Wise Sale Summary:</b></label>
                                                         <div class="col-7">
                                                             @Html.RadioButtonFor(model => model.RadioFor, "TWSS", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Void Invoice History:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "VIH", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
 
                                                         </div>
                                                     </div>
@@ -191,11 +198,60 @@
 
         $(':radio[name=RadioFor]').change(function () {
             var value = $(this).val();
-            if (value === 'TWSS') {
+
+            if (value === 'S') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'C') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'D') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'CS') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'CSD') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'TWSS') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
                 $("#fromDateTimeDiv").show();
                 $("#toDateTimeDiv").show();
-            } 
-            else {
+            }
+            else if (value === 'VIH') {
+                $("#categoryDiv").hide();
+                $("#subCategoryDiv").hide();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show(); 
                 $("#fromDateTimeDiv").hide();
                 $("#toDateTimeDiv").hide();
             }

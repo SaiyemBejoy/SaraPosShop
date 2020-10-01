@@ -1,0 +1,76 @@
+/* Formatted on 27-Sep-20 4:48:07 PM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_RPT_VOID_HISTORY
+(
+   RPT_TITLE,
+   SHOP_NAME,
+   SHOP_ADDRESS,
+   SALE_INFO_ID,
+   INVOICE_NUMBER,
+   INVOICE_DATE,
+   TOTAL_ITEM,
+   TOTAL_AMOUNT,
+   VAT,
+   DISCOUNT_P,
+   DISCOUNT_A,
+   SUB_TOTAL,
+   CUSTOMER_ID,
+   CREATED_BY,
+   CREATED_BY_NAME,
+   NET_AMOUNT,
+   BARCODE,
+   STYLE_NAME,
+   PRICE,
+   QUANTITY,
+   TOTAL,
+   ITEM_ID,
+   PRODUCT_ID,
+   PRODUCT_CATEGORY,
+   PRODUCT_SUB_CATEGORY,
+   SALESMAN_ID,
+   SALESMAN_NAME,
+   PAYMENT_INFO
+)
+AS
+   SELECT '' RPT_TITLE,
+          (SELECT SHOP_NAME FROM shop) SHOP_NAME,
+          (SELECT SHOP_ADDRESS FROM shop) SHOP_ADDRESS,
+          vs.SALE_INFO_ID,
+          vs.INVOICE_NUMBER,
+          vs.INVOICE_DATE,
+          vs.TOTAL_ITEM,
+          vs.TOTAL_AMOUNT,
+          vs.VAT,
+          vs.DISCOUNT_P,
+          vs.DISCOUNT_A,
+          vs.SUB_TOTAL,
+          vs.CUSTOMER_ID,
+          vs.CREATED_BY,
+          (SELECT EMPLOYEE_NAME
+             FROM EMPLOYEE_DISTRIBUTION
+            WHERE EMPLOYEE_ID = vs.CREATED_BY)
+             CREATED_BY_NAME,
+          vs.NET_AMOUNT,
+          vi.BARCODE,
+          vi.STYLE_NAME,
+          vi.PRICE,
+          vi.QUANTITY,
+          vi.TOTAL,
+          vi.ITEM_ID,
+          vi.PRODUCT_ID,
+          vi.PRODUCT_CATEGORY,
+          vi.PRODUCT_SUB_CATEGORY,
+          vi.SALESMAN_ID,
+          (SELECT EMPLOYEE_NAME
+             FROM EMPLOYEE_DISTRIBUTION
+            WHERE EMPLOYEE_ID = VI.SALESMAN_ID)
+             SALESMAN_NAME,
+          (SELECT LISTAGG (t.PAYMENT_TYPE || '-' || t.SUB_TOTAL, ',')
+                     WITHIN GROUP (ORDER BY t.SALE_INFO_ID)
+                     PAYMENT_INFO
+             FROM VOID_SALE_PAYMENT_INFO t
+            WHERE t.SALE_INFO_ID = VI.SALE_INFO_ID)
+             PAYMENT_INFO
+     FROM    VOID_SALE_INFO vs
+          LEFT JOIN
+             VOID_SALE_ITEM vi
+          ON (VS.SALE_INFO_ID = VI.SALE_INFO_ID);
