@@ -76,6 +76,14 @@ namespace PosShop.Controllers
             return Json(dataInfo, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<ActionResult> GetProductInfoByReceiveChallanNo(string receiveChallanNo)
+        {
+            var dataInfo = await _transitManager.GetProductInfoByReceiveChallanNo(receiveChallanNo);
+            if (dataInfo == null)
+                return Json(0, JsonRequestBehavior.AllowGet);
+            return Json(dataInfo, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<ActionResult> SaveTransitData(TransitProductModel objTransitProductModel)
         {
             LoadSession();

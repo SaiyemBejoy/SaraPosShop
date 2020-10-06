@@ -741,5 +741,17 @@ namespace DAL.Repository
             var dt = await GetDataThroughDataTableAsync(query, param);
             return ((dt.Rows).Cast<DataRow>().Select(SearchHintsModel.ConvertSearchHintsModel));
         }
+
+        public async Task<TransitItemInfoModel> GetAllTransitProductInfoByBarcode(string barcode,string marketPlaceId)
+        {
+            List<OracleParameter> param = new List<OracleParameter>
+            {
+                new OracleParameter(":BARCODE", OracleDbType.Varchar2, barcode.ToUpper(), ParameterDirection.Input),
+                new OracleParameter(":MARKET_PLACE_ID", OracleDbType.Varchar2, marketPlaceId, ParameterDirection.Input)
+            };
+            var query = "Select * from VEW_RPT_TRANSIT_PRODUCT_INFO WHERE BARCODE = :BARCODE AND MARKET_PLACE_ID = :MARKET_PLACE_ID AND TRANSIT_BLANCE >0";
+            var dt = await GetDataThroughDataTableAsync(query, param);
+            return TransitItemInfoModel.ConvertTransitItemInfoModel(dt.Rows[0]);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BLL.IManager;
@@ -7,6 +8,7 @@ using BLL.Manager;
 using Models.ApiModel;
 using Quartz;
 using DAL.DBManager;
+using Models.AllModel;
 using PosShop.Utility;
 
 namespace PosShop
@@ -87,6 +89,7 @@ namespace PosShop
         private async Task GetShopRequisitionDataForNotificationAsync()
         {
             var requisitiondata = await _shopRequisitionManager.GetAllFromRequisitionData(UtilityClass.ShopId);
+            NotificationClass.RequisitionNotification = requisitiondata.Count();
         }
         //private void DataBaseBackup()
         //{

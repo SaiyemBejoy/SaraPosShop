@@ -676,5 +676,19 @@ namespace BLL.Manager
                 return null;
             }
         }
+
+        public  async Task<TransitItemInfoModel> GetAllTransitProductInfoByBarcode(string barcode, string marketPlaceId)
+        {
+            try
+            {
+                var data = await _repository.GetAllTransitProductInfoByBarcode(barcode, marketPlaceId);
+                return data;
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
     }
 }

@@ -47,6 +47,7 @@ namespace DAL.Repository
             {
                 new OracleParameter(":P_TRANSIT_PRODUCT_ID", OracleDbType.Varchar2, objTransitProductModel.TransitProductId, ParameterDirection.Input),
                 new OracleParameter(":P_TRANSIT_CHALLAN_NUM", OracleDbType.Varchar2, objTransitProductModel.TransitChallnNo, ParameterDirection.Input),
+                new OracleParameter(":P_STORE_RECEIVE_CHALLAN_NO", OracleDbType.Varchar2, objTransitProductModel.StoreReceiveChallanNo, ParameterDirection.Input),
                 new OracleParameter(":P_MARKET_PLACE_ID", OracleDbType.Varchar2, objTransitProductModel.MarketPalceId, ParameterDirection.Input),
                 new OracleParameter(":P_SHOP_ID", OracleDbType.Varchar2, objTransitProductModel.ShopId, ParameterDirection.Input),
                 new OracleParameter(":P_CREATED_BY", OracleDbType.Varchar2, objTransitProductModel.CreateddBy, ParameterDirection.Input),
@@ -81,6 +82,18 @@ namespace DAL.Repository
             query.Append("PRO_TRANSIT_PRODUCT_ITEM_SAVE");
 
             return await ExecuteNonQueryAsync(query.ToString(), param);
+        }
+
+        public async Task<IEnumerable<TransitItemInfoModel>> GetProductInfoByReceiveChallanNo(string receiveChallanNo)
+        {
+            List<OracleParameter> param = new List<OracleParameter>
+            {
+                new OracleParameter(":STORE_RECEIVE_CHALLAN_NO", OracleDbType.Varchar2, receiveChallanNo, ParameterDirection.Input)
+            };
+
+            var query = "Select * from VEW_STORE_RECEIVE_DETAILS WHERE STORE_RECEIVE_CHALLAN_NO = :STORE_RECEIVE_CHALLAN_NO ";
+            var dt = await GetDataThroughDataTableAsync(query, param);
+            return (dt.Rows).Cast<DataRow>().Select(TransitItemInfoModel.ConvertTransitItemInfoByChallanNoModel);
         }
 
         #region "Transit Return"
@@ -146,6 +159,8 @@ namespace DAL.Repository
             var dt = await GetDataThroughDataTableAsync(query, null);
             return (dt.Rows).Cast<DataRow>().Select(TransitProductReturnModel.ConvertTransitProductReturnModel);
         }
+
+       
         #endregion
     }
 }

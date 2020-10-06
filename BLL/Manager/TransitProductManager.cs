@@ -30,13 +30,18 @@ namespace BLL.Manager
                 try
                 {
                     shopDbSave = await _repository.SaveAllTransitProductData(objTransitProductModel);
-                    if (!string.IsNullOrWhiteSpace(shopDbSave))
+                    if (shopDbSave != "NOTFOUND" && shopDbSave !="Exist")
                     {
                         foreach (var tableData in objTransitProductModel.TransitProductItemList)
                         {
                             tableData.TransitChallnNo = shopDbSave;
                             var itemSave = await _repository.SaveAllTransitProductItem(tableData);
                         }
+                        return shopDbSave;
+                    }
+
+                    if (shopDbSave == "Exist")
+                    {
                         return shopDbSave;
                     }
                 }
@@ -64,6 +69,20 @@ namespace BLL.Manager
             }
             catch (Exception)
             {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<TransitItemInfoModel>> GetProductInfoByReceiveChallanNo(string receiveChallanNo)
+        {
+            try
+            {
+                var data = await _repository.GetProductInfoByReceiveChallanNo(receiveChallanNo);
+                return data;
+            }
+            catch (Exception)
+            {
+
                 return null;
             }
         }
@@ -114,6 +133,8 @@ namespace BLL.Manager
                 return null;
             }
         }
+
+       
         #endregion
     }
 }

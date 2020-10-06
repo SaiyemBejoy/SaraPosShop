@@ -112,14 +112,14 @@
                                         <div class="row">
                                             @*use hoi na tai hide kore raksi*@
                                             @*<div class="col-md-6">
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-4 col-form-label" style="font-size: 11px;">Old Barcode(Ex):</label>
-                                                    <div class="col-8">
-                                                        <input class="form-control m-input--air m-input--pill" type="text" style="width: 200px" id="BarcodeForExchange" placeholder="Exchange Barcode">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label" style="font-size: 11px;">Old Barcode(Ex):</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" style="width: 200px" id="BarcodeForExchange" placeholder="Exchange Barcode">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>*@
-                                           @*End*@
+                                                </div>*@
+                                            @*End*@
                                             <div class="col-md-6">
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-4 col-form-label" style="font-size: 15px;"><b>Medium:</b></label>
@@ -140,7 +140,7 @@
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-4 col-form-label" style="font-size: 15px;"><b>MarketPlace:</b></label>
                                                     <div class="col-8">
-                                                        @Html.DropDownListFor(model => model.MarketPlaceId, (IEnumerable<SelectListItem>)ViewBag.marketPlaceList, "--MarketPlace--", new { @class = " form-control m-input--air m-input--pill"})
+                                                        @Html.DropDownListFor(model => model.MarketPlaceId, (IEnumerable<SelectListItem>)ViewBag.marketPlaceList, "--MarketPlace--", new { @class = " form-control m-input--air m-input--pill" })
                                                     </div>
                                                 </div>
 
@@ -186,13 +186,12 @@
                                         <div class="col-md-3">
                                             <button type="button" id="exchange" class="btn m-btn m-btn--gradient-from-accent m-btn--gradient-to-success" style="width: 85px; height: 60px; text-align: center"> Exchange<Br />(F9)</button>
                                         </div>
-                                        @if (employee.EmployeeRole.ToLower() == "manager" || employee.EmployeeRole.ToLower() == "cashier")
+                                        @if (employee.VoidPermision == "Y")
                                         {
                                             <div class="col-md-3">
                                                 <button type="button" class="btn m-btn m-btn--gradient-from-focus m-btn--gradient-to-danger" data-toggle="modal" data-target="#voidInvoiceModal" id="voidInvoice" style="width: 85px; height: 60px; text-align: center">Void</button>
                                             </div>
                                         }
-
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +253,10 @@
                                         <div class="form-group m-form__group row">
                                             <div class="col-md-3"></div>
                                             <div class="col-md-3">
+                                            @if (employee.ReturnPermision == "Y")
+                                            {
                                                 <button type="button" class="btn m-btn m-btn--gradient-from-danger m-btn--gradient-to-warning" id="returnInvoice" style="width: 90px; height: 60px; text-align: center">Return</button>
+                                            }
                                             </div>
                                             <div class="col-md-3">
                                                 <button type="button" class="btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" id="rePrint" style="width: 90px; height: 60px; text-align: center">Reprint</button>
@@ -593,14 +595,19 @@
                         </text>
                     }
                 }
-                for (var j = 0; j < empList.length; j++) {
-                    if (data.SaleItemList[i].SalesManId === empList[j].id) {
-                        $("#SalesManName" + data.SaleItemList[i].Barcode).append('<option selected value="' + empList[j].id + '">' + empList[j].name + '</option>');
-                    } else {
-                        $("#SalesManName" + data.SaleItemList[i].Barcode).append('<option  value="' + empList[j].id + '">' + empList[j].name + '</option>');
-                    }
-
+            for (var j = 0; j < empList.length; j++) {
+                if (data.SaleItemList[i].SalesManId === empList[j].id) {
+                    $("#SalesManName" + data.SaleItemList[i].Barcode).append('<option selected value="' +
+                        empList[j].id +
+                        '">' +
+                        empList[j].name +
+                        '</option>');
+                } else {
+                    $("#SalesManName" + data.SaleItemList[i].Barcode)
+                        .append('<option  value="' + empList[j].id + '">' + empList[j].name + '</option>');
                 }
+
+            }
             scrollStopNumberField();
 
             compute(data.SaleItemList[i].Vat);
@@ -612,112 +619,130 @@
     }
 
     function ItemDecreaseForBarcodeScan(exBarcode) {
-        $.each($("#pointOfSaleGridTableBody tr"), function () {
-            var value = $(this).find('td:eq(2)').html();
-            var vat = $(this).find('#vat').val();
-            var quantity = $(this).find('#orderQuantity').val();
-            if (exBarcode === value) {
-                if (quantity === "1") {
-                    $(this).remove();
-                } else {
-                    $(this).find('#orderQuantity').val(parseInt(quantity) - 1);
-                }
+        $.each($("#pointOfSaleGridTableBody tr"),
+            function() {
+                var value = $(this).find('td:eq(2)').html();
+                var vat = $(this).find('#vat').val();
+                var quantity = $(this).find('#orderQuantity').val();
+                if (exBarcode === value) {
+                    if (quantity === "1") {
+                        $(this).remove();
+                    } else {
+                        $(this).find('#orderQuantity').val(parseInt(quantity) - 1);
+                    }
 
-                //This For SameBarcode Scan Calculation
-                var decrementValue = $(this).find('#orderQuantity').val();
-                var salePrice = $(this).find('#salePrice').val();
-                var totalPrice = parseInt(salePrice) * parseInt(decrementValue);
-                $(this).find('.subTotal').val(totalPrice);
-                compute(vat);
-                reset();
-                //end
-                $("#BarcodeForExchange").val("");
-            }else {
-                toastr.error("Invalid Barcode !.");
-            }
-        });
+                    //This For SameBarcode Scan Calculation
+                    var decrementValue = $(this).find('#orderQuantity').val();
+                    var salePrice = $(this).find('#salePrice').val();
+                    var totalPrice = parseInt(salePrice) * parseInt(decrementValue);
+                    $(this).find('.subTotal').val(totalPrice);
+                    compute(vat);
+                    reset();
+                    //end
+                    $("#BarcodeForExchange").val("");
+                } else {
+                    toastr.error("Invalid Barcode !.");
+                }
+            });
 
     }
+
     function tableFooterChange() {
         var totalAmount = 0;
-        $.each($("#gridTableForPayment tr"), function () {
-            totalAmount += parseFloat($(this).find('td:eq(5)').html());
-        });
+        $.each($("#gridTableForPayment tr"),
+            function() {
+                totalAmount += parseFloat($(this).find('td:eq(5)').html());
+            });
         $('#payTotal').val(totalAmount);
         $('.paymentTypeAmount').focus();
     }
+    
+    function GetItemDetailsByBarCode(barcode, saleManId, transitStockBlance) {
+            if (saleManId !== "") {
+                $.ajax({
+                    type: 'GET',
+                    url: '/PointOfSale/GetAllInfoByBarcode/',
+                    dataType: 'json',
+                    data: { barcode: barcode },
+                    success: function (data) {
+                        if (transitStockBlance !== 0 && transitStockBlance > 0 ) {/// Transit product scan korar somoi transit er stock dakhanor jonno use kora
+                            data.RoundQuantity = transitStockBlance;
+                        };
+                        var barcode = $('#barcode').val();
 
-    function GetItemDetailsByBarCode(barcode, saleManId) {
+                        var allProductItemCode = [];
+                        allProductItemCode.length = 0;
+                        var checker = true;
 
-        if (saleManId  !== "") {
+                        $.each($("#pointOfSaleGridTableBody tr"),
+                            function() {
+                                var value = $(this).find('td:eq(2)').html();
+                                var quantity = $(this).find('#orderQuantity').val();
+                                allProductItemCode.push({
+                                    value,
+                                    quantity
+                                });
+                            });
+                        if (allProductItemCode.length > 0) {
+                            $.each(allProductItemCode,
+                                function(i, val) {
+                                    if (data.Barcode == val.value) {
+                                        checker = false;
+                                    }
+                                });
+                            if (checker) {
+                                if (data.Barcode !== null && data.Barcode) {
+                                    if (!isNaN(data.RoundQuantity) && data.RoundQuantity > 0) {
 
-        $.ajax({
-            type: 'GET',
-            url: '/PointOfSale/GetAllInfoByBarcode/',
-            dataType: 'json',
-            data: { barcode: barcode },
-            success: function (data) {
-                var barcode = $('#barcode').val();
-
-                var allProductItemCode = [];
-                allProductItemCode.length = 0;
-                var checker = true;
-
-                $.each($("#pointOfSaleGridTableBody tr"), function () {
-                    var value = $(this).find('td:eq(2)').html();
-                    var quantity = $(this).find('#orderQuantity').val();
-                    allProductItemCode.push({
-                        value, quantity
-                    });
-                });
-                if (allProductItemCode.length > 0) {
-                    $.each(allProductItemCode, function (i, val) {
-                        if (data.Barcode == val.value) {
-                            checker = false;
-                        }
-                    });
-                    if (checker) {
-                        if (data.Barcode !== null && data.Barcode) {
-                            if (!isNaN(data.RoundQuantity) && data.RoundQuantity > 0) {
-
-                                $("#pointOfSaleGridTableBody").append('<tr>' +
-                                    '<td style="display:none" >' +
-                                    data.ItemId +
-                                    '</td>' +
-                                    '<td style="display:none" >' +
-                                    data.ProductId +
-                                    '</td>' +
-                                    '<td>' +
-                                    data.Barcode +
-                                    '</td>' +
-                                    '<td>' +
-                                    data.ItemName +
-                                    '</td>' +
-                                    '<td style="width: 13%">' +
-                                    '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' + data.SalePrice + '">' +
-                                    '</td>' +
-                                    '<td style="width: 13%">' +
-                                    '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" min="0" value="' + 1 + '">' +
-                                    '</td>' +
-                                    '<td style="width: 13%">' +
-                                    //'<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.Quantity + '">' +
-                                    '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.RoundQuantity + '">' +
-                                    '</td>' +
-                                    '<td style="width: 10%">' +
-                                    '<input type="number" class="form-control m-input--air m-input--pill vat"  disabled="disabled" id="vat" value="' + data.Vat + '">' +
-                                    '</td>' +
-                                    '<td style="width: 13%">' +
-                                    '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow"  value="' + parseInt(data.SalePrice) * 1 + '">' +
-                                    '</td>' +
-                                    '<td>' +
-                                    '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' + data.Barcode +'" name="SalesManName2">' +
-
-                                    '</select>'+
-                                    '</td>' +
-                                    '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
-                                    '</tr>');
-                                    var empList = [];
-                                    @{
+                                        $("#pointOfSaleGridTableBody").append('<tr>' +
+                                            '<td style="display:none" >' +
+                                            data.ItemId +
+                                            '</td>' +
+                                            '<td style="display:none" >' +
+                                            data.ProductId +
+                                            '</td>' +
+                                            '<td>' +
+                                            data.Barcode +
+                                            '</td>' +
+                                            '<td>' +
+                                            data.ItemName +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' +
+                                            data.SalePrice +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" min="0" value="' +
+                                            1 +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            //'<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.Quantity + '">' +
+                                            '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' +
+                                            data.RoundQuantity +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 10%">' +
+                                            '<input type="number" class="form-control m-input--air m-input--pill vat"  disabled="disabled" id="vat" value="' +
+                                            data.Vat +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow"  value="' +
+                                            parseInt(data.SalePrice) * 1 +
+                                            '">' +
+                                            '</td>' +
+                                            '<td>' +
+                                            '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' +
+                                            data.Barcode +
+                                            '" name="SalesManName2">' +
+                                            '</select>' +
+                                            '</td>' +
+                                            '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                                            '</tr>');
+                                        var empList = [];
+                                        @{
                                         foreach (var emp in employeeList)
                                         {
                                             <text>
@@ -730,150 +755,179 @@
                                         }
                                     }
 
+                                        for (var i = 0; i < empList.length; i++) {
+                                            if (saleManId === empList[i].id) {
+                                                $("#SalesManName" + data.Barcode).append('<option selected value="' +
+                                                    empList[i].id +
+                                                    '">' +
+                                                    empList[i].name +
+                                                    '</option>');
+                                            } else {
+                                                $("#SalesManName" + data.Barcode).append('<option  value="' +
+                                                    empList[i].id +
+                                                    '">' +
+                                                    empList[i].name +
+                                                    '</option>');
+                                            }
+
+                                        }
+
+                                        scrollStopNumberField();
+
+                                        compute(data.Vat);
+
+                                        $("#barcode").val("");
+                                        $("#discount").val("");
+                                        $("#discountAmount").val("");
+
+                                    } else {
+                                        toastr.error("This Item have No Stock!.");
+                                        $("#barcode").val("");
+                                    }
+                                } else {
+                                    toastr.error("Invalid BarCode!!.");
+                                    $("#barcode").val("");
+                                }
+                            } else {
+                                $.each($("#pointOfSaleGridTableBody tr"),
+                                    function() {
+                                        var value = $(this).find('td:eq(2)').html();
+                                        var vat = $(this).find('#vat').val();
+                                        var stock = $(this).find('.stock').val();
+                                        var quantity = $(this).find('#orderQuantity').val();
+                                        if (barcode.toLowerCase() === value.toLowerCase()) {
+                                            if (parseInt(quantity) >= parseInt(stock)) {
+                                                alert("Stock Not Available");
+                                                $("#barcode").val("");
+                                                return false;
+                                            } else {
+                                                $(this).find('#orderQuantity').val(parseInt(quantity) + 1);
+                                                //This For SameBarcode Scan Calculation
+                                                var incrementValue = $(this).find('#orderQuantity').val();
+                                                var salePrice = $(this).find('#salePrice').val();
+                                                var totalPrice = parseInt(salePrice) * parseInt(incrementValue);
+                                                $(this).find('.subTotal').val(totalPrice);
+
+                                                compute(vat);
+
+                                                //end
+
+                                                $("#barcode").val("");
+                                                $("#discount").val("");
+                                                $("#discountAmount").val("");
+                                                toastr.success(" Add Same Item.");
+                                            }
+                                        }
+                                    });
+
+                            }
+                        } else {
+                            if (data.Barcode !== null && data.Barcode) {
+                                if (!isNaN(data.RoundQuantity) && data.RoundQuantity > 0) {
+                                    $("#pointOfSaleGridTableBody").append('<tr>' +
+                                        '<td style="display:none" >' +
+                                        data.ItemId +
+                                        '</td>' +
+                                        '<td style="display:none" >' +
+                                        data.ProductId +
+                                        '</td>' +
+                                        '<td>' +
+                                        data.Barcode +
+                                        '</td>' +
+                                        '<td>' +
+                                        data.ItemName +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' +
+                                        data.SalePrice +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" min="0" value="' +
+                                        1 +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        //'<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.Quantity + '">' +
+                                        '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' +
+                                        data.RoundQuantity +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 10%">' +
+                                        '<input type="number" class="form-control m-input--air m-input--pill vat" disabled="disabled" id="vat" value="' +
+                                        data.Vat +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow" value="' +
+                                        parseInt(data.SalePrice) * 1 +
+                                        '">' +
+                                        '</td>' +
+                                        '<td>' +
+                                        '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' +
+                                        data.Barcode +
+                                        '" name="SalesManName2">' +
+                                        '' +
+                                        '</select>' +
+                                        '</td>' +
+                                        '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                                        '</tr>');
+
+                                    var empList = [];
+                                    @{
+                                    foreach (var emp in employeeList)
+                                    {
+                                        <text>
+                                            var employee = {
+                                                'id': '@emp.Value',
+                                                'name': '@emp.Text'
+                                            }
+                                            empList.push(employee);
+                                        </text>
+                                    }
+                                }
+
                                     for (var i = 0; i < empList.length; i++) {
                                         if (saleManId === empList[i].id) {
-                                            $("#SalesManName" + data.Barcode).append('<option selected value="' + empList[i].id + '">' + empList[i].name + '</option>');
+                                            $("#SalesManName" + data.Barcode).append('<option selected value="' +
+                                                empList[i].id +
+                                                '">' +
+                                                empList[i].name +
+                                                '</option>');
                                         } else {
-                                            $("#SalesManName" + data.Barcode).append('<option  value="' + empList[i].id + '">' + empList[i].name + '</option>');
+                                            $("#SalesManName" + data.Barcode).append('<option  value="' +
+                                                empList[i].id +
+                                                '">' +
+                                                empList[i].name +
+                                                '</option>');
                                         }
 
                                     }
 
-                                scrollStopNumberField();
-
-                                compute(data.Vat);
-
-                                $("#barcode").val("");
-                                $("#discount").val("");
-                                $("#discountAmount").val("");
-
-                            } else {
-                                toastr.error("This Item have No Stock!.");
-                                $("#barcode").val("");
-                            }
-                        } else {
-                            toastr.error("Invalid BarCode!!.");
-                            $("#barcode").val("");
-                        }
-                    } else {
-                        $.each($("#pointOfSaleGridTableBody tr"), function () {
-                            var value = $(this).find('td:eq(2)').html();
-                            var vat = $(this).find('#vat').val();
-                            var stock = $(this).find('.stock').val();
-                            var quantity = $(this).find('#orderQuantity').val();
-                            if (barcode.toLowerCase() === value.toLowerCase()) {
-                                if (parseInt(quantity) >= parseInt(stock)) {
-                                    alert("Stock Not Available");
-                                    $("#barcode").val("");
-                                    return false;
-                                } else {
-                                    $(this).find('#orderQuantity').val(parseInt(quantity) + 1);
-                                    //This For SameBarcode Scan Calculation
-                                    var incrementValue = $(this).find('#orderQuantity').val();
-                                    var salePrice = $(this).find('#salePrice').val();
-                                    var totalPrice = parseInt(salePrice) * parseInt(incrementValue);
-                                    $(this).find('.subTotal').val(totalPrice);
-
-                                    compute(vat);
-
-                                    //end
+                                    scrollStopNumberField();
+                                    finalDataCalculation();
+                                    compute(data.Vat);
 
                                     $("#barcode").val("");
                                     $("#discount").val("");
                                     $("#discountAmount").val("");
-                                    toastr.success(" Add Same Item.");
+
+                                } else {
+                                    toastr.error("This Item have No Stock!.");
+                                    $("#barcode").val("");
                                 }
+
+                            } else {
+                                toastr.error("Invalid BarCode!!.");
+                                $("#barcode").val("");
                             }
-                        });
-
-                    }
-                } else {
-                    if (data.Barcode !== null && data.Barcode) {
-                        if (!isNaN(data.RoundQuantity) && data.RoundQuantity > 0) {
-                            $("#pointOfSaleGridTableBody").append('<tr>' +
-                                '<td style="display:none" >' +
-                                data.ItemId +
-                                '</td>' +
-                                '<td style="display:none" >' +
-                                data.ProductId +
-                                '</td>' +
-                                '<td>' +
-                                data.Barcode +
-                                '</td>' +
-                                '<td>' +
-                                data.ItemName +
-                                '</td>' +
-                                '<td style="width: 13%">' +
-                                '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' + data.SalePrice + '">' +
-                                '</td>' +
-                                '<td style="width: 13%">' +
-                                '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" min="0" value="' + 1 + '">' +
-                                '</td>' +
-                                '<td style="width: 13%">' +
-                                //'<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.Quantity + '">' +
-                                '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.RoundQuantity + '">' +
-                                '</td>' +
-                                '<td style="width: 10%">' +
-                                '<input type="number" class="form-control m-input--air m-input--pill vat" disabled="disabled" id="vat" value="' + data.Vat + '">' +
-                                '</td>' +
-                                '<td style="width: 13%">' +
-                                '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow" value="' + parseInt(data.SalePrice) * 1 + '">' +
-                                '</td>' +
-                                '<td>' +
-                                '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' + data.Barcode +'" name="SalesManName2">' +
-                                ''+
-                                '</select>'+
-                                '</td>' +
-                                '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
-                                '</tr>');
-
-                                    var empList = [];
-                                    @{
-                                            foreach (var emp in employeeList)
-                                            {
-                                                <text>
-                                                    var employee = {
-                                                        'id': '@emp.Value',
-                                                        'name': '@emp.Text'
-                                                    }
-                                                    empList.push(employee);
-                                                </text>
-                                            }
-                                        }
-
-                                    for (var i = 0; i < empList.length; i++) {
-                                        if (saleManId === empList[i].id) {
-                                            $("#SalesManName" + data.Barcode).append('<option selected value="' + empList[i].id + '">' + empList[i].name + '</option>');
-                                        } else {
-                                            $("#SalesManName" + data.Barcode).append('<option  value="' + empList[i].id + '">' + empList[i].name + '</option>');
-                                        }
-
-                                    }
-
-                            scrollStopNumberField();
-                            finalDataCalculation();
-                            compute(data.Vat);
-
-                            $("#barcode").val("");
-                            $("#discount").val("");
-                            $("#discountAmount").val("");
-
-                        } else {
-                            toastr.error("This Item have No Stock!.");
-                            $("#barcode").val("");
                         }
-
-                    } else {
-                        toastr.error("Invalid BarCode!!.");
-                        $("#barcode").val("");
                     }
-                }
+                });
+            } else {
+                toastr.error("Select Sales Man!..");
+                $('#barcode').val("");
             }
-            });
-        } else {
-            toastr.error("Select Sales Man!..");
-            $('#barcode').val("");
-        }
     }
 
     function AllDataSave(holdInvoice, pAmount, paymentInfo, giftVoucherCode, giftVoucherValue, giftVoucherRemainingBal) {
@@ -1244,7 +1298,7 @@
                                 });
                             var mobile = $("#mobile").is(':focus'); //mobile,customer, address a space bar a pay now open hobe na
                             var customer = $("#customerName").is(':focus');//karon cahaier a phone dia onik time a inter dai na..jar jonno discount er value bad na gia paynow a cole jai...report mile na bill vul hoi.
-                        var address = $("#address").is(':focus'); 
+                        var address = $("#address").is(':focus');
                         var ModalSearchValue = $("#ModalSearchValue").is(':focus');
                             if (allPointOfSaleItem.length !== 0) {
                                 if (customer === false && address === false && mobile === false && ModalSearchValue === false ) {
@@ -2211,9 +2265,24 @@
             if ($(this).is(':checked')) {
                 var barcode = $(this).val();
                 var saleManId = $("#SalesManName").val();
-                GetItemDetailsByBarCode(barcode, saleManId);
-                //$("#searchModal").modal("hide");
-                //$('.modal-backdrop').remove();
+                var marketPlaceId = $("#MarketPlaceId").val();
+                if (marketPlaceId !== "") {//transit product scan korar somoy validation check kora hoise...stock asa ki na
+                    $.ajax({
+                        type: 'GET',
+                        url: '/PointOfSale/GetAllInfoByBarcodeFromTransit/',
+                        dataType: 'json',
+                        data: { barcode: barcode, marketPlaceId: marketPlaceId },
+                        success: function (data) {
+                            if (data !== 0) {
+                                GetItemDetailsByBarCode(barcode, saleManId, data.TransitStockBlance)
+                            } else {
+                                alert("This Product have not avaiable in this marketplace!.")
+                            } 
+                        }
+                    });;
+                } else {
+                    GetItemDetailsByBarCode(barcode, saleManId,0);
+                } 
             }
         });
         //End
@@ -2267,8 +2336,24 @@
         $('#barcode').on('change', function () {
             var barcode = $("#barcode").val();
             var saleManId = $("#SalesManName").val();
-            GetItemDetailsByBarCode(barcode, saleManId);
-
+            var marketPlaceId = $("#MarketPlaceId").val();
+            if (marketPlaceId !== "") {//transit product scan korar somoy validation check kora hoise...stock asa ki na
+                $.ajax({
+                    type: 'GET',
+                    url: '/PointOfSale/GetAllInfoByBarcodeFromTransit/',
+                    dataType: 'json',
+                    data: { barcode: barcode, marketPlaceId: marketPlaceId },
+                    success: function (data) {
+                        if (data !== 0) {
+                            GetItemDetailsByBarCode(barcode, saleManId, data.TransitStockBlance)
+                        } else {
+                            alert("This Product have not avaiable in this marketplace!.")
+                        } 
+                    }
+                });;
+            } else {
+                GetItemDetailsByBarCode(barcode, saleManId,0);
+            } 
         });
         //End
         // BarcodeForExchange

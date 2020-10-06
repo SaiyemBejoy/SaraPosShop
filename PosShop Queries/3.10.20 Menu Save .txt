@@ -1,0 +1,112 @@
+/* Formatted on 03-Oct-20 12:31:40 PM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE PROCEDURE POSSHOP.PRO_MENU_SAVE (
+   P_MENU_ID      IN     VARCHAR2,
+   P_MENU_NAME           VARCHAR2,
+   P_MENU_URL            VARCHAR2,
+   P_MENU_ICON           VARCHAR2,
+   P_MENU_ORDER          VARCHAR2,
+   P_UPDATE_BY           VARCHAR2,
+   P_CONTROLLER          VARCHAR2,
+   P_ACTION              VARCHAR2,
+   P_MESSAGE         OUT VARCHAR2)
+AS
+   v_count     INT;
+   v_menu_id   INT;
+   v_dup       INT;
+BEGIN
+   SELECT COUNT (*)
+     INTO v_count
+     FROM MENU_MAIN
+    WHERE MENU_ID = P_MENU_ID;
+
+   IF v_count > 0
+   THEN
+      UPDATE MENU_MAIN
+         SET MENU_NAME = P_MENU_NAME,
+             MENU_URL = P_MENU_URL,
+             MENU_ICON = P_MENU_ICON,
+             MENU_ORDER = P_MENU_ORDER,
+             CONTROLLER = P_CONTROLLER,
+             ACTION = P_ACTION,
+             UPDATE_BY = P_UPDATE_BY,
+             UPDATE_DATE = SYSDATE
+       WHERE MENU_ID = P_MENU_ID;
+
+      COMMIT;
+      P_MESSAGE := 'UPDATED SUCCESSFULLY !!';
+      RETURN;
+   ELSE
+      SELECT COUNT (*)
+        INTO v_dup
+        FROM MENU_MAIN
+       WHERE (UPPER (MENU_NAME) = UPPER (P_MENU_NAME)
+              OR LOWER (MENU_NAME) = LOWER (P_MENU_NAME));
+
+      IF v_dup > 0
+      THEN
+         P_MESSAGE := 'MENU NAME ALREADY EXISTS !!';
+         RETURN;
+      END IF;
+
+      SELECT NVL (MAX (MENU_ID), 0) + 1 INTO v_menu_id FROM MENU_MAIN;
+
+      INSERT INTO MENU_MAIN (MENU_ID,
+                             MENU_NAME,
+                             MENU_URL,
+                             MENU_ICON,
+                             MENU_ORDER,
+                             CREATED_BY,
+                             CREATED_DATE,
+                             UPDATE_BY,
+                             UPDATE_DATE,
+                             CONTROLLER,
+                             ACTION)
+           VALUES (v_menu_id,
+                   P_MENU_NAME,
+                   P_MENU_URL,
+                   P_MENU_ICON,
+                   P_MENU_ORDER,
+                   P_UPDATE_BY,
+                   SYSDATE,
+                   P_UPDATE_BY,
+                   SYSDATE,
+                   P_CONTROLLER,
+                   P_ACTION);
+
+      COMMIT;
+      P_MESSAGE := 'INSERTED SUCCESSFULLY !!';
+   END IF;
+END;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -63,6 +63,7 @@
     <Compile Include="AllModel\MainMenuPermisionModel.cs" />
     <Compile Include="AllModel\MenuMainModel.cs" />
     <Compile Include="AllModel\MenuSubModel.cs" />
+    <Compile Include="AllModel\OtherActionPermissionModel.cs" />
     <Compile Include="AllModel\OtherCompanyOfferModel.cs" />
     <Compile Include="AllModel\PointOfSaleModel.cs" />
     <Compile Include="AllModel\PrivilegeCustomerModelForShop.cs" />

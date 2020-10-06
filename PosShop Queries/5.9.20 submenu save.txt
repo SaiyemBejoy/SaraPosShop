@@ -1,0 +1,153 @@
+CREATE OR REPLACE PROCEDURE POSSHOP.PRO_MENU_SUB_SAVE (
+   P_MENU_SUB_ID     IN     VARCHAR2,
+   P_MENU_MAIN_ID           VARCHAR2,
+   P_MENU_SUB_NAME          VARCHAR2,
+   P_MENU_SUB_URL           VARCHAR2,
+   P_MENU_SUB_ICON          VARCHAR2,
+   P_MENU_ORDER             VARCHAR2,
+   P_UPDATE_BY              VARCHAR2,
+   P_CONTROLLER             VARCHAR2,
+   P_ACTION                 VARCHAR2,
+   P_MESSAGE            OUT VARCHAR2)
+AS
+   v_count        INT;
+   v_submenu_id   INT;
+   v_dup          INT;
+BEGIN
+   SELECT COUNT (*)
+     INTO v_count
+     FROM MENU_SUB
+    WHERE MENU_SUB_ID = P_MENU_SUB_ID;
+
+   IF v_count > 0
+   THEN
+      UPDATE MENU_SUB
+         SET MENU_SUB_NAME = P_MENU_SUB_NAME,
+             MENU_SUB_URL = P_MENU_SUB_URL,
+             MENU_SUB_ICON = P_MENU_SUB_ICON,
+             MENU_ORDER = P_MENU_ORDER,
+             CONTROLLER = P_CONTROLLER,
+             ACTION = P_ACTION,
+             UPDATE_BY = P_UPDATE_BY,
+             UPDATE_DATE = SYSDATE
+       WHERE MENU_SUB_ID = P_MENU_SUB_ID AND MENU_MAIN_ID = P_MENU_MAIN_ID;
+
+      COMMIT;
+      P_MESSAGE := 'UPDATED SUCCESSFULLY !!';
+      RETURN;
+   ELSE
+      SELECT COUNT (*)
+        INTO v_dup
+        FROM MENU_SUB
+       WHERE (UPPER (MENU_SUB_NAME) = UPPER (P_MENU_SUB_NAME)
+              OR LOWER (MENU_SUB_NAME) = LOWER (P_MENU_SUB_NAME));
+
+      IF v_dup > 0
+      THEN
+         P_MESSAGE := 'SUB-MENU NAME ALREADY EXISTS !!';
+         RETURN;
+      END IF;
+
+      SELECT NVL (MAX (MENU_SUB_ID), 0) + 1 INTO v_submenu_id FROM MENU_SUB;
+
+      INSERT INTO MENU_SUB (MENU_SUB_ID,
+                            MENU_MAIN_ID,
+                            MENU_SUB_NAME,
+                            MENU_SUB_URL,
+                            MENU_SUB_ICON,
+                            MENU_ORDER,
+                            CREATED_BY,
+                            CREATED_DATE,
+                            UPDATE_BY,
+                            UPDATE_DATE,
+                            CONTROLLER,
+                            ACTION)
+           VALUES (v_submenu_id,
+                   P_MENU_MAIN_ID,
+                   P_MENU_SUB_NAME,
+                   P_MENU_SUB_URL,
+                   P_MENU_SUB_ICON,
+                   P_MENU_ORDER,
+                   P_UPDATE_BY,
+                   SYSDATE,
+                   P_UPDATE_BY,
+                   SYSDATE,
+                   P_CONTROLLER,
+                   P_ACTION);
+
+      COMMIT;
+      P_MESSAGE := 'INSERTED SUCCESSFULLY !!';
+   END IF;
+END;
+/
+
+
+=================================================
+=================================================
+
+/* Formatted on 05-Oct-20 4:01:07 PM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE PROCEDURE POSSHOP.PRO_OTR_ACTN_PRMSN_SAVE (
+   P_AUTO_ID       IN     VARCHAR2,
+   P_ROLE_NAME            VARCHAR2,
+   P_CONTROLLER           VARCHAR2,
+   P_ACTION_NAME          VARCHAR2,
+   P_CREATE_BY            VARCHAR2,
+   P_MESSAGE          OUT VARCHAR2)
+AS
+   v_count     INT;
+   v_auto_id   INT;
+   v_dup       INT;
+BEGIN
+   SELECT COUNT (*)
+     INTO v_count
+     FROM USER_ACTION_PERMISION
+    WHERE AUTO_ID = P_AUTO_ID;
+
+   IF v_count > 0
+   THEN
+      UPDATE USER_ACTION_PERMISION
+         SET ROLE_NAME = P_ROLE_NAME,
+             CONTROLLER = P_CONTROLLER,
+             ACTION_NAME = P_ACTION_NAME
+       WHERE AUTO_ID = P_AUTO_ID;
+
+      COMMIT;
+      P_MESSAGE := 'UPDATED SUCCESSFULLY !!';
+      RETURN;
+   ELSE
+      SELECT COUNT (*)
+        INTO v_dup
+        FROM USER_ACTION_PERMISION
+       WHERE (UPPER (ACTION_NAME) = UPPER (P_ACTION_NAME)
+              OR LOWER (ACTION_NAME) = LOWER (P_ACTION_NAME));
+
+      IF v_dup > 0
+      THEN
+         P_MESSAGE := 'ACTION NAME ALREADY EXISTS !!';
+         RETURN;
+      END IF;
+
+      SELECT NVL (MAX (AUTO_ID), 0) + 1
+        INTO v_auto_id
+        FROM USER_ACTION_PERMISION;
+
+      INSERT INTO USER_ACTION_PERMISION (AUTO_ID,
+                                         ROLE_NAME,
+                                         CONTROLLER,
+                                         ACTION_NAME,
+                                         CREATE_BY,
+                                         CREATE_DATE,
+                                         ACTIVE_YN)
+           VALUES (v_auto_id,
+                   P_ROLE_NAME,
+                   P_CONTROLLER,
+                   P_ACTION_NAME,
+                   P_CREATE_BY,
+                   SYSDATE,
+                   'Y');
+
+      COMMIT;
+      P_MESSAGE := 'INSERTED SUCCESSFULLY !!';
+   END IF;
+END;
+/

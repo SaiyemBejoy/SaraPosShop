@@ -86,6 +86,7 @@
     <Compile Include="IRepository\IStoreHouseRequestRepository.cs" />
     <Compile Include="IRepository\ITestRepository.cs" />
     <Compile Include="IRepository\ITransitProductRepository.cs" />
+    <Compile Include="IRepository\IUserPermissionRepository.cs" />
     <Compile Include="IRepository\IWareHouseDashboardRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AuthRepository.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Repository\StoreHouseRequestRepository.cs" />
     <Compile Include="Repository\TestRepository.cs" />
     <Compile Include="Repository\TransitProductRepository.cs" />
+    <Compile Include="Repository\UserPermissionRepository.cs" />
     <Compile Include="Repository\WareHouseDashboardRepository.cs" />
   </ItemGroup>
   <ItemGroup>

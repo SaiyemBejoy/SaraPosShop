@@ -25,5 +25,7 @@ namespace DAL.IRepository
         Task<string> DeleteAllTransitReturnProductData(string ChallanNumber);
 
         Task<IEnumerable<TransitProductReturnModel>> GetAllReturnData();
+
+        Task<IEnumerable<TransitItemInfoModel>> GetProductInfoByReceiveChallanNo(string receiveChallanNo);
     }
 }

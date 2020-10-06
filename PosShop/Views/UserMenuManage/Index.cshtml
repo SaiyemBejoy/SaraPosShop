@@ -21,76 +21,31 @@
                                         <form class="m-form m-form--fit">
 
                                             <div class="row">
+                                                <div class="col-md-3"></div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">User Role:</label>
-                                                        <div class="col-6">
+                                                        <label class="col-2 col-form-label" style="font-size: 15px;font-weight: bold">User Role:</label>
+                                                        <div class="col-10">
                                                             @Html.DropDownListFor(model => model.UserRole, (IEnumerable<SelectListItem>)ViewBag.UserRoleList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill" })
                                                         </div>
                                                     </div>
                                                     <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">Menu:</label>
-                                                        <div class="col-6">
-                                                            @Html.DropDownListFor(model => model.MainMenu, (IEnumerable<SelectListItem>)ViewBag.MenuList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill " })
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">Controller:</label>
-                                                        <div class="col-6">
-                                                            <select class="form-control m-input--air m-input--pill" id="controllerList"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">Action:</label>
-                                                        <div class="col-6">
-                                                            <select class="form-control m-input--air m-input--pill" id="actionList"></select>
+                                                        <label class="col-2 col-form-label" style="font-size: 15px;font-weight: bold">Menu:</label>
+                                                        <div class="col-10">
+                                                            @Html.DropDownListFor(model => model.MainMenu, (IEnumerable<SelectListItem>)ViewBag.MenuList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill manuMainP" })
                                                         </div>
                                                     </div>
                                                     <div class="form-group m-form__group row">
                                                         <label class="col-2 col-form-label"></label>
-                                                        <div class="col-8">
-                                                            <button type="button" id="AddGridMain" class="btn m-btn--pill m-btn m-btn--gradient-from-info m-btn--gradient-to-accent"> Add Grid</button>
+                                                        <div class="col-10">
+                                                            <button type="button" id="permisionSaveNow" class="btn m-btn--pill m-btn m-btn--gradient-from-success m-btn--gradient-to-accent"> Save Now</button>
+                                                            <button type="button" id="permisionDeleteNow" class="btn m-btn--pill m-btn m-btn--gradient-from-danger m-btn--gradient-to-accent">Delete This Menu&SubMenu Permision</button>
+                                                            <button type="button" id="permisionVoidAndReturn" class="btn m-btn--pill m-btn m-btn--gradient-from-warning m-btn--gradient-to-accent">Void&Return Permision</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">User Role:</label>
-                                                        <div class="col-6">
-                                                            @Html.DropDownListFor(model => model.UserRole, (IEnumerable<SelectListItem>)ViewBag.UserRoleList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill userRoleForSub" })
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">Menu:</label>
-                                                        <div class="col-6">
-                                                            @Html.DropDownListFor(model => model.MainMenu, (IEnumerable<SelectListItem>)ViewBag.MenuListHaveSubMenu, "--Select Option--", new { @class = " form-control m-input--air m-input--pill mainMenu" })
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">SubMenu:</label>
-                                                        <div class="col-6">
-                                                            <select class="form-control m-input--air m-input--pill" id="subMenuList"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">Controller:</label>
-                                                        <div class="col-6">
-                                                            <select class="form-control m-input--air m-input--pill" id="controllerListForSub"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label">Action:</label>
-                                                        <div class="col-6">
-                                                            <select class="form-control m-input--air m-input--pill" id="actionListForSub"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group m-form__group row">
-                                                        <label class="col-2 col-form-label"></label>
-                                                        <div class="col-8">
-                                                            <button type="button" id="AddGridSub" class="btn m-btn--pill m-btn m-btn--gradient-from-info m-btn--gradient-to-accent"> Add Grid</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <div class="col-md-3"></div>
+
                                             </div>
                                         </form>
 
@@ -102,8 +57,10 @@
 
 
                         </div>
+
+                        <br />
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
                                     <div class="m-portlet__head">
                                         <div class="m-portlet__head-caption">
@@ -112,7 +69,7 @@
                                                     <i class="la la-thumb-tack"></i>
                                                 </span>
                                                 <h3 class="m-portlet__head-text">
-                                                    Main Menu Section
+                                                    User Permision
                                                 </h3>
                                             </div>
                                         </div>
@@ -121,66 +78,27 @@
                                     <div class="m-portlet__body">
                                         <div id="table-wrapper">
                                             <div id="table-scroll">
-                                                <table class="table table-bordered table-striped table-hover MainMenuPermision" id="MainMenuPermisionTable">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Role</th>
-                                                        <th>Menu</th>
-                                                        <th>Controller</th>
-                                                        <th>Action</th>
-                                                        <th>#</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="MainMenuPermisionTableBody" class="table-scroll"></tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
-                                    <div class="m-portlet__head">
-                                        <div class="m-portlet__head-caption">
-                                            <div class="m-portlet__head-title">
-                                                <span class="m-portlet__head-icon">
-                                                    <i class="la la-thumb-tack"></i>
-                                                </span>
-                                                <h3 class="m-portlet__head-text">
-                                                    Sub Menu Section
-                                                </h3>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="m-portlet__body">
-                                        <div id="table-wrapper">
-                                            <div id="table-scroll">
-                                                <table class="table table-bordered table-striped table-hover SubMenuPermision" id="SubMenuPermisionTable">
+                                                <table class="table table-bordered table-striped table-hover " id="SubMenuListTable">
                                                     <thead>
                                                         <tr>
-                                                            <th>Role</th>
-                                                            <th>SubMenu</th>
-                                                            <th>Menu</th>
-                                                            <th>Controller</th>
-                                                            <th>Action</th>
-                                                            <th>#</th>
+                                                            <th style="font-size: 15px;font-weight: bold">Add Action</th>
+                                                            <th style="font-size: 15px;font-weight: bold">Sub Menu</th>
+                                                            <th style="font-size: 15px;font-weight: bold">Sub URL</th>
+                                                            <th style="font-size: 15px;font-weight: bold">Icon</th>
+                                                            <th style="font-size: 15px;font-weight: bold">Controller</th>
+                                                            <th style="font-size: 15px;font-weight: bold">Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="SubMenuPermisionTableBody" class="table-scroll"></tbody>
+                                                    <tbody id="SubMenuListTableBody" class="table-scroll"></tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-                        <div class="row">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-7"> <button type="button" id="saveNow" class="btn m-btn--pill m-btn m-btn--gradient-from-success m-btn--gradient-to-accent"> Save Now</button></div>
-                            <div class="col-md-1"></div>
-                        </div>
-                       
+
                     </div>
                 </div>
                 <!--end::Portlet-->
@@ -188,6 +106,53 @@
         </div>
     </div>
 </div>
+
+<!--Return  Modal -->
+<div class="modal fade show " id="voidAndReturnModal" tabindex="-1" role="dialog" aria-labelledby="example5ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog reveal-modal-bg" role="document">
+        <div class="modal-content">
+            
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                    <div class="m-portlet__body">
+                        <form class="m-form m-form--fit">
+                        
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group m-form__group row">
+                                        <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold">Employee:</label>
+                                        <div class="col-8">
+                                            @Html.DropDownListFor(model => model.EmployeeId, (IEnumerable<SelectListItem>)ViewBag.EmployeeList, "-Select Sales Man-", new { @class = " form-control m-input--air m-input--pill select2", @style = "display:none; width: 200px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold">Void Permision:</label>
+                                        <div class="col-8">
+                                            <input type ='checkbox' class ='checker'id='voidCheckBox' style = 'margin-top: 10px; left: 0; height: 22px; width: 22px;' />
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold">Return Permision:</label>
+                                        <div class="col-8">
+                                            <input type ='checkbox' class ='checker'id='retnCheckBox'style = 'margin-top: 10px; left: 0; height: 22px; width: 22px;' />
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-right">
+                                        <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-brand m-btn--gradient-to-accent" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-danger m-btn--gradient-to-accent" id="VoidAndReturnSave">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
 <script>
     jQuery(document).ready(function() {
         //Controller
@@ -196,7 +161,7 @@
             contentType: 'application/json',
             dataType: 'json',
             url: '@Url.Action("ControllerList", "UserMenuManage")',
-            success: function (data) {
+            success: function(data) {
                 $("#controllerList").append('<option>--Select Option--</option>');
                 for (var i = 0; i < data.length; i++) {
                     $("#controllerList").append('<option  value="' + data[i] + '">' + data[i] + '</option>');
@@ -208,9 +173,11 @@
                 }
             }
         });
-
+        $("#permisionVoidAndReturn").click(function() {
+            $("#voidAndReturnModal").modal('show');
+        });
         //End
-        $("#controllerList").change(function () {
+        $("#controllerList").change(function() {
             var controllerName = $("#controllerList").val();
             $("#actionList").empty("");
             $.ajax({
@@ -218,15 +185,16 @@
                 url: '/UserMenuManage/GetActionName/',
                 dataType: 'json',
                 data: { controllerName: controllerName },
-                success: function (data) {
+                success: function(data) {
                     $("#actionList").append('<option>--Select Option--</option>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#actionList").append('<option  value="' + data[i].Action + '">' + data[i].Action + '</option>');
+                        $("#actionList")
+                            .append('<option  value="' + data[i].Action + '">' + data[i].Action + '</option>');
                     }
                 }
             });
         });
-        $("#controllerListForSub").change(function () {
+        $("#controllerListForSub").change(function() {
             var controllerName = $("#controllerListForSub").val();
             $("#actionListForSub").empty("");
             $.ajax({
@@ -234,34 +202,37 @@
                 url: '/UserMenuManage/GetActionName/',
                 dataType: 'json',
                 data: { controllerName: controllerName },
-                success: function (data) {
+                success: function(data) {
                     $("#actionListForSub").append('<option>--Select Option--</option>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#actionListForSub").append('<option  value="' + data[i].Action + '">' + data[i].Action + '</option>');
+                        $("#actionListForSub")
+                            .append('<option  value="' + data[i].Action + '">' + data[i].Action + '</option>');
                     }
                 }
             });
         });
 
-        $("#AddGridMain").click(function () {
+        $("#AddGridMain").click(function() {
             var userRole = $("#UserRole").val();
             var mainMenuId = $("#MainMenu").val();
             var mainMenu = $("#MainMenu option:selected").text();
             var controller = $("#controllerList").val();
             var action = $("#actionList").val();
-            
-         
-            if (controller == null || controller === "--Select Option--" && action == null || action === "--Select Option--") {
+
+
+            if (controller == null ||
+                controller === "--Select Option--" && action == null ||
+                action === "--Select Option--") {
                 controller = '#';
                 action = '#';
             } else {
                 controller = controller;
                 action = action;
             }
-            
+
             $("#MainMenuPermisionTableBody").append('<tr>' +
                 '<td style="display:none;">' +
-                 mainMenuId +
+                mainMenuId +
                 '</td>' +
                 '<td>' +
                 userRole +
@@ -278,13 +249,13 @@
                 '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
                 '</tr>');
             $("#UserRole").val("");
-             $("#MainMenu ").val("");
+            $("#MainMenu ").val("");
             $("#controllerList").val("");
             $("#actionList").val("");
 
         });
 
-        $("#AddGridSub").click(function () {
+        $("#AddGridSub").click(function() {
             var userRole = $(".userRoleForSub").val();
             var mainMenuId = $(".mainMenu").val();
             var mainMenu = $(".mainMenu option:selected").text();
@@ -324,28 +295,207 @@
 
         });
 
-        $(".mainMenu").change(function () {
-            var manuId = $(".mainMenu").val();
-            $("#subMenuList").empty("");
-            $.ajax({
-                type: 'GET',
-                url: '/UserMenuManage/GetSubMenuListByMenuId/',
-                dataType: 'json',
-                data: { menuId: manuId },
-                success: function (data) {
-                    $("#subMenuList").append('<option>--Select Option--</option>');
-                    for (var i = 0; i < data.length; i++) {
-                        $("#subMenuList").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+        //$(".mainMenu").change(function () {
+        //    var manuId = $(".mainMenu").val();
+        //    $("#subMenuList").empty("");
+        //    $.ajax({
+        //        type: 'GET',
+        //        url: '/UserMenuManage/GetSubMenuListByMenuId/',
+        //        dataType: 'json',
+        //        data: { menuId: manuId },
+        //        success: function (data) {
+        //            $("#subMenuList").append('<option>--Select Option--</option>');
+        //            for (var i = 0; i < data.length; i++) {
+        //                $("#subMenuList").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+        //            }
+        //        }
+        //    });
+        //});
+        $(".manuMainP").change(function() {
+            var manuId = $(".manuMainP").val();
+            var userRole = $("#UserRole").val();
+            if (userRole !== "") {
+                $.ajax({
+                    type: 'GET',
+                    url: '/UserMenuManage/GetSubMenuListForTableByMenuId/',
+                    dataType: 'json',
+                    data: { menuId: manuId },
+                    success: function(data) {
+                        var submenuList = data.length;
+                        $("#SubMenuListTableBody").html("");
+                        for (var i = 0; i < submenuList; i++) {
+                            $("#SubMenuListTableBody").append('<tr>' +
+                                '<td style="display:none;">' +
+                                data[i].MenuSubId +
+                                '</td>' +
+                                '<td>' +
+                                "<input type ='checkbox' class ='checker'  id='checkbox' value='" +
+                                data[i].MenuSubId +
+                                "' style = 'top: 0; left: 0; height: 22px; width: 22px;' />" +
+                                '</td>' +
+                                '<td  style="font-size: 15px;font-weight: bold">' +
+                                data[i].MenuSubName +
+                                '</td>' +
+                                '<td  style="font-size: 15px;font-weight: bold">' +
+                                data[i].SubMenuUrl +
+                                '</td>' +
+                                '<td  style="font-size: 15px;font-weight: bold">' +
+                                data[i].SubMenuIcon +
+                                '</td>' +
+                                '<td  style="font-size: 15px;font-weight: bold">' +
+                                data[i].Controller +
+                                '</td>' +
+                                '<td  style="font-size: 15px;font-weight: bold">' +
+                                data[i].Action +
+                                '</td>' +
+                                '</tr>');
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                toastr.error("Select Role!.")
+            }
+
+        });
+        $("#VoidAndReturnSave").click(function () {
+            debugger;
+            var employeeId = $("#EmployeeId").val();
+            var voidCheck = $("input[id='voidCheckBox']:checked").val();
+            var rtnCheck = $("input[id='retnCheckBox']:checked").val();
+            if (voidCheck == "on") {
+                voidCheck = "Y";
+            } else {
+                voidCheck = "N";
+            }
+            //------
+            if (rtnCheck == "on") {
+                rtnCheck = "Y";
+            } else {
+                rtnCheck = "N";
+            }
+            var dataObject = {
+                'EmployeeId': employeeId,
+                'VoidPermision': voidCheck,
+                'ReturnPermision': rtnCheck,
+            }
+
+            var dataList = JSON.stringify({ objUserMenuManageModel: dataObject });
+            if (employeeId !== "") {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("VoidAndReturnPermisionData", "UserMenuManage")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.isRedirect) {
+                            window.setTimeout(function() {
+                                window.location = data.redirectUrl;
+                            },1000);
+                            toastr.success("Save Successfully.");
+                            $('#cover-spin').hide();
+                        }
+                    }
+                });
+            } else {
+                toastr.error("Select Employee!.");
+            }
+
+
         });
 
         $("#saveNow").click(function() {
             dataSave();
         });
 
-        function dataSave() {
+        $("#permisionDeleteNow").click(function() {
+            var menuId = $(".manuMainP").val();
+            var userRole = $("#UserRole").val();
+            var dataObject = {
+                'MainMenuId': menuId,
+                'UserRole': userRole,
+            }
+
+            var dataList = JSON.stringify({ objMainMenuPermisionModels: dataObject });
+            if (menuId !== "" && userRole !== "") {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("DeleteAllMenuPermisionData", "UserMenuManage")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.isRedirect) {
+                            window.setTimeout(function() {
+                                window.location = data.redirectUrl;
+                            },1000);
+                            toastr.success("Delete Successfully.");
+                            $('#cover-spin').hide();
+                        }
+                    }
+                });
+            } else {
+                toastr.error("Select Menu and Role!.");
+            }
+        });
+
+
+        $("#permisionSaveNow").click(function() {
+            permisiondataSave();
+        });
+
+        function permisiondataSave() {
+            var menuId = $(".manuMainP").val();
+            var userRole = $("#UserRole").val();
+            //---------------
+            var allSubMainMenu = [];
+            allSubMainMenu.length = 0;
+            $.each($("input[id='checkbox']:checked"),
+                function() {
+                    allSubMainMenu.push({
+                        SubMenuId: $(this).val(),
+                    });
+                });
+
+            //-------------------------------------
+            var dataObject = {
+                'MainMenuId': menuId,
+                'UserRole': userRole,
+                'SubMenuPermisionList': allSubMainMenu
+            }
+            var dataList = JSON.stringify({ objMainMenuPermisionModels: dataObject });
+            if (menuId !== "" && userRole !== "") {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveAllMenuPermisionData", "UserMenuManage")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.isRedirect) {
+                            window.setTimeout(function() {
+                                window.location = data.redirectUrl;
+                            },1000);
+                            toastr.success("Save Successfully.");
+                            $('#cover-spin').hide();
+                        }
+                    }
+            });
+            } else {
+                toastr.error("Select Menu and Role!.");
+            }
+        }
+
+         function dataSave() {
             var allMainMenu = [];
             allMainMenu.length = 0;
             $.each($("#MainMenuPermisionTableBody tr"),
@@ -372,7 +522,7 @@
                 });
             //-------------------------------------
             var dataList = JSON.stringify({ obMainMenuPermisionModels: allMainMenu, obSubMenuPermisionModels: allSubMainMenu });
-        
+
                 $.ajax({
                     type: 'POST',
                     contentType: 'application/json',
@@ -391,8 +541,9 @@
                         }
                     }
                 });
-            
-        }
+
+
+         }
         //Delete from grid Table
         $(document).on('click', 'a.deleteItem', function (e) {
             e.preventDefault();

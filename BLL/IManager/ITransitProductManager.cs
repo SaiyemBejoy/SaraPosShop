@@ -15,5 +15,7 @@ namespace BLL.IManager
         //Transit Return
         Task<string> SaveTransitReturnData(TransitProductReturnModel objTransitProductReturnModel);
         Task<IEnumerable<TransitProductReturnModel>> ViewAllReturnData();
+
+        Task<IEnumerable<TransitItemInfoModel>> GetProductInfoByReceiveChallanNo( string receiveChallanNo);
     }
 }

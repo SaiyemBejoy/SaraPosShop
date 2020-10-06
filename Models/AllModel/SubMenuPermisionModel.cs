@@ -13,5 +13,6 @@ namespace Models.AllModel
         public string UserRole { get; set; }
         public string ControllerName { get; set; }
         public string ActionName { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

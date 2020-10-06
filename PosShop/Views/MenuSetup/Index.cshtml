@@ -1,0 +1,274 @@
+﻿
+@{
+    ViewBag.Title = "MenuMainList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            <input type="hidden" id="menuId"/>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Menu Name:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="menuName">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Menu URL:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="menuUrl">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Menu Icon:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="menuIcon">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Controller:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="controllerName">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Action Name:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="actionName">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Menu Order:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="menuOrder" value=@ViewBag.MaxMenuOrder readonly="readonly">
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"></label>
+                                                <div class="col-4">
+                                                    <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-success m-btn--gradient-to-danger" id="menuSave"><b>SAVE</b></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--rounded">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    <b>Menu Main List</b>
+                                                </h3>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="m-portlet__body" style="background-color: gainsboro">
+                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="m-section">
+                                                        <div class="m-section__content">
+                                                            <table class="table table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="menuListTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Menu Name</th>
+                                                                        <th>URL</th>
+                                                                        <th>Menu Icon</th>
+                                                                        <th>Menu Order</th>
+                                                                        <th>Controller</th>
+                                                                        <th>Action Name</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="menuListTableBody">
+                                                                    @if (ViewBag.MenuList != null)
+                                                                    {
+
+                                                                        foreach (var data in ViewBag.MenuList)
+                                                                        {
+                                                                            <tr>
+                                                                                <td> @data.MenuMainName</td>
+                                                                                <td>@data.MenuUrl</td>
+                                                                                <td>@data.MenuIcon</td>
+                                                                                <td>@data.MenuOrder</td>
+                                                                                <td>@data.Controller</td>
+                                                                                <td>@data.Action</td>
+                                                                                <td>
+                                                                                    <a class="btn m-btn--pill m-btn m-btn--gradient-from-primary m-btn--gradient-to-info menuEdit" data-id="@data.MenuMainId" id="menuEdit">
+                                                                                        <i class="fa fa-edit"></i>
+                                                                                        Edit
+                                                                                    </a>
+
+                                                                                    @*@Html.ActionLink("Edit", "Index", "MenuSetup", new { menuId = data.MenuMainId }, new { @class = "btn m-btn--pill m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" })*@
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function validationCheck() {
+        var menuName = $("#menuName").val();
+        if (menuName === '') {
+            toastr.error("Enter Menu Name !!");
+            return false;
+        }
+
+        var menuUrl = $("#menuUrl").val();
+        if (menuUrl === '') {
+            toastr.error("Enter Menu Url !!");
+            return false;
+        }
+
+        var menuIcon = $("#menuIcon").val();
+        if (menuIcon === '') {
+            toastr.error("Enter Menu Icon !!");
+            return false;
+        }
+
+        var menuOrder = $("#menuOrder").val();
+        if (menuOrder === '') {
+            toastr.error("Enter Menu Order !!");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function MenuManiDataSave() {
+        var menuId = $("#menuId").val();
+        var menuName = $("#menuName").val();
+        var menuUrl = $("#menuUrl").val();
+        var menuIcon = $("#menuIcon").val();
+        var menuOrder = $("#menuOrder").val();
+        var controllerName = $("#controllerName").val();
+        var actionName = $("#actionName").val();
+
+        var dataObject = {
+            'MenuMainId' : menuId,
+            'MenuMainName': menuName,
+            'MenuUrl': menuUrl,
+            'MenuIcon': menuIcon,
+            'MenuOrder': menuOrder,
+            'Controller': controllerName,
+            'Action': actionName
+        }
+        var dataList = JSON.stringify({ objMenuMainModel: dataObject });
+        if (validationCheck()) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveMenuData", "MenuSetup")',
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                    success: function (data) {
+                        if (data.m != null) {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                            }
+                        } else {
+                            toastr.error("Connection Problem !.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+           }
+    }
+
+    jQuery(document).ready(function () {
+
+        $("#menuSave").click(function () {
+            MenuManiDataSave();
+        });
+
+        $(document).on('click', '.menuEdit', function () {
+            var menuId = $(this).data('id');
+            var dataList = JSON.stringify({ menuId: menuId });
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("GetAMenu", "MenuSetup")',
+                data: dataList,
+                success: function (data) {
+                    $("#menuId").val(data.MenuMainId);
+                    $("#menuName").val(data.MenuMainName);
+                    $("#menuUrl").val(data.MenuUrl);
+                    $("#menuIcon").val(data.MenuIcon);
+                    $("#menuOrder").val(data.MenuOrder);
+                    $("#controllerName").val(data.Controller);
+                    $("#actionName").val(data.Action);
+                    toastr.success("Selected");
+                    $("body").addClass("m-scroll-top--shown");
+                }
+            });
+        });
+    });
+
+</script>
+
+

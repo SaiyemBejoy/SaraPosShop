@@ -49,8 +49,11 @@ namespace Models.AllModel
         public string WareHouseId { get; set; }
         public string ShopId { get; set; }
         public string ShopName { get; set; }
+        public string VoidPermision { get; set; }
+        public string ReturnPermision { get; set; }
 
         public IEnumerable<DeliveredProduct> DeliveredProductModels { get; set; }
+        
 
         public static AuthModel ConvertAuthModel(DataRow row)
         {
@@ -73,8 +76,9 @@ namespace Models.AllModel
                 //UpdateBy = row.Table.Columns.Contains("VAT_NO") ? Convert.ToString(row["VAT_NO"]) : "",
                 WareHouseId = "1",
                 ShopId = row.Table.Columns.Contains("SHOP_ID") ? Convert.ToString(row["SHOP_ID"]) : "",
-                ShopName = row.Table.Columns.Contains("SHOP_NAME") ? Convert.ToString(row["SHOP_NAME"]) : ""
-               
+                ShopName = row.Table.Columns.Contains("SHOP_NAME") ? Convert.ToString(row["SHOP_NAME"]) : "",
+                VoidPermision = row.Table.Columns.Contains("VOID_PERMISION") ? Convert.ToString(row["VOID_PERMISION"]) : "",
+                ReturnPermision = row.Table.Columns.Contains("RETURN_PERMISION") ? Convert.ToString(row["RETURN_PERMISION"]) : ""
             };
         }
     }

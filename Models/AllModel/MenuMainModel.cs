@@ -9,21 +9,23 @@ namespace Models.AllModel
 {
     public class MenuMainModel
     {
-            public int MenuMainId { get; set; }
+        public int MenuMainId { get; set; }
 
-            public string MenuMainName { get; set; }
+        public string MenuMainName { get; set; }
 
-            public string RoleName { get; set; }
+        public string MenuUrl { get; set; }
 
-            public string MenuUrl { get; set; }
+        public string MenuIcon { get; set; }
 
-            public string MenuIcon { get; set; }
+        public string UpdateBy { get; set; }
 
-            public string UpdateBy { get; set; }
+        public int MenuOrder { get; set; }
 
-            public int MenuOrder { get; set; }
+        public string Controller { get; set; }
 
-            public IEnumerable<MenuSubModel> MenuSubModels { get; set; }
+        public string Action { get; set; }
+
+        public IEnumerable<MenuSubModel> MenuSubModels { get; set; }
 
         public static MenuMainModel ConvertMenuMainModel(DataRow row)
         {
@@ -31,7 +33,8 @@ namespace Models.AllModel
             {
                 MenuMainId = row.Table.Columns.Contains("MENU_ID") ? Convert.ToInt32(row["MENU_ID"]) : 0,
                 MenuMainName = row.Table.Columns.Contains("MENU_NAME") ? Convert.ToString(row["MENU_NAME"]) : "",
-                RoleName = row.Table.Columns.Contains("ROLE_NAME") ? Convert.ToString(row["ROLE_NAME"]) : "",
+                Controller = row.Table.Columns.Contains("CONTROLLER") ? Convert.ToString(row["CONTROLLER"]) : "",
+                Action = row.Table.Columns.Contains("ACTION") ? Convert.ToString(row["ACTION"]) : "",
                 MenuUrl = row.Table.Columns.Contains("MENU_URL") ? Convert.ToString(row["MENU_URL"]) : "",
                 MenuIcon = row.Table.Columns.Contains("MENU_ICON") ? Convert.ToString(row["MENU_ICON"]) : "",
                 UpdateBy = row.Table.Columns.Contains("CREATED_BY") ? Convert.ToString(row["CREATED_BY"]) : "",
@@ -39,7 +42,16 @@ namespace Models.AllModel
 
             };
         }
- 
+
+        public static MenuMainModel ConvertMenuOrder(DataRow row)
+        {
+            return new MenuMainModel
+            {
+                MenuOrder = row.Table.Columns.Contains("MENU_ORDER") ? Convert.ToInt32(row["MENU_ORDER"]) : 0
+
+            };
+        }
+
     }
 
     public class MenuMainModelList

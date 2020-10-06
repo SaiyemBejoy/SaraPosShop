@@ -13,6 +13,8 @@ namespace Models.AllModel
 
         public string TransitChallnNo { get; set; }
 
+        public string StoreReceiveChallanNo { get; set; } // receive challan dhore transit korar jonno 
+
         public int MarketPalceId { get; set; }
 
         public string MarketPlaceName { get; set; }

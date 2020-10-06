@@ -29,7 +29,6 @@
                                     Product Transit
                                 </h3>
                             </div>
-
                         </div>
                     </div>
                     <div class="m-portlet__body">
@@ -45,28 +44,42 @@
                                                         <div class="dataTables_wrapper dt-bootstrap4 no-footer">
                                                             <div class="form-group m-form__group row">
                                                                 <div class="col-1"></div>
-                                                                <label class="col-4 col-form-label">Scan Product:</label>
+                                                                <label class="col-md-4 col-form-label" style="font-weight: bold;">Challan Select:</label>
+                                                                <div class="col-md-7" style="margin-top: 12px">
+                                                                    <input type="checkbox" id="checkbox">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group m-form__group row">
+                                                                <div class="col-1"></div>
+                                                                <label class="col-4 col-form-label" style="font-weight: bold;">Scan Product:</label>
                                                                 <div class="col-7">
                                                                     <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" id="scanProduct" placeholder="Scan Product">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group m-form__group row">
                                                                 <div class="col-1"></div>
-                                                                <label class="col-4 col-form-label">Growing Precent(%):</label>
+                                                                <label class="col-4 col-form-label"style="font-weight: bold;">Receive Challan:</label>
+                                                                <div class="col-7">
+                                                                    <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" id="receiveChallan" placeholder="Type Product Receive Challan">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group m-form__group row">
+                                                                <div class="col-1"></div>
+                                                                <label class="col-4 col-form-label" style="font-weight: bold;">Growing Precent(%):</label>
                                                                 <div class="col-7">
                                                                     <input class="form-control m-input--air m-input--pill growingPercentTxt" autocomplete="off" type="number" id="growingPercentTxt" value="0">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group m-form__group row">
                                                                 <div class="col-1"></div>
-                                                                <label class="col-4 col-form-label">Today Dollar Rate:</label>
+                                                                <label class="col-4 col-form-label" style="font-weight: bold;">Today Dollar Rate:</label>
                                                                 <div class="col-7">
                                                                     <input class="form-control m-input--air m-input--pill dollarRatetxt" autocomplete="off" type="number" id="dollarRatetxt" value="0">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group m-form__group row">
                                                                 <div class="col-1"></div>
-                                                                <label class="col-4 col-form-label">Market Place:</label>
+                                                                <label class="col-4 col-form-label" style="font-weight: bold;">Market Place:</label>
                                                                 <div class="col-7">
                                                                     @Html.DropDownListFor(model => model.MarketPalceId, (IEnumerable<SelectListItem>)ViewBag.MarketPlaceNameList, "---Select---", new { @class = "form-control m-input--air m-input--pill" })
                                                                 </div>
@@ -75,7 +88,7 @@
                                                         <div class="row">
                                                             <div class="col-4"></div>
                                                             <div class="col-4 text-center">
-                                                                <button type="button" id="Save" class="btn m-btn--pill btn-primary m-btn--wide">Save</button>
+                                                                <button type="button" id="Save" class="btn m-btn--pill btn-primary m-btn--wide" style="font-weight: bold;">Save</button>
                                                             </div>
                                                             <div class="col-4"></div>
                                                         </div>
@@ -161,6 +174,7 @@
 <script>
     jQuery(document).ready(function () {
         $("#scanProduct").focus();
+        $('#receiveChallan').attr('disabled', true);
         //LocalStorage data auto Load
         var localStorageData = JSON.parse(localStorage.getItem('transitProduct'));
         if (localStorageData != null) {
@@ -177,6 +191,24 @@
 
         $("#Save").click(function() {
             transitDataSave();
+        });
+        $("#checkbox").change(function () {
+            localStorage.removeItem('transitProduct');
+            if (this.checked) {
+                $('#scanProduct').attr('disabled', true);
+                $('#scanProduct').val("");
+                $('#receiveChallan').attr('disabled', false);
+                $('#receiveChallan').val("");
+                $('#ProductDetailsTableBody').html("");
+            } else {
+                $('#scanProduct').attr('disabled', false);
+                $('#scanProduct').val("");
+                $('#receiveChallan').attr('disabled', true);
+                $('#receiveChallan').val("");
+                $('#ProductDetailsTableBody').html("");
+            }
+          
+
         });
         //Barcode Scan
         $('#scanProduct').on('change', function () {
@@ -409,6 +441,7 @@
         var MarketPalceId = $("#MarketPalceId").val();
         var growingPercentTxt = parseFloat($("#growingPercentTxt").val());
         var dollarRatetxt = parseFloat($("#dollarRatetxt").val());
+        var receiveChallan = $("#receiveChallan").val().trim();
 
         var totalCurrentStock = 0;
         var totalTransitItem = 0;
@@ -420,10 +453,13 @@
             toastr.info("Transit Quantity Must Be Equal Or Less Than CurrentStock");
             return false;
         }
-        if (isNaN(dollarRatetxt) || dollarRatetxt === 0) {
-            toastr.error("Enter Today Dollar Rate!.");
-            return false;
+        if (receiveChallan ==="") {
+            if (isNaN(dollarRatetxt) || dollarRatetxt === 0) {
+                toastr.error("Enter Today Dollar Rate!.");
+                return false;
+            } 
         }
+       
         if (MarketPalceId === "---Select---" || MarketPalceId === "" ) {
             toastr.error("Select Market Place!.");
             return false;
@@ -554,6 +590,7 @@
 
     function transitDataSave() {
         var MarketPalceId = $("#MarketPalceId").val();
+        var receiveChallan = $("#receiveChallan").val().trim();
 
          var allTransitItem = [];
         allTransitItem.length = 0;
@@ -576,6 +613,7 @@
 
         var dataObject = {
             'MarketPalceId': MarketPalceId,
+            'StoreReceiveChallanNo': receiveChallan,
             'TransitProductItemList': allTransitItem
         }
         var dataList = JSON.stringify({ objTransitProductModel: dataObject });
@@ -591,16 +629,21 @@
                         $('#cover-spin').show();
                     },
                     success: function (data) {
-                        if (data.m  !== null) {
-                            if (data.isRedirect) {
-                                window.open('/Transit/ShowReport?transitChallanNo=' + data.m, '_blank');
-                                window.setTimeout(function() {
-                                    window.location = data.redirectUrl;
-                                },1000);
-                                toastr.success("Save Successfully.");
-                                localStorage.removeItem('transitProduct');
-                            }else {
-                                toastr.error("Something is wrong !.");
+                        if (data.m !== "") {
+                            if (data.m !== "Exist") {
+                                if (data.isRedirect) {
+                                    window.open('/Transit/ShowReport?transitChallanNo=' + data.m, '_blank');
+                                    window.setTimeout(function() {
+                                        window.location = data.redirectUrl;
+                                    },1000);
+                                    toastr.success("Save Successfully.");
+                                    localStorage.removeItem('transitProduct');
+                                }else {
+                                    toastr.error("Something is wrong !.");
+                                    $('#cover-spin').hide();
+                                }
+                            } else {
+                                alert(receiveChallan.concat(" Already Exist!."));
                                 $('#cover-spin').hide();
                             }
 
@@ -618,6 +661,48 @@
         }
     }
 
+    function manageGridForReceive(addItem) {
+            filterData = {
+                'ItemId': addItem.ItemId,
+                'ProductId': addItem.ProductId,
+                'Barcode': addItem.Barcode,
+                'ItemName': addItem.ItemName,
+                'TransitQuantity': addItem.ReceiveQty,
+                'CurrentStock': addItem.ReceiveQty,
+                'SalePrice': addItem.SalePrice,
+                'GrowingPrice': addItem.SalePrice,
+                'GrowingPercent': 0,
+                'USDollar': 0,
+                'USDollarRate': 0,
+
+            };
+            var productItemList = JSON.parse(localStorage.getItem('transitProduct'));
+            if (filterData) {
+                if (productItemList == null) {
+                    productItemList = [];
+                    productItemList.push(filterData);
+                }
+                else {
+                    var checker = true;
+                    var barcode = filterData.Barcode;
+                    for (var i = 0; i < productItemList.length; i++) {
+                        if (productItemList[i].Barcode === barcode) {
+                            var transitQty = parseInt(productItemList[i].TransitQuantity);
+                            productItemList[i].TransitQuantity = transitQty + 1;
+                            checker = false;
+                            //toastr.success("Add Same Item.");
+                        }
+                    }
+                    if (checker) {
+                        productItemList.push(filterData);
+                    }
+                }
+            }
+
+        localStorage.setItem('transitProduct', JSON.stringify(productItemList));
+    };
+
+    /////END
     function rowDataCalculation(data) {
         var barcode = data.parents('tr').find('td:eq(2)').text();
         var salePrice = parseFloat(data.parents('tr').find('.salePrice').val());
@@ -652,4 +737,32 @@
         }
     });
     //end
+
+
+    $("#receiveChallan").change(function () {
+        var receiveChallan = $("#receiveChallan").val().trim();
+        $.ajax({
+            type: 'GET',
+            url: '/Transit/GetProductInfoByReceiveChallanNo/',
+            dataType: 'json',
+            data: { receiveChallanNo: receiveChallan },
+            success: function (data) {
+                //for local storage a save
+                localStorage.removeItem('transitProduct');
+                if (data != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        manageGridForReceive(data[i]);
+                    }
+                    var localStorageData = JSON.parse(localStorage.getItem('transitProduct'));
+                    if (localStorageData != null) {
+                        tableBodyGenerateForLocalStorage(localStorageData);
+                    }
+                } else {
+                    alert("Data Not Found!.");
+                }
+                //end
+            }
+        });
+    });
+
 </script>

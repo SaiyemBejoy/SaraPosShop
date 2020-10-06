@@ -74,6 +74,7 @@
     <Compile Include="IManager\IStoreHouseRequestManager.cs" />
     <Compile Include="IManager\ITestManager.cs" />
     <Compile Include="IManager\ITransitProductManager.cs" />
+    <Compile Include="IManager\IUserPermissionManager.cs" />
     <Compile Include="IManager\IWareHouseDashboardManager.cs" />
     <Compile Include="Manager\AuthManager.cs" />
     <Compile Include="Manager\DamageProductManager.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Manager\StoreHouseRequestManager.cs" />
     <Compile Include="Manager\TestManager.cs" />
     <Compile Include="Manager\TransitProductManager.cs" />
+    <Compile Include="Manager\UserPermissionManager.cs" />
     <Compile Include="Manager\WareHouseDashboardManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

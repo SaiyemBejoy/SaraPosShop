@@ -28,6 +28,7 @@ namespace BLL.IManager
         Task<IEnumerable<CustomerSaleModel>> GetAllSaleCustomerInfo();
         Task<string> DeleteAllHoldInvoice(string invoiceNumber);
         Task<IEnumerable<SearchHintsModel>> GetProductGridsForHints(string model);
+        Task<TransitItemInfoModel> GetAllTransitProductInfoByBarcode(string barcode,string marketPlaceId);
 
     }
 }

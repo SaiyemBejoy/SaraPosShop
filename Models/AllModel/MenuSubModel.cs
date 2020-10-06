@@ -19,13 +19,15 @@ namespace Models.AllModel
 
         public string SubMenuIcon { get; set; }
 
-        public string RoleName { get; set; }
-
         public string UpdateBy { get; set; }
 
         public int SubMenuMainId { get; set; }
 
         public int SubMenuOrder { get; set; }
+
+        public string Controller { get; set; }
+
+        public string Action { get; set; }
 
 
         public static MenuSubModel ConvertMenuSubModel(DataRow row)
@@ -35,7 +37,8 @@ namespace Models.AllModel
                 MenuMainId = row.Table.Columns.Contains("MENU_MAIN_ID") ? Convert.ToInt32(row["MENU_MAIN_ID"]) : 0,
                 MenuSubId = row.Table.Columns.Contains("MENU_SUB_ID") ? Convert.ToInt32(row["MENU_SUB_ID"]) : 0,
                 MenuSubName = row.Table.Columns.Contains("MENU_SUB_NAME") ? Convert.ToString(row["MENU_SUB_NAME"]) : "",
-                RoleName = row.Table.Columns.Contains("ROLE_NAME") ? Convert.ToString(row["ROLE_NAME"]) : "",
+                Controller = row.Table.Columns.Contains("CONTROLLER") ? Convert.ToString(row["CONTROLLER"]) : "",
+                Action = row.Table.Columns.Contains("ACTION") ? Convert.ToString(row["ACTION"]) : "",
                 SubMenuUrl = row.Table.Columns.Contains("MENU_SUB_URL") ? Convert.ToString(row["MENU_SUB_URL"]) : "",
                 SubMenuIcon = row.Table.Columns.Contains("MENU_SUB_ICON") ? Convert.ToString(row["MENU_SUB_ICON"]) : "",
                 UpdateBy = row.Table.Columns.Contains("CREATED_BY") ? Convert.ToString(row["CREATED_BY"]) : "",

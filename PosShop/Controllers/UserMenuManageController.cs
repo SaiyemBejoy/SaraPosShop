@@ -17,11 +17,13 @@ namespace PosShop.Controllers
     {
         private readonly IDropdownManager _dropdownManager;
         private readonly IAuthManager _authManager;
+        private readonly IUserPermissionManager _userPermissionManager;
 
         public UserMenuManageController()
         {
             _dropdownManager = new DropdownManager();
             _authManager = new AuthManager();
+            _userPermissionManager = new UserPermissionManager();
         }
         #region "Common"
         private string _employeeId;
@@ -47,16 +49,18 @@ namespace PosShop.Controllers
 
         #endregion
         // GET: UserMenuManage
-
+        [UserRoleFilter]
         public async Task<ActionResult> Index()
         {
             LoadSession();
             var menuList = await _dropdownManager.GetAllMenuList();
-            var menuListHaveSubMenu = await _dropdownManager.GetAllMenuListHaveSubMenu();
+            //var menuListHaveSubMenu = await _dropdownManager.GetAllMenuListHaveSubMenu();
             var userRoleList = await _dropdownManager.GetAllUserRoleList();
+            var employee = await _dropdownManager.GetAllEmployeeInfo();
             ViewBag.MenuList = menuList;
             ViewBag.UserRoleList = userRoleList;
-            ViewBag.MenuListHaveSubMenu = menuListHaveSubMenu;
+            ViewBag.EmployeeList = employee;
+            //ViewBag.MenuListHaveSubMenu = menuListHaveSubMenu;
             return View();
         }
 
@@ -152,5 +156,56 @@ namespace PosShop.Controllers
         //}
         /// End
         #endregion
+
+        #region UserMenuPermision
+
+        public async Task<ActionResult> GetSubMenuListForTableByMenuId(string menuId)
+        {
+            var data = await _userPermissionManager.GetSubMenuListByMenu(menuId);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> SaveAllMenuPermisionData(MainMenuPermisionModel objMainMenuPermisionModels)
+        {
+            LoadSession();
+            objMainMenuPermisionModels.UpdatedBy = _employeeId;
+            var result = await _userPermissionManager.SaveAllMenuPermisionData(objMainMenuPermisionModels);
+            var returnData = new
+            {
+                m = result,
+                isRedirect = true,
+                redirectUrl = Url.Action("Index")
+            };
+            return Json(returnData, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> DeleteAllMenuPermisionData(MainMenuPermisionModel objMainMenuPermisionModels)
+        {
+            LoadSession();
+            objMainMenuPermisionModels.UpdatedBy = _employeeId;
+            var result = await _userPermissionManager.DeleteAllMenuPermisionData(objMainMenuPermisionModels);
+            var returnData = new
+            {
+                m = result,
+                isRedirect = true,
+                redirectUrl = Url.Action("Index")
+            };
+            return Json(returnData, JsonRequestBehavior.AllowGet);
+        }
+        public async Task<ActionResult> VoidAndReturnPermisionData(UserMenuManageModel objUserMenuManageModel)
+        {
+            LoadSession();
+            var result = await _userPermissionManager.VoidAndReturnPermisionData(objUserMenuManageModel);
+            var returnData = new
+            {
+                m = result,
+                isRedirect = true,
+                redirectUrl = Url.Action("Index")
+            };
+            return Json(returnData, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+
     }
 }

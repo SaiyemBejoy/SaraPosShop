@@ -77,7 +77,13 @@ namespace PosShop.Controllers
                 return Json(0, JsonRequestBehavior.AllowGet);
             return Json(item, JsonRequestBehavior.AllowGet);
         }
-
+        public async Task<ActionResult> GetAllInfoByBarcodeFromTransit(string barcode,string marketPlaceId)
+        {
+            var item = await _manager.GetAllTransitProductInfoByBarcode(barcode, marketPlaceId);
+            if (item == null)
+                return Json(0, JsonRequestBehavior.AllowGet);
+            return Json(item, JsonRequestBehavior.AllowGet);
+        }
         public async Task<ActionResult> GetAllShopForEx()
         {
             var shopName = await _dropdownManager.GetAllShopListForExchange(UtilityClass.ShopId);

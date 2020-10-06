@@ -88,5 +88,7 @@ namespace DAL.IRepository
 
 
         Task<IEnumerable<SearchHintsModel>> GetProductGridsForHints(string model);
+
+        Task<TransitItemInfoModel> GetAllTransitProductInfoByBarcode(string barcode, string stringmarketPlaceId);
     }
 }
