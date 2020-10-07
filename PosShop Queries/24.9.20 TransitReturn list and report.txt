@@ -169,16 +169,30 @@ AS
               WHERE i.ITEM_ID = S.ITEM_ID
                     AND R.MARKET_PLACE_ID = M.MARKET_PLACE_ID)
                TRANSIT_RETURN_QTY,
-            '' TRANSIT_SALE_QTY, ----Transit Sale Koto Hoise Ata Pore Daka Lagbe
+            (SELECT NVL (SUM (QUANTITY), 0)
+               FROM    SALE_ITEM i
+                    JOIN
+                       SALE_INFO r
+                    ON (i.SALE_INFO_ID = r.SALE_INFO_ID)
+              WHERE i.ITEM_ID = S.ITEM_ID
+                    AND r.MARKET_PLACE_ID = M.MARKET_PLACE_ID)
+               TRANSIT_SALE_QTY,
             (NVL (SUM (S.QUANTITY), 0)
-             - (SELECT NVL (SUM (QUANTITY), 0)
-                  FROM    TRANSIT_PRODUCT_RETURN_ITEM i
-                       JOIN
-                          TRANSIT_PRODUCT_RETURN_MAIN r
-                       ON (i.TRANSIT_RETURN_CHALLAN_NUM =
-                              r.TRANSIT_RETURN_CHALLAN_NUM)
-                 WHERE i.ITEM_ID = S.ITEM_ID
-                       AND R.MARKET_PLACE_ID = M.MARKET_PLACE_ID))
+             - ( (SELECT NVL (SUM (QUANTITY), 0)
+                    FROM    TRANSIT_PRODUCT_RETURN_ITEM i
+                         JOIN
+                            TRANSIT_PRODUCT_RETURN_MAIN r
+                         ON (i.TRANSIT_RETURN_CHALLAN_NUM =
+                                r.TRANSIT_RETURN_CHALLAN_NUM)
+                   WHERE i.ITEM_ID = S.ITEM_ID
+                         AND R.MARKET_PLACE_ID = M.MARKET_PLACE_ID)
+                + (SELECT NVL (SUM (QUANTITY), 0)
+                     FROM    SALE_ITEM i
+                          JOIN
+                             SALE_INFO r
+                          ON (i.SALE_INFO_ID = r.SALE_INFO_ID)
+                    WHERE i.ITEM_ID = S.ITEM_ID
+                          AND r.MARKET_PLACE_ID = M.MARKET_PLACE_ID)))
                TRANSIT_BLANCE,
             S.SALE_PRICE
        FROM    TRANSIT_PRODUCT_ITEM s
