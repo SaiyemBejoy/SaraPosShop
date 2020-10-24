@@ -11,6 +11,7 @@ namespace BLL.IManager
     public interface IRequisitionManager
     {     
         Task<string> SaveAllRequisitionData(RequisitionMainModel objRequisitionMainModel);
+        Task<string> UpdateWarehouseRequisitionInfo(RequisitionMainModel objRequisitionMainModel);
         Task<IEnumerable<RequisitionMainModel>> GetAllWarehouseRequisitionData();
         Task<string> GetMaxRequisition();
         Task<IEnumerable<DcProductSearchModel>> GetDcProductByStyleName(string styleName);

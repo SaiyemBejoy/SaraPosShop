@@ -353,5 +353,41 @@ namespace DAL.Repository
 
             return await ExecuteNonQueryAsync(query.ToString(), param);
         }
+
+        public async Task<string> DeleteShopRequisitionChallanDC(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WarehouseApi);
+
+                HttpResponseMessage response = await client.PostAsJsonAsync("ShopRequisitionUpdate", objShopToShopRequisitionMainModel);
+                response.EnsureSuccessStatusCode();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.StatusCode.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public async Task<string> DeleteShopRequisitionChallan(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel)
+        {
+
+            StringBuilder query = new StringBuilder();
+            query.Clear();
+
+            List<OracleParameter> param = new List<OracleParameter>
+            {
+                new OracleParameter(":P_REQUISITION_NUMBER", OracleDbType.Varchar2, objShopToShopRequisitionMainModel.RequisitionNumber, ParameterDirection.Input),
+                new OracleParameter("P_MESSAGE", OracleDbType.Varchar2, 500, "", ParameterDirection.Output)
+            };
+            query.Append("PRO_SHOP_REQUI_MAIN_DELETE");
+
+            return await ExecuteNonQueryAsync(query.ToString(), param);
+        }
     }
 }

@@ -191,5 +191,25 @@ namespace BLL.Manager
                 return null;
             }
         }
+
+        public async Task<string> DeleteShopRequisitionChallan(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel)
+        {
+            string saveMessage = "";
+            try
+            {
+                var data = await _repository.DeleteShopRequisitionChallanDC(objShopToShopRequisitionMainModel);
+                if (data == "OK")
+                {
+                    saveMessage = await _repository.DeleteShopRequisitionChallan(objShopToShopRequisitionMainModel);
+                    return saveMessage;
+                }
+
+                return saveMessage;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

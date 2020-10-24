@@ -102,5 +102,21 @@ namespace DAL.Repository
 
             return await ExecuteNonQueryAsync(query.ToString(), param);
         }
+
+        public async Task<string> UpdateWarehouseRequisitionInfo(RequisitionMainModel objRequisitionMainModel)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Clear();
+
+            List<OracleParameter> param = new List<OracleParameter>
+            {
+                new OracleParameter(":P_REQUISITION_NO", OracleDbType.Varchar2, objRequisitionMainModel.RequisitionNo, ParameterDirection.Input),
+                new OracleParameter(":P_SHOP_ID", OracleDbType.Varchar2, objRequisitionMainModel.ShopId, ParameterDirection.Input),
+                new OracleParameter("P_MESSAGE", OracleDbType.Varchar2, 500, "", ParameterDirection.Output)
+            };
+            query.Append("PRO_REQUISITION_MAIN_UPDATE");
+
+            return await ExecuteNonQueryAsync(query.ToString(), param);
+        }
     }
 }

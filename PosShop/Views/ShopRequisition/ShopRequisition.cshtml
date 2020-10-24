@@ -72,10 +72,10 @@
                                                 <div class="m-portlet__head-caption">
                                                     <div class="m-portlet__head-title">
                                                         <span class="m-portlet__head-icon">
-                                                            <i class="la la-thumb-tack"></i>
+                                                           
                                                         </span>
                                                         <h3 class="m-portlet__head-text">
-                                                            All Product List
+                                                            
                                                         </h3>
                                                     </div>
                                                 </div>
@@ -83,7 +83,7 @@
                                                     <div class="form-group m-form__group row">
                                                         <label class="col-4 col-form-label"><strong>Search:</strong></label>
                                                         <div class="col-7">
-                                                            <input type="text" id="styleOrBarcode" class="form-control m-input--air m-input--pill" placeholder="Style/Barcode" style = "width:200px;font-size: 15px;"/>
+                                                            <input type="text" id="styleOrBarcode" class="form-control m-input--air m-input--pill" placeholder="Style/Barcode" style = "max-width:200px;min-width:150px;font-size: 15px;"/>
                                                             @*@Html.DropDownListFor(model => model.StyleName, (IEnumerable<SelectListItem>) ViewBag.StyleNameList, "Select Style", new {@class = " form-control m-input--air m-input--pill select2", @style = "width:200px"})*@
                                                         </div>
                                                     </div>
@@ -91,7 +91,7 @@
                                             </div>
                                             <div class="m-portlet__body">
                                                 <div class="m-section__content">
-                                                    <table class="table table-bordered m-table m-table--border-danger m-table--head-bg-primary table-hover " id="ShopProductStockList">
+                                                    <table class="table table-responsive-sm table-bordered m-table m-table--border-danger m-table--head-bg-primary table-hover" id="ShopProductStockList">
                                                         <thead>
                                                             <tr>
                                                                 <th style="display: none">ItemId</th>
@@ -120,7 +120,7 @@
 
                                     <div class="m-portlet__body">
                                         <div class="m-section__content">
-                                            <table class="table table-bordered m-table m-table--border-success m-table--head-bg-light " id="selectTableForShopRequisition">
+                                            <table class="table table-responsive-sm table-bordered m-table m-table--border-success m-table--head-bg-light " id="selectTableForShopRequisition">
                                                 <thead>
                                                     <tr>
 

@@ -36,5 +36,9 @@ namespace DAL.IRepository
         Task<string> SaveAllRequisitionDataInShop(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel);
 
         Task<string> SaveAllRequisitionItemDataInShop(ShopToShopRequisitionMainItemModel objShopToShopRequisitionMainItemModel);
+
+        Task<string> DeleteShopRequisitionChallanDC(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel);
+
+        Task<string> DeleteShopRequisitionChallan(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel);
     }
 }

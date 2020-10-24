@@ -89,5 +89,19 @@ namespace BLL.Manager
                 return "something went wrong";
             }
         }
+
+        public async Task<string> UpdateWarehouseRequisitionInfo(RequisitionMainModel objRequisitionMainModel)
+        {
+            string returnMessage = "";
+            try
+            {
+                var data = await _repository.UpdateWarehouseRequisitionInfo(objRequisitionMainModel);
+                return data;
+            }
+            catch (Exception)
+            {
+                return "something went wrong";
+            }
+        }
     }
 }

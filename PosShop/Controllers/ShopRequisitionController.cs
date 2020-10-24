@@ -118,6 +118,13 @@ namespace PosShop.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<ActionResult> DeleteShopRequisitionChallan(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel)
+        {
+            objShopToShopRequisitionMainModel.RequisitionShopIdFrom = UtilityClass.ShopId;
+            var data = await _manager.DeleteShopRequisitionChallan(objShopToShopRequisitionMainModel);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
 
         public async Task<ActionResult> SaveAllShopToShopReceiveData(ShopToShopReceiveMainModel objShopToShopReceiveMainModel)
         {

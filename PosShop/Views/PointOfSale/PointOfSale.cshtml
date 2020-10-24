@@ -152,7 +152,7 @@
                             <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
                                 <div class="m-portlet__body">
                                     <div class="table-responsive">
-                                        <table class="table m-table m-table--head-bg-success" id="gridTable">
+                                        <table class="table table-responsive-sm m-table m-table--head-bg-success" id="gridTable">
                                             <thead style="font-size: 15px; font-weight: bold;">
                                                 <tr>
                                                     @*<th>SL No</th>*@
@@ -301,7 +301,7 @@
 
                     <div class="m-portlet__body">
 
-                        <table class="table table-striped- table-bordered table-hover dataTable dtr-inline" id="SearchTable">
+                        <table class="table table-responsive-sm table-striped- table-bordered table-hover dataTable dtr-inline" id="SearchTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -339,7 +339,7 @@
 
                     <div class="m-portlet__body">
 
-                        <table class="table table-striped- table-bordered table-hover dataTable dtr-inline" id="holdInvoiceTable">
+                        <table class="table table-responsive-sm table-striped- table-bordered table-hover dataTable dtr-inline" id="holdInvoiceTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -1873,6 +1873,7 @@
 
         //Auto cashSelect Option
         function autoCashSelect() {
+            debugger;
             var paymentType = $('.paymentType').val();
             var invoiceAmount = $('.inVoiceAmount').val();
             var remainAmount = $('.cashAmount').val();
@@ -1896,7 +1897,7 @@
                     $('.changeAmount').val("");
                     $('.paymentTypeAmount').attr('disabled', false);
 
-                    paymentTypeTable(paymentType, invoiceAmount, 0, invoiceAmount);
+                    $("#gridTableForPayment").empty().append(paymentTypeTable(paymentType, invoiceAmount, 0, invoiceAmount));
                     $('.payNowButton').focus();
                 }
             } else {

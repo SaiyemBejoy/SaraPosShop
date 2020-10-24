@@ -18,6 +18,7 @@ namespace BLL.IManager
         Task<string> GetMaxShopRequisitionId();
         Task<string> ShopToShopReQuisitionDataSave(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel);
         Task<string> SaveAllShopToShopDeliveryData(ShopToShopDeliveryModel objShopToShopDeliveryModel);
+        Task<string> DeleteShopRequisitionChallan(ShopToShopRequisitionMainModel objShopToShopRequisitionMainModel);
         Task<string> SaveAllShopToShopReceiveData(ShopToShopReceiveMainModel objShopToShopReceiveMainModel);
     }
 }

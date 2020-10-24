@@ -14,5 +14,6 @@ namespace DAL.IRepository
         Task<string> SaveAllRequisitionItem(RequisitionMainItemModel obRequisitionMainItemModel);
         Task<string> GetMaxRequisition();
         Task<IEnumerable<DcProductSearchModel>> GetDcProductByStyleName(string styleName);
+        Task<string> UpdateWarehouseRequisitionInfo(RequisitionMainModel objRequisitionMainModel);
     }
 }

@@ -34,7 +34,7 @@
                     <div class="m-portlet__body">
                         <div class="m-section">
                             <div class="m-section__content">
-                                <table class="table table-bordered m-table m-table--border-success" id="requisitionToTable">
+                                <table class="table table-bordered m-table m-table--border-success table-responsive" id="requisitionToTable">
                                     <thead>
                                         <tr>
                                             <th>Requisition Number</th>
@@ -76,7 +76,7 @@
                     <div class="m-portlet__body">
                         <div class="m-section">
                             <div class="m-section__content">
-                                <table class="table table-bordered m-table m-table--border-primary" id="requisitionFromTable">
+                                <table class="table table-bordered m-table m-table--border-primary table-responsive" id="requisitionFromTable">
                                     <thead>
                                         <tr>
                                             <th>Requisition Number</th>
@@ -86,6 +86,7 @@
                                             <th style="display: none">Requisition From Shop Id</th>
                                             <th>Action</th>
                                             <th>Action</th>
+                                            <th>#</th>
                                         </tr>
                                     </thead>
                                     <tbody id="requisitionFromTableBody"></tbody>
@@ -261,10 +262,14 @@
                         data.toReQuisition[i].CreatedBy +
                         '</td>' +
                         (data.toReQuisition[i].DeliveryStatus === 'N' ? '<td> <a href="#" class="btn btn-danger m-btn m-btn--icon m-btn--pill status"  value = "' + 0 + '"><span><i class="fa fa-calendar-check-o"></i><span> <i class="fa fa-times-circle"></i> NO</span></span></a></td>' : '<td><a href="#" class="btn btn-success m-btn m-btn--icon m-btn--pill status" value = "' + 1+'"><span><i class="fa fa-calendar-check-o"></i><span>YES</span></span></a></td>' ) +
-                        '<td>' +
-                        ' <a class="btn m-btn--pill m-btn--air btn-warning m-btn--wide ViewItem" style = "font-weight: bold;" data-id="' + data.toReQuisition[i].RequisitionId + '" id="viewItem">' +
+                        '<td style = "width: 100px;">' +
+                        ' <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--wide ViewItem" style = "font-weight: bold;width: 40px;" data-id="' + data.toReQuisition[i].RequisitionId + '" id="viewItem">' +
                         ' <input type="hidden" name="requisitionNumber" value="' + data.toReQuisition[i].RequisitionNumber + '">'+
-                        ' <i class="fa fa-eye"></i> View Item'+
+                        ' <i class="fa fa-eye"></i>'+
+                        '</a>' +
+                        ' <a class="btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--wide DeleteChallan" style = "font-weight: bold;width: 40px;" data-id="' + data.toReQuisition[i].RequisitionId + '" id="DeleteChallan">' +
+                        ' <input type="hidden" name="DRequisitionNumber" value="' + data.toReQuisition[i].RequisitionNumber + '">' +
+                        ' <i class="fa fa-trash"></i>' +
                         '</a>' +
                         '</td>' +
                         '<td>' +
@@ -280,31 +285,33 @@
 
                 for (var j = 0; j < fromItemObject.length; j++) {
                     $("#requisitionFromTableBody").append('<tr>' +
-                        '<td>' +
+                        '<td style="font-size: 10px; font-weight: bold;">' +
                         fromItemObject[j].RequisitionNumber +
                         '</td>' +
-                        '<td>' +
+                        '<td style="font-size: 10px; font-weight: bold;">' +
                         fromItemObject[j].RequisitionShopNameFrom +
                         '</td>' +
-                        '<td>' +
+                        '<td style="font-size: 10px; font-weight: bold;">' +
                         fromItemObject[j].RequisitionDate +
                         '</td>' +
-                        '<td>' +
+                        '<td style="font-size: 10px; font-weight: bold;">' +
                         fromItemObject[j].CreatedBy +
                         '</td>' +
                         '<td style="display:none">' +
                         fromItemObject[j].RequisitionShopIdFrom +
                         '</td>' +
                         '<td>' +
-                        ' <a class="btn m-btn--pill m-btn--air btn-warning m-btn--wide ViewFromItem" style = "font-size: 15px; font-weight: bold;" data-id="' + fromItemObject[j].RequisitionId + '" id="viewItem2">' +
-                        ' <i class="fa fa-eye"></i> View Item' +
+                        ' <a class="btn m-btn--pill m-btn--air btn-warning m-btn--wide ViewFromItem" style = "font-size: 10px; font-weight: bold;" data-id="' + fromItemObject[j].RequisitionId + '" id="viewItem2">' +
+                        ' <i class="fa fa-eye"></i> View' +
                         '</a>' +
                         '</td>' +
                         '<td>' +
-                        ' <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-success m-btn--gradient-to-accent ViewDeliveryFromItem" style = "font-size: 15px; font-weight: bold;" data-id="' + fromItemObject[j].RequisitionId + '" id="viewItem2">' +
+                        ' <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-success m-btn--gradient-to-accent ViewDeliveryFromItem" style = "font-size: 10px; font-weight: bold;" data-id="' + fromItemObject[j].RequisitionId + '" id="viewItem2">' +
                         '<i class="fa fa-arrow-right"></i> Transfer Challan' +
                         '</a>' +
-
+                        '</td>' +
+                        '<td style="text-align: center">' +
+                        //'<input type="checkbox" class="checker" style="top: 0; left: 0; height: 25px; width: 25px;" id="checkbox2" data-id="' + fromItemObject[j].RequisitionId + '" />' +
                         '</td>' +
                         '</tr>');
                 }
@@ -383,6 +390,66 @@
             $("#ViewFromItemModal").modal('show');
         });
 
+    //$('#requisitionFromTable').on('click', '.checker', function (e) {
+    //    var checked = $(this).is(":checked");
+
+    
+    //    if (checked) {
+    //        var requisitionId = $(this).data('id');
+    //        var requisitionNumber = $(this).parents('tr').find('td:eq(0)').text();
+    //        var requisitionShopIdFrom = $(this).parents('tr').find('td:eq(4)').text();
+    //        //$("#requisitionNum").val(requisitionNumber);
+    //        $("#deliveryToShopId").val(requisitionShopIdFrom);
+    //        var ObjectForLocalStorage = [];
+    //        $("#requFromDeliveryItemTableBody").html("");
+    //        for (var i = 0; i < fromItemObject.length; i++) {
+    //            if (fromItemObject[i].RequisitionId === requisitionId) {
+    //                for (var j = 0; j < fromItemObject[i].ShopToShopRequisitionMainItemList.length; j++) {
+    //                    filterDataForArray = {
+    //                        'ShopToShoprequisitionNum': requisitionNumber,
+    //                        'ItemId': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemId,
+    //                        'ProductId': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ProductId,
+    //                        'Barcode': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Barcode,
+    //                        'ItemName': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemName,
+    //                        'TransferQuantity': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Quantity,
+    //                        'CurrentStock': fromItemObject[i].ShopToShopRequisitionMainItemList[j].ItemStock,
+    //                        'SalePrice': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Price,
+    //                        'Umo': '',
+    //                        'Vat': fromItemObject[i].ShopToShopRequisitionMainItemList[j].Vat
+    //                    };
+    //                    var productSelectItemList = JSON.parse(localStorage.getItem('transferProduct'));
+    //                    if (productSelectItemList != null) {
+    //                        productSelectItemList.push(filterDataForArray);
+    //                        localStorage.setItem('transferProduct', JSON.stringify(productSelectItemList));
+    //                    } else {
+    //                        ObjectForLocalStorage.push(filterDataForArray);
+    //                    }
+
+    //                }
+    //            }
+    //        }
+            
+    //        if (productSelectItemList == null) {
+    //            localStorage.setItem('transferProduct', JSON.stringify(ObjectForLocalStorage));
+    //        }
+    //    } else {
+   
+    //        var localStrogeItemListforDelete = JSON.parse(localStorage.getItem('transferProduct'));
+    //        var requisitionNumber = $(this).parents('tr').find('td:eq(0)').text();
+
+    //        for (var l = 0; l < localStrogeItemListforDelete.length; l++) {
+    //            var localSrequisition = localStrogeItemListforDelete[l].ShopToShoprequisitionNum;
+    //            if (localSrequisition === requisitionNumber) {
+                   
+    //                localStrogeItemListforDelete.splice(l, 1);
+    //                localStorage.setItem('transferProduct', JSON.stringify(localStrogeItemListforDelete));
+    //            }
+    //        }
+           
+    //    }
+                  
+    //});
+
     $('#requisitionFromTable').on('click',
         '.ViewDeliveryFromItem',
         function(e) {
@@ -459,6 +526,38 @@
         deliveryAllDataSave();
     });
 
+    $('#requisitionToTable').on('click', '.DeleteChallan', function (e) {
+        var requisitionNumber = $(this).parents('tr').find('input[name="requisitionNumber"]').val();
+        $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+            $(this).remove();
+        });
+        var dataObject = {
+            'RequisitionNumber': requisitionNumber
+        }
+        var dataList = JSON.stringify({ objShopToShopRequisitionMainModel: dataObject });
+
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            url: '@Url.Action("DeleteShopRequisitionChallan", "ShopRequisition")',
+            data: dataList,
+            beforeSend: function () {
+                $('#cover-spin').show();
+            },
+            success: function (data) {
+                if (data == "DELETE") {
+                    toastr.success("Delete Success!.");
+                    $('#cover-spin').hide();
+                } else {
+                    toastr.error("This challn Cann't Delete.");
+                    $('#cover-spin').hide();
+                }
+                
+            }
+        });
+    });
+
     function deliveryAllDataSave() {
         var requisitionNum = $('input[name="requisitionNum"]').val();
         var deliveryShopToId = $('input[name="deliveryToShopId"]').val();
@@ -489,6 +588,9 @@
                 dataType: 'json',
                 url: '@Url.Action("SaveAllShopToShopDeliveryData", "ShopRequisition")',
                 data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
                 success: function(data) {
                     if (data.isRedirect) {
                         window.setTimeout(function() {
@@ -496,11 +598,14 @@
                             },
                             1000);
                         toastr.success("Save Successfully.");
+                        $('#cover-spin').hide();
                     }
+                   
                 }
             });
         } else {
             toastr.error("Table Data Cann't Be Empty!");
+            $('#cover-spin').hide();
         }
 
     }
@@ -535,18 +640,23 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 url: '@Url.Action("SaveAllShopToShopReceiveData", "ShopRequisition")',
-            data: dataList,
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
             success: function (data) {
                 if (data.isRedirect) {
                     window.setTimeout(function() {
                         window.location = data.redirectUrl;
                     },1000);
                     toastr.success("Save Successfully.");
+                    $('#cover-spin').hide();
                 }
             }
             });
         } else {
             toastr.error("Data NOt found!.");
+            $('#cover-spin').hide();
         }
     } 
     //Delete from grid Table

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using BLL.IManager;
 using BLL.Manager;
+using Models.AllModel;
 
 namespace PosShop.Controllers.Api
 {
@@ -28,6 +29,16 @@ namespace PosShop.Controllers.Api
             }
 
             return Ok(getData);
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> Post(RequisitionMainModel model)
+        {
+            var updateDate = await _manager.UpdateWarehouseRequisitionInfo(model);
+            if (updateDate == "UPDATE")
+                return Ok(true);
+
+            return BadRequest();
         }
     }
 }
