@@ -142,5 +142,13 @@ namespace PosShop.Controllers
             List<StoreHouseProductSearchModel> data = (List<StoreHouseProductSearchModel>)model.ListOfData;
             return Json(new { model.draw, model.recordsTotal, model.recordsFiltered, data }, JsonRequestBehavior.AllowGet);
         }
+
+        public async Task<ActionResult> RemoveItem(string productBarcode, int storehouseId)
+        {
+            string message = await _manager.RemoveItem(productBarcode, storehouseId);
+            TempData["message"] = message;
+
+            return RedirectToAction("StoreHouseProductSearch");
+        }
     }
 }

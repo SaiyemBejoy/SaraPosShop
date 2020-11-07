@@ -21,5 +21,7 @@ namespace DAL.IRepository
         Task<string> SaveGiftVoucherData(GiftVoucherDeliveryModel objGiftVoucherDeliveryModel);
         Task<GiftVoucherModel> giftVoucherInfoByCode(string giftVoucherCode);
         Task<IEnumerable<GiftVoucherModel>> ViewAllDataGiftvoucherActive();
+        Task<IEnumerable<GiftVoucherModel>> GetAllGiftVoucherSaleDataFromShop();
+        Task<string> UpdateGiftVoucherSaleData(GiftVoucherModel objGiftVoucherModel);
     }
 }

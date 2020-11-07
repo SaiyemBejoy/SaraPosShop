@@ -17,5 +17,6 @@ namespace BLL.IManager
         Task<IEnumerable<StoreHouseRequestItemModelSubmit>> GetAllInfoByRequisitionNo(string requisitionNo);
         Task<string> SaveAllStoreHouseData(StoreHouseModel objStoreHouseModel);
         Task<DataTableAjaxPostModel> StoreHouseProductSearch(DataTableAjaxPostModel model);
+        Task<string> RemoveItem(string productBarcode, int storehouseId);
     }
 }

@@ -335,5 +335,27 @@ namespace DAL.Repository
             var dt = await GetDataThroughDataTableAsync(query, null);
             return (dt.Rows).Cast<DataRow>().Select(GiftVoucherModel.ConvertGiftVoucherModel);
         }
+
+        public async Task<IEnumerable<GiftVoucherModel>> GetAllGiftVoucherSaleDataFromShop()
+        {
+            var query = "Select * from GIFT_VOUCHER_SALE WHERE WAREHOUSE_RCV_YN = 'N' ";
+            var dt = await GetDataThroughDataTableAsync(query, null);
+            return (dt.Rows).Cast<DataRow>().Select(GiftVoucherModel.ConvertGiftVoucherModel);
+        }
+
+        public async Task<string> UpdateGiftVoucherSaleData(GiftVoucherModel objGiftVoucherModel)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Clear();
+
+            List<OracleParameter> param = new List<OracleParameter>
+                {
+                    new OracleParameter(":P_GIFT_VOUCHER_CODE", OracleDbType.Varchar2, objGiftVoucherModel.GiftVoucherCode, ParameterDirection.Input),
+                    new OracleParameter("P_MESSAGE", OracleDbType.Varchar2, 500, "", ParameterDirection.Output)
+            };
+
+            query.Append("PRO_GIFTVOUCHER_SALE_UPDATE");
+            return await ExecuteNonQueryAsync(query.ToString(), param);
+        }
     }
 }

@@ -44,7 +44,8 @@
                                             <th>Barcode</th>
                                             <th>Category</th>
                                             <th>SubCategory</th>
-                                            <th>Quantity</th>       
+                                            <th>Quantity</th> 
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -58,7 +59,6 @@
             </div>
         </div>
     </div>
-
 
 </div>
 <script>
@@ -111,6 +111,16 @@
                 },
                 {
                     "data": "Quantity"
+                },
+                {
+                    "data": null,
+                    "orderable": false,
+                    render: function (data, type, productGrid) {
+                        return "<a href='/StoreHouseRequest/RemoveItem?productBarcode=" +
+                            productGrid.Barcode + "&storehouseId=" + productGrid.StoreHouseId+
+                            "' class='btn btn-circle' style='color:red;'><i class='fa fa-trash' style='color:red;'></i> Remove</a>";
+                        ;
+                    }
                 }
             ]
         });

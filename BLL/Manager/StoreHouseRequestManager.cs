@@ -74,7 +74,7 @@ namespace BLL.Manager
                 return null;
             }
         }
-
+        
         public async Task<string> SaveAllData(StoreHouseRequestMain objStoreHouseRequestMain)
         {
             string returnMessage = "";
@@ -179,5 +179,20 @@ namespace BLL.Manager
                 return "something went wrong";
             }
         }
+
+        public async Task<string> RemoveItem(string productBarcode, int storehouseId)
+        {
+            string returnMessage = "";
+            try
+            {
+                returnMessage = await _repository.RemoveItem(productBarcode, storehouseId);
+                return returnMessage;
+            }
+            catch (Exception)
+            {
+                return "something went wrong";
+            }
+        }
+
     }
 }

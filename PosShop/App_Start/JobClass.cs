@@ -28,6 +28,7 @@ namespace PosShop
             var value1 = WareHouseDeliveryProductAsync();
             var value2 = GetCustomerListAsync();
             var shopRequisitionData = GetShopRequisitionDataForNotificationAsync();
+            var giftvoucher = GiftVoucherSaleDataUpdate();
             //var value3 = GetEmployeeDistributionListAsync();
             //DataBaseBackup();
 
@@ -98,5 +99,31 @@ namespace PosShop
         //    proc.StartInfo.WorkingDirectory = "E:\\BACKUPSCRIPT\\";
         //    proc.Start();
         //}
+
+        private async Task GiftVoucherSaleDataUpdate()
+        {
+            var giftVoucherSaleValue = await _manager.GetAllGiftVoucherSaleDataFromShop();
+            if (giftVoucherSaleValue.Count() > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(UtilityClass.ShopId))
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(DatabaseConfiguration.WarehouseApi);
+                        foreach (var objGiftVoucherModel in giftVoucherSaleValue)
+                        {
+                            HttpResponseMessage response = await client.PostAsJsonAsync("GiftVoucherDataUpdate", objGiftVoucherModel);
+                            response.EnsureSuccessStatusCode();
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var shopUpdate = await _manager.UpdateGiftVoucherSaleData(objGiftVoucherModel);
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+
     }
 }

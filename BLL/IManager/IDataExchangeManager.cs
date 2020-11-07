@@ -19,5 +19,7 @@ namespace BLL.IManager
         Task<IEnumerable<SalesManWiseSaleReportForDc>> GetAllSalesManWiseSaleDataForDc(string fromDate,string toDate);
         Task<string> GetAllGiftVoucherDeliveryAndSave();
         Task<GiftVoucherModel> giftVoucherInfoByCode(string giftVoucherCode);
+        Task<IEnumerable<GiftVoucherModel>> GetAllGiftVoucherSaleDataFromShop();
+        Task<string> UpdateGiftVoucherSaleData(GiftVoucherModel objGiftVoucherModel);
     }
 }

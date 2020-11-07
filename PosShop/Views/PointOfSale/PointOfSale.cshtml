@@ -1224,6 +1224,7 @@
         $("#paymentType").val(0);
     }
     //End
+
     //All Function End
     jQuery(document).ready(function () {
         $("body").addClass("m-brand--minimize m-aside-left--minimize");
@@ -1384,7 +1385,9 @@
         //Reprint
         $("#rePrint").click(function () {
             var invoiceNumber = localStorage.getItem("invoiceNumber");
-            invoiceNumber = invoiceNumber.replace(/^"(.*)"$/, '$1');
+            if (invoiceNumber != null) {
+                invoiceNumber = invoiceNumber.replace(/^"(.*)"$/, '$1');
+            }
             var counterName = localStorage.getItem("counterName");
             if (invoiceNumber == null)
                 invoiceNumber = "";
@@ -1873,7 +1876,6 @@
 
         //Auto cashSelect Option
         function autoCashSelect() {
-            debugger;
             var paymentType = $('.paymentType').val();
             var invoiceAmount = $('.inVoiceAmount').val();
             var remainAmount = $('.cashAmount').val();

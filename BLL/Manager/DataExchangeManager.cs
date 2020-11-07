@@ -40,6 +40,19 @@ namespace BLL.Manager
             }
         }
 
+        public async Task<IEnumerable<GiftVoucherModel>> GetAllGiftVoucherSaleDataFromShop()
+        {
+            try
+            {
+                var data = await _repository.GetAllGiftVoucherSaleDataFromShop();
+                return data;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<SalesManWiseSaleReportForDc>> GetAllSalesManWiseSaleDataForDc(string fromDate, string toDate)
         {
             try
@@ -172,6 +185,19 @@ namespace BLL.Manager
             catch (Exception)
             {
                 return "something went wrong";
+            }
+        }
+
+        public async Task<string> UpdateGiftVoucherSaleData(GiftVoucherModel objGiftVoucherModel)
+        {
+            try
+            {
+                var Data = await _repository.UpdateGiftVoucherSaleData(objGiftVoucherModel);
+                return Data;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 

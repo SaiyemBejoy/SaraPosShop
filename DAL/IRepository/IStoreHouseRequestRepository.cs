@@ -23,5 +23,6 @@ namespace DAL.IRepository
         Task<DataTableAjaxPostModel> StoreHouseProductSearch(DataTableAjaxPostModel model);
         Task<StoreHouseItemModel> GetAllInfoByBarcode(string barcode);
         Task<IEnumerable<StoreHouseModel>> GetAllLineRopeRackList(string barcode);
+        Task<string> RemoveItem(string productBarcode, int storehouseId);
     }
 }

@@ -108,6 +108,7 @@ namespace DAL.Repository
                          "DBBLGATEWAY," +
                          "CITYGATEWAY," +
                          "REDX," +
+                          "ACILOGISTICS, " + 
                         "TOTAL_PAYMENT_TYPE_AMOUNT, " +
                         "PAYMENT_AMOUNT_ALL  " +
 
@@ -186,6 +187,7 @@ namespace DAL.Repository
                          "DBBLGATEWAY," +
                          "CITYGATEWAY," +
                          "REDX," +
+                         "ACILOGISTICS, " +
                         "TOTAL_PAYMENT_TYPE_AMOUNT, " +
                         "PAYMENT_AMOUNT_ALL  " +
                         "from VEW_RPT_SALE_SUMMARY where INVOICE_DATE  BETWEEN  to_date(:INVOICE_FROM_DATE, 'MM/DD/YYYY HH:MI:SS AM') AND  to_date(:INVOICE_TO_DATE , 'MM/DD/YYYY HH:MI:SS AM') ";

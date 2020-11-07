@@ -257,5 +257,23 @@ namespace DAL.Repository
 
             return await ExecuteNonQueryAsync(query.ToString(), param);
         }
+
+        public async Task<string> RemoveItem(string productBarcode, int storehouseId)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Clear();
+
+            List<OracleParameter> param = new List<OracleParameter>
+            {
+                
+                new OracleParameter(":P_STORE_HOUSE_ID", OracleDbType.Varchar2, storehouseId, ParameterDirection.Input),
+                new OracleParameter(":P_BARCODE", OracleDbType.Varchar2, productBarcode, ParameterDirection.Input),
+                new OracleParameter("P_MESSAGE", OracleDbType.Varchar2, 500, "", ParameterDirection.Output)
+            };
+            query.Append("PRO_STR_HOUSE_PRDT_ITM_DELETE");
+
+            return await ExecuteNonQueryAsync(query.ToString(), param);
+        }
+
     }
 }
