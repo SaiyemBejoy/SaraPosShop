@@ -1,0 +1,6 @@
+E:\SaRa Project\NEW\posshop\Shop\Models\bin\Release\Models.dll
+E:\SaRa Project\NEW\posshop\Shop\Models\bin\Release\Models.pdb
+E:\SaRa Project\NEW\posshop\Shop\Models\obj\Release\Models.csproj.CoreCompileInputs.cache
+E:\SaRa Project\NEW\posshop\Shop\Models\obj\Release\Models.dll
+E:\SaRa Project\NEW\posshop\Shop\Models\obj\Release\Models.pdb
+E:\SaRa Project\NEW\posshop\Shop\Models\obj\Release\Models.csprojAssemblyReference.cache

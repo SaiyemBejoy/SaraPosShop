@@ -1,0 +1,329 @@
+﻿@using Models.AllModel
+@model Models.AllModel.MenuSubModel
+@{
+    ViewBag.Title = "MenuSubList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            <input type="hidden" id="subMenuId" />
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Menu Name:</b></label>
+                                                <div class="col-4">
+                                                    @Html.DropDownListFor(model => model.MenuMainId, (IEnumerable<SelectListItem>)ViewBag.MenuList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill manuMainP" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>SubMenu Name:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="subMenuName">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>SubMenu URL:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="subMenuUrl">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>SubMenu Icon:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="subMenuIcon">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Controller:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="controllerName">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Action Name:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="actionName">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>SubMenu Order:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="subMenuOrder" readonly="readonly">
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"></label>
+                                                <div class="col-4">
+                                                    <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-info m-btn--gradient-to-danger" id="subMenuClear"><b>CLEAR</b></button>
+                                                    <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-success m-btn--gradient-to-danger" id="subMenuSave"><b>SAVE</b></button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--rounded">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    <b>Sub Menu List</b>
+                                                </h3>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="m-portlet__body" style="background-color: gainsboro">
+                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="m-section">
+                                                        <div class="m-section__content">
+                                                            <table class="table table-responsive-sm table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="subMenuListTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Main Menu ID</th>
+                                                                        <th>SubMenu Name</th>
+                                                                        <th>URL</th>
+                                                                        <th>SubMenu Icon</th>
+                                                                        <th>SubMenu Order</th>
+                                                                        <th>Controller</th>
+                                                                        <th>Action Name</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="menuListTableBody">
+                                                                    @if (ViewBag.SubMenuList != null)
+                                                                    {
+
+                                                                        foreach (var data in ViewBag.SubMenuList)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>@data.MenuMainId</td>
+                                                                                <td>@data.MenuSubName</td>
+                                                                                <td>@data.SubMenuUrl</td>
+                                                                                <td>@data.SubMenuIcon</td>
+                                                                                <td>@data.SubMenuOrder</td>
+                                                                                <td>@data.Controller</td>
+                                                                                <td>@data.Action</td>
+                                                                                <td>
+                                                                                    <a class="btn m-btn--pill m-btn m-btn--gradient-from-primary m-btn--gradient-to-info subMenuEdit" data-id="@data.MenuSubId" id="subMenuEdit">
+                                                                                        <i class="fa fa-edit"></i>
+                                                                                        Edit
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function validationCheck() {
+        var menuId = $("#MenuMainId").val();
+        if (menuId <= 0) {
+            toastr.error("Select Menu Name !!");
+            return false;
+        }
+
+        var subMenuName = $("#subMenuName").val();
+        if (subMenuName === '') {
+            toastr.error("Enter SubMenu Name !!");
+            return false;
+        }
+
+        var subMenuUrl = $("#subMenuUrl").val();
+        if (subMenuUrl === '') {
+            toastr.error("Enter SubMenu Url !!");
+            return false;
+        }
+
+        var subMenuIcon = $("#subMenuIcon").val();
+        if (subMenuIcon === '') {
+            toastr.error("Enter SubMenu Icon !!");
+            return false;
+        }
+
+        var subMenuOrder = $("#subMenuOrder").val();
+        if (subMenuOrder === '') {
+            toastr.error("Enter SubMenu Order !!");
+            return false;
+        }
+
+        var controllerName = $("#controllerName").val();
+        if (controllerName === '') {
+            toastr.error("Enter controller name !!");
+            return false;
+        }
+
+        var actionName = $("#actionName").val();
+        if (actionName === '') {
+            toastr.error("Enter action name !!");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function MenuSubDataSave() {
+        var subMenuId = $("#subMenuId").val();
+        var menuId = $("#MenuMainId").val();
+        var subMenuName = $("#subMenuName").val();
+        var subMenuUrl = $("#subMenuUrl").val();
+        var subMenuIcon = $("#subMenuIcon").val();
+        var subMenuOrder = $("#subMenuOrder").val();
+        var controllerName = $("#controllerName").val();
+        var actionName = $("#actionName").val();
+
+        var dataObject = {
+            'MenuSubId': subMenuId,
+            'MenuMainId': menuId,
+            'MenuSubName': subMenuName,
+            'SubMenuUrl': subMenuUrl,
+            'SubMenuIcon': subMenuIcon,
+            'SubMenuOrder': subMenuOrder,
+            'Controller': controllerName,
+            'Action': actionName
+        }
+        var dataList = JSON.stringify({ objMenuSubModel: dataObject });
+        if (validationCheck()) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveSubMenuData", "SubMenuSetup")',
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                    success: function (data) {
+                        if (data.m != null) {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                            }
+                        } else {
+                            toastr.error("Connection Problem !.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+           }
+    }
+
+    jQuery(document).ready(function () {
+        $('#MenuMainId').on('change', function () {
+            var menuId = $("#MenuMainId").val();
+
+             $.ajax({
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("GetMenuIdFromView", "SubMenuSetup")',
+                 data: { menuId: menuId },
+                 success: function (data) {
+                     $("#subMenuOrder").val(data);
+                }
+            });
+        });
+
+        $("#subMenuSave").click(function () {
+            MenuSubDataSave();
+        });
+
+        $("#subMenuClear").click(function () {
+            location.reload();
+        });
+
+        $(document).on('click', '.subMenuEdit', function () {
+            var subMenuId = $(this).data('id');
+            var dataList = JSON.stringify({ subMenuId: subMenuId});
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("GetASubMenu", "SubMenuSetup")',
+                data: dataList,
+                success: function (data) {
+                        $("#MenuMainId").val(data.MenuMainId);
+                        $("#subMenuId").val(data.MenuSubId);
+                        $("#subMenuName").val(data.MenuSubName);
+                        $("#subMenuUrl").val(data.SubMenuUrl);
+                        $("#subMenuIcon").val(data.SubMenuIcon);
+                        $("#subMenuOrder").val(data.SubMenuOrder);
+                        $("#controllerName").val(data.Controller);
+                        $("#actionName").val(data.Action);
+                        toastr.success("Selected");
+                        $("body").addClass("m-scroll-top--shown");
+                    }
+                });
+        });
+    });
+
+</script>
+
+

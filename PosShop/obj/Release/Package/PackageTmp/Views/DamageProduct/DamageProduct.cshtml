@@ -1,0 +1,296 @@
+﻿
+@{
+    ViewBag.Title = "DamageProduct";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            
+                                            <div class="row">
+                                               
+                                                <div class="col-md-3">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5 col-form-label">Barcode:</label>
+                                                        <div class="col-7">
+                                                            <input class="form-control m-input--air m-input--pill" placeholder="Scan Barcode"  id="damageBarcode" type="text">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5 col-form-label">Damage Challan No#:</label>
+                                                        <div class="col-7">
+                                                            <input class="form-control m-input--air m-input--pill" value="@ViewBag.GetMaxDamageChallanNo" style="background-color: gold" readonly="readonly" id="damageChallanNo" type="text">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">Created Date:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" style="background-color: gold" id="damageDate" value="@ViewBag.dateTime" disabled="disabled">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group m-form__group row">
+                                                        <div class="col-8">
+                                                            <button type="button" id="saveNow" class="btn m-btn--pill m-btn m-btn--gradient-from-success m-btn--gradient-to-accent"> Save Now</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        
+
+                                    </div>
+                                </div>
+
+                            </div>
+                           
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                <div class="m-portlet__body">
+                                    <div id="table-wrapper">
+                                        <div id="table-scroll">
+                                            <table class="table table-responsive-sm table-bordered table-striped table-hover DamageTable" id="DamageTable">
+                                                <thead>
+                                                <tr>
+
+                                                    <th>BarCode</th>
+                                                    <th>Name</th>
+                                                    <th>Qty</th>
+                                                    <th>Price</th>
+                                                    <th>Remarks</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="DamageTableBody" class="table-scroll"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    jQuery(document).ready(function() {
+        $("#damageBarcode").focus();
+        $('#damageBarcode').on('change',
+            function() {
+                var damageBarcode = $("#damageBarcode").val();
+                GetDamageItemDetailsByBarCode(damageBarcode);
+
+            });
+
+        $("#saveNow").click(function() {
+
+            damageAllDataSave();
+
+        });
+    });
+
+    function GetDamageItemDetailsByBarCode(barcode) {
+        $.ajax({
+            type: 'GET',
+            url: '/DamageProduct/GetAllDamageProductInfoByBarcode/',
+            dataType: 'json',
+            data: { barcode: barcode },
+            success: function(data) {
+                if (data !== 0) {
+                    var allProductItemCode = [];
+                    allProductItemCode.length = 0;
+                    var checker = true;
+
+                    $.each($("#DamageTableBody tr"),
+                        function() {
+                            var value = $(this).find('td:eq(2)').html();
+                            var quantity = $(this).find('#qty').val();
+                            allProductItemCode.push({
+                                value,
+                                quantity
+                            });
+                        });
+
+                    $.each(allProductItemCode,
+                        function(i, val) {
+                            if (data.Barcode.toLowerCase() === val.value.toLowerCase()) {
+                                checker = false;
+                            }
+                        });
+                    if (checker) {
+                        $("#DamageTableBody").append('<tr>' +
+                            '<td style="display:none" >' +
+                            data.ProductId +
+                            '</td>' +
+                            '<td style="display:none" >' +
+                            data.ItemId +
+                            '</td>' +
+                            '<td>' +
+                            data.Barcode +
+                            '</td>' +
+                            '<td>' +
+                            data.ItemName +
+                            '</td>' +
+                            '<td style="width: 10%">' +
+                            '<input type="text" class="form-control m-input--air m-input--pill qty" disabled="disabled" style="background-color: yellow;"  id="qty" value="' +
+                            1 +
+                            '">' +
+                            '</td>' +
+                            '<td>' +
+                            data.SalePrice +
+                            '</td>' +
+                            '<td style="width: 23%">' +
+                            '<input type="text" class="form-control m-input--air m-input--pill remarks"  id="remarks">' +
+                            '</td>' +
+                            '<td>' +
+                            '<a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a>' +
+                            '</td>' +
+                            '</tr>');
+
+                        $("#damageBarcode").val("");
+                    } else {
+                        $.each($("#DamageTableBody tr"),
+                            function() {
+                                var value = $(this).find('td:eq(2)').html();
+                                var quantity = $(this).find('#qty').val();
+                                if (barcode.toLowerCase() === value.toLowerCase()) {
+                                    $(this).find('#qty').val(parseInt(quantity) + 1);
+                                }
+                            });
+                        $("#damageBarcode").val("");
+                        toastr.success(" Add Same Item.");
+                    }
+                } else {
+                    toastr.error("Invalid Barcode !.");
+                    $("#damageBarcode").val("");
+                }
+            }
+
+        });
+    }
+
+    //Delete from grid Table
+    $(document).on('click',
+        'a.deleteItem',
+        function(e) {
+            e.preventDefault();
+            var self = $(this);
+            if (self != null) {
+                $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800,
+                    function() {
+                        $(this).remove();
+
+                    });
+            } else {
+                //t("delete hoi ni");
+                toastr.error("Data cann't delete");
+            }
+        });
+    //End
+
+    function Validation() {
+
+        var damageChallanNo = $("#damageChallanNo").val();
+        if (damageChallanNo === "") {
+            toastr.error("DamageChallan No Cann't be Empty!.");
+            $("#damageChallanNo").focus();
+            return false;
+        }
+
+        //validation for Remarks 
+        var validate = false;
+        $('#DamageTable').find('tr input[type=text]').each(function(){
+            if($(this).val() === ""){
+                validate = true;
+            }
+        });
+        if (validate) {
+            toastr.error("Remarks Can't Be Empty !.");
+            return false;
+        } else {
+            return true;
+        }
+        //End
+    }
+
+   
+   
+    function damageAllDataSave() {
+        if (Validation()) {
+        
+                var damageChallanNo = $("#damageChallanNo").val();
+                var damageDate = $("#damageDate").val();
+                var allDamageItem = [];
+                allDamageItem.length = 0;
+                $.each($("#DamageTableBody tr"),
+                    function() {
+                        allDamageItem.push({
+                            ProductId: $(this).find('td:eq(0)').html(),
+                            ItemId: $(this).find('td:eq(1)').html(),
+                            Barcode: $(this).find('td:eq(2)').html(),
+                            ItemName: $(this).find('td:eq(3)').html(),
+                            Quantity: $(this).find('#qty').val(),
+                            Price: $(this).find('td:eq(5)').html(),
+                            Remarks: $(this).find('#remarks').val()
+                        });
+                    });
+                var dataObject = {
+                    'DamageChallanNo': damageChallanNo,
+                    'CreatedDate': damageDate,
+                    'DamageMainItemList': allDamageItem
+                }
+                var dataList = JSON.stringify({ objDamageMainModel: dataObject });
+                if (allDamageItem.length) {
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        url: '@Url.Action("SaveAllDamageData", "DamageProduct")',
+                        data: dataList,
+                        beforeSend: function () {
+                            $('#cover-spin').show();
+                        },
+                    success: function (data) {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                            }
+                    } 
+                });
+            } else {
+                    toastr.error("Table Data Cann't Be Empty!");
+                    $('#cover-spin').hide();
+                }
+            
+        }
+    }
+</script>

@@ -1,0 +1,406 @@
+﻿
+@{
+    ViewBag.Title = "StoreHouseRequest";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    All Product List
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="m-portlet__body">
+                                        <div class="row">
+                                            <div class="col-md-2 col-">
+                                            </div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label"><b>Style/Barcode:</b></label>
+                                                        <div class="col-8">
+                                                            <input type="text" class="form-control m-input--air m-input--pill" placeholder="Barcode/Style" id="SearchValue">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <hr />
+                                            <div class="m-section">
+                                                <div class="m-section__content">
+                                                    <table class="table table-responsive-sm table-bordered m-table m-table--border-danger m-table--head-bg-danger table-hover" id="storeHouseRequisitionTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">BarCode</th>
+                                                                <th class="text-center">Name</th>
+                                                                <th class="text-center">Current Stock</th>
+                                                                <th class="text-center">Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="background-color: gainsboro" id="storeHouseRequisitionBody"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5 col-form-label">Floor No:</label>
+                                                        <div class="col-7">
+                                                            <input type="text" class="form-control m-input--air m-input--pill" value="" style="width: 130px;" id="floorNo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+
+                                                    <div class="form-group m-form__group row">
+                                                        <div class="col-8">
+                                                            <button type="button" id="requestNow" class="btn m-btn--pill m-btn--gradient-from-danger m-btn--gradient-to-warning"> Request Now</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <br/>
+                                        <div id="table-wrapper">
+                                            <div class="m-section">
+                                                <div class="m-section__content">
+                                                    <table class="table table-bordered m-table m-table--border-warning m-table--head-bg-warning table-hover" id="storeHouseRequestListTable">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>BarCode</th>
+                                                            <th>Name</th>
+                                                            <th>Quantity</th>
+                                                            <th>Price</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="storeHouseRequestListBody"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+<script>
+    jQuery(document).ready(function () {
+        $("#SearchValue").focus();
+        $("#storeHouseRequisitionTable").dataTable();
+        
+
+        $("body").on("click", "#storeHouseRequisitionBody tr", function () {
+            var barcode = $(this).find('td:eq(0)').text();
+            var itemName = $(this).find('td:eq(1)').text();
+            var quantity = $(this).find('td:eq(2)').text();
+            var price = $(this).find('td:eq(3)').text();
+            if (quantity !== "0" && parseInt(quantity) > 0) {
+                var allItemCode = [];
+                allItemCode.length = 0;
+                var checker = true;
+                $.each($("#storeHouseRequestListBody tr"), function () {
+                    var value = $(this).find('td:eq(0)').text();
+                    allItemCode.push({
+                        value
+                    });
+                });
+                if (allItemCode.length > 0) {
+                    $.each(allItemCode, function (i, val) {
+                        if (barcode === val.value) {
+                            checker = false;
+                        }
+                    });
+                    if (checker) {
+                        appendTableForStoreHouseRequest(barcode, itemName, price);
+
+                    } else {
+                        toastr.error("This Item Already Exist.");
+                    }
+                } else {
+                    appendTableForStoreHouseRequest(barcode, itemName, price);
+                }
+
+            } else {
+                    toastr.error("No Stock.");
+            }
+        });
+
+        //Delete from grid Table
+        $(document).on('click', 'a.deleteItem', function (e) {
+            e.preventDefault();
+            var self = $(this);
+            if (self != null) {
+                $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+                    $(this).remove();
+
+                });
+            } else {
+                //t("delete hoi ni");
+                toastr.error("Data cann't delete");
+            }
+        });
+        //End
+
+        $("#requestNow").click(function() {
+            requestDataSave();
+        });
+
+        $('#SearchValue').on('change', function () {
+            var searchValue = $('#SearchValue').val();
+            $.ajax({
+                type: 'GET',
+                url: '/ProductSearch/GetAllInfoBySearchTextBoxValue/',
+                dataType: 'json',
+                data: { searchValue: searchValue },
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                success: function (data) {
+                    if (data != null) {
+                        var stockProductData = data.length;
+                        $('#storeHouseRequisitionTable').DataTable().destroy();
+                        $("#storeHouseRequisitionBody").html("");
+                        for (var i = 0; i < stockProductData; i++) {
+                            if (parseInt(data[i].RoundQuantity) == 0) {
+                                $("#storeHouseRequisitionBody").append('<tr>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Barcode +
+                                    '</td>' +
+                                    '<td style="background-color: red; width: 90%; text-align: left">' +
+                                    data[i].StyleName +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].RoundQuantity +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Price +
+                                    '</td>' +
+                                    '</tr>');
+                            } else {
+                                $("#storeHouseRequisitionBody").append('<tr>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Barcode +
+                                    '</td>' +
+                                    '<td style="width: 90%; text-align: left">' +
+                                    data[i].StyleName +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].RoundQuantity +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Price +
+                                    '</td>' +
+                                    '</tr>');
+                            }
+                           
+                        }
+                        $('#storeHouseRequisitionTable').DataTable();
+                        $('#SearchValue').val("");
+                        $('#cover-spin').hide();
+                    } else {
+                        $('#SearchValue').val("");
+                        $('#cover-spin').hide();
+                        alert('No Data Found!.');
+                    }
+                }
+            });
+
+        });
+
+        @*var vForm = $('#__AjaxAntiForgeryForm');
+        var vToken = $('input[name="__RequestVerificationToken"]', vForm).val();
+
+        var table = $("#storeHouseRequisitionTable").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "searchHighlight": true,
+            "ajax": {
+                data: {
+                    __RequestVerificationToken: vToken
+                },
+                url: '@Url.Action("GetAllItemInfoForDataTable", "ProductSearch")',
+                type: 'POST'
+            },
+            "columns": [
+                {
+                    "data": "Barcode",
+                    render: function (data, type, productGrid) {
+                        if (productGrid.Quantity) {
+                            return "<p>" + productGrid.Barcode + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + productGrid.Barcode + "</p>";
+                        }
+                    }
+                },
+                {
+                    "data": "StyleName",
+                    render: function (data, type, productGrid) {
+                        if (productGrid.Quantity) {
+                            return "<p>" + productGrid.StyleName + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + productGrid.StyleName + "</p>";
+                        }
+                    },
+                    "orderable": false
+                },
+                {
+                    "data": "Quantity",
+                    render: function (data, type, productGrid) {
+                        if (productGrid.Quantity) {
+                            return "<p>" + productGrid.Quantity + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + productGrid.Quantity + "</p>";
+                        }
+                    }
+                },
+                {
+                    "data": "Price",
+                    "orderable": false
+                },
+
+            ]
+
+        });*@
+
+    });
+    function appendTableForStoreHouseRequest(barcode, itemName, price) {
+    $("#storeHouseRequestListBody").append('<tr>' +
+        '<td>' +
+        barcode +
+        '</td>' +
+        '<td>' +
+        itemName +
+        '</td>' +
+        '<td style ="width: 20%">' +
+        '<input type="number" class="form-control input-circle requestQuantity" id="requestQuantity" value="' + 1 + '"' +
+        '</td>' +
+        '<td>' +
+         price +
+        '</td>' +
+        '<td>' +
+        '<a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a>' +
+        '</td>' +
+        '</tr>');
+    }
+
+
+    function requestDataSave() {
+        var floorNo = $("#floorNo").val();
+         var allRequestItem = [];
+        allRequestItem.length = 0;
+        $.each($("#storeHouseRequestListBody tr"),
+            function() {
+                allRequestItem.push({
+                    Barcode: $(this).find('td:eq(0)').text(),
+                    Quantity: $(this).find('.requestQuantity').val(),
+                    Price: $(this).find('td:eq(3)').text()
+                });
+            });
+        var dataObject = {
+            'FloorNo': floorNo,
+            'StoreHouseRequestMainItemList': allRequestItem
+        }
+        var dataList = JSON.stringify({ objStoreHouseRequestMain: dataObject });
+        if (allRequestItem.length) {
+            if (validationCheck()) {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("SaveAllData", "StoreHouseRequest")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.m  !== null) {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                                //$('#cover-spin').hide();
+                            }else {
+                                toastr.error("Something is wrong !.");
+                                $('#cover-spin').hide();
+                            }
+
+                        } else {
+                            toastr.error("Something is wrong !.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+            }
+        } else {
+            toastr.error("Table Data Cann't Be Empty!");
+            $('#cover-spin').hide();
+        }
+    }
+    function validationCheck() {
+
+        var floorNo = $("#floorNo").val();
+        if (floorNo === "") {
+            toastr.error("Floor No Cann't be Empty!.");
+            $("#floorNo").focus();
+            return false;
+        }
+        //validation for Remarks
+        var validate = false;
+        $('#storeHouseRequestListBody').find('tr input[type=number]').each(function () {
+            if ($(this).val() === 0) {
+                validate = true;
+            }
+        });
+        if (validate) {
+            toastr.error("Quantity Can't Be Empty !.");
+            return false;
+        } else {
+            return true;
+        }
+        //End
+    }
+</script>

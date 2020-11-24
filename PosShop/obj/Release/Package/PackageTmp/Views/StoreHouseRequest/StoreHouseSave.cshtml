@@ -1,0 +1,405 @@
+﻿@using Models.AllModel
+@model Models.AllModel.StoreHouseModel
+@{
+    ViewBag.Title = "StoreHouseSave";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-content">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <!--begin::Portlet-->
+            <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="la la-thumb-tack"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Save Store House Product
+                            </h3>
+                            <div class="m-portlet__head-tools">
+                                <ul class="m-portlet__nav">
+                                    <li class="m-portlet__nav-item">
+                                        <a href="@Url.Action("StoreHouseProductSearch","StoreHouseRequest")" class="m-portlet__nav-link btn btn-success m-btn m-btn--pill m-btn--air">Back To List</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="m-portlet__body">
+                    <form class="m-form m-form--fit">
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group row">
+                                    <label class="col-2 col-form-label"><b>Line No:</b></label>
+                                    <div class="col-7">
+                                        <input type="text" autocomplete="off" class="form-control m-input--air m-input--pill" value="" id="LineNo">
+                                    </div>
+                                    <div class="col-3"></div>
+                                </div>
+                                <div class="form-group m-form__group row">
+                                    <label class="col-2 col-form-label"><b>Rope No:</b></label>
+                                    <div class="col-7">
+                                        <input type="text" autocomplete="off" class="form-control m-input--air m-input--pill" value="" id="RopeNo">
+                                    </div>
+                                    <div class="col-3"></div>
+                                </div>
+                                <div class="form-group m-form__group row">
+                                    <label class="col-2 col-form-label"><b>Rack No:</b></label>
+                                    <div class="col-7">
+                                        <input type="text" autocomplete="off" class="form-control m-input--air m-input--pill" value="" id="RackNo">
+                                    </div>
+                                    <div class="col-3"></div>
+                                </div>
+                                <div class="form-group m-form__group row">
+                                    <label class="col-2 col-form-label"><b>Remarks:</b></label>
+                                    <div class="col-7">
+                                        <input type="text" autocomplete="off" class="form-control m-input--air m-input--pill" id="Remarks">
+                                    </div>
+                                    <div class="col-3"></div>
+                                </div>
+
+                                <div class="form-group m-form__group row">
+                                    <div class="col-2"></div>
+                                    <div class="col-7">
+                                        <button type="button" id="SaveStoreHouse" class="btn m-btn--pill m-btn--gradient-from-danger m-btn--gradient-to-warning"> Save Now</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                <div class="m-portlet__body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-2 col-form-label" style="margin-left: 25px;" ><b>StyleName:</b></label>
+                                                <div class="col-7">
+                                                    @Html.DropDownListFor(model => model.StyleName, (IEnumerable<SelectListItem>)ViewBag.StyleNameList, "Select Style", new { @class = " form-control m-input--air m-input--pill select2", @style = "width:200px" })
+                                                </div>
+                                                <div class="col-1"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-2 col-form-label"><b>Barcode:</b></label>
+                                                <div class="col-7">
+                                                    <input type="text" autocomplete="off" class="form-control m-input--air m-input--pill" autofocus id="barcode">
+                                                </div>
+                                                <div class="col-3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div id="table-wrapper">
+                                        <div class="m-section">
+                                            <div class="m-section__content">
+                                                <table class="table table-responsive-sm table-bordered m-table m-table--border-warning m-table--head-bg-warning table-hover" id="storeHouseRequestListTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>BarCode</th>
+                                                            <th>Name</th>
+                                                            <th>Quantity</th>
+                                                            <th>Price</th>
+                                                            <th>Category</th>
+                                                            <th>SubCategory</th>
+                                                            <th>#</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="storeHouseRequestListBody"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--end::Portlet-->
+        </div>
+    </div>
+</div>
+<script>
+    function validation() {
+        var lineNo = $("#LineNo").val();
+        if (lineNo === "") {
+            toastr.error("Line No Can't Be empty.");
+            $('#LineNo').focus();
+            return false;
+        }
+
+        var rackNo = $("#RackNo").val();
+        if (rackNo === "") {
+            toastr.error("Rack No can't be empty!.");
+            $('#RackNo').focus();
+            return false;
+        }
+
+        return true;
+    }
+
+    function scrollStopNumberField() {
+        $('input[type=number]').on('mousewheel',
+            function(e) {
+                $(e.target).blur();
+            });
+    }
+
+    jQuery(document).ready(function () {
+
+        $("#StyleName").change(function() {
+            var styleName = parseInt($("#StyleName").val());
+            $.ajax({
+                type: 'GET',
+                url: '/StoreHouseRequest/GetAllInfoByProductId/',
+                dataType: 'json',
+                data: { productId: styleName },
+                beforeSend: function() {
+                    $('#cover-spin').show();
+                },
+                success: function(data) {
+                    var storeHouseData = data.length;
+                    $("#storeHouseRequestListBody").html("");
+                    for (var i = 0; i < storeHouseData; i++) {
+                        $("#storeHouseRequestListBody").append('<tr>' +
+                            '<td style="display:none;">' +
+                            data[i].ProductId +
+                            '</td>' +
+                            '<td style="display:none;">' +
+                            data[i].ItemId +
+                            '</td>' +
+                            '<td>' +
+                            data[i].Barcode +
+                            '</td>' +
+                            '<td>' +
+                            data[i].ItemName +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="number" class="form-control input-circle receiveQuantity" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length===3) return false;" min="0" id="receiveQuantity" tabindex="' +
+                            (i + 1) +
+                            '">' +
+                            '</td>' +
+                            '<td>' +
+                            data[i].SalePrice +
+                            '</td>' +
+                            '<td style ="width: 13%">' +
+                            data[i].Category +
+                            '</td>' +
+                            '<td>' +
+                            data[i].SubCategory +
+                            '</td>' +
+                            '<td>' +
+                            
+                            '</td>' +
+                            '</tr>');
+                    }
+                    $('[tabindex=' + 1 + ']').focus();
+                    scrollStopNumberField();
+                    $('#cover-spin').hide();
+                }
+            });
+        });
+
+        $("#barcode").change(function (e) {
+            var barcode = $("#barcode").val();
+            if (barcode !== "") {
+            $.ajax({
+                type: 'GET',
+                url: '/StoreHouseRequest/GetAllInfoByBarcode/',
+                dataType: 'json',
+                data: { barcode: barcode },
+                success: function (data) {
+                    if (data !== 0) {
+                        var allProductItemCode = [];
+                        allProductItemCode.length = 0;
+                        var checker = true;
+
+                        $.each($("#storeHouseRequestListBody tr"),
+                            function () {
+                                var value = $(this).find('td:eq(2)').text();
+                                var quantity = parseInt($(this).find('.receiveQuantity').val());
+                                allProductItemCode.push({
+                                    value,
+                                    quantity
+                                });
+                            });
+
+                        $.each(allProductItemCode,
+                            function (i, val) {
+                                if (data.Barcode.toLowerCase() === val.value.toLowerCase()) {
+                                    checker = false;
+                                }
+                            });
+                        if (checker) {
+                                $("#storeHouseRequestListBody").append('<tr>' +
+                                    '<td style="display:none;">' +
+                                    data.ProductId +
+                                    '</td>' +
+                                    '<td style="display:none;">' +
+                                    data.ItemId +
+                                    '</td>' +
+                                    '<td>' +
+                                    data.Barcode +
+                                    '</td>' +
+                                    '<td>' +
+                                    data.ItemName +
+                                    '</td>' +
+                                    '<td style="width: 13%">' +
+                                    '<input type="number" class="form-control input-circle receiveQuantity"  readonly="readonly" min="0" id="receiveQuantity" value = "'+1+'">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    data.SalePrice +
+                                    '</td>' +
+                                    '<td style ="width: 13%">' +
+                                    data.Category +
+                                    '</td>' +
+                                    '<td>' +
+                                    data.SubCategory +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a>' +
+                                    '</td>' +
+                                    '</tr>');
+                                $("#barcode").val("");
+                            scrollStopNumberField();
+                        } else {
+                            $.each($("#storeHouseRequestListBody tr"),
+                                function () {
+                                    var value = $(this).find('td:eq(2)').text();
+                                  var quantity = parseInt($(this).find('.receiveQuantity').val());
+                                    if (barcode.toLowerCase() === value.toLowerCase()) {
+                                        $(this).find('.receiveQuantity').val(parseInt(quantity) + 1);
+                                    }
+                                });
+                            $("#barcode").val("");
+                            toastr.success(" Add Same Item.");
+                        }
+                    } else {
+                        toastr.error("Invalid Barcode !.");
+                        $("#barcode").val("");
+                    }
+                }
+                });
+            }
+        });
+
+        //Delete from grid Table
+        $(document).on('click',
+            'a.deleteItem',
+            function(e) {
+                e.preventDefault();
+                var self = $(this);
+                if (self != null) {
+                    $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800,
+                        function() {
+                            $(this).remove();
+
+                        });
+                } else {
+                    //t("delete hoi ni");
+                    toastr.error("Data cann't delete");
+                }
+            });
+        //End
+
+        //corsor focus change korar jonno
+        $(document).on('keydown',
+            '.receiveQuantity',
+            function(e) {
+                if (e.keyCode === 13) //if its a enter key
+                {
+                    var tabindex = $(this).attr('tabindex');
+                    tabindex++; //increment tabindex
+                    $('[tabindex=' + tabindex + ']').focus();
+                }
+            });
+        //End
+        $("#SaveStoreHouse").click(function() {
+            AllStoreHouseDataSave();
+        });
+    });
+
+    function AllStoreHouseDataSave() {
+        var lineNo = $("#LineNo").val();
+        var ropeNo = $("#RopeNo").val();
+        var rackNo = $("#RackNo").val();
+        var remarks = $("#Remarks").val();
+        var allTableItem = [];
+        allTableItem.length = 0;
+        $.each($("#storeHouseRequestListBody tr"), function () {
+            if ($(this).find('.receiveQuantity').val() > 0) {
+            allTableItem.push({
+                    ProductId: $(this).find('td:eq(0)').html(),
+                    ItemId: $(this).find('td:eq(1)').html(),
+                    Barcode: $(this).find('td:eq(2)').html(),
+                    Quantity: $(this).find('.receiveQuantity').val(),
+                    Category: $(this).find('td:eq(6)').text(),
+                    SubCategory: $(this).find('td:eq(7)').text()
+                });
+            }
+            });
+        var dataObject = {
+            'LineNo': lineNo,
+            'RopeNo': ropeNo,
+            'RackNo': rackNo,
+            'Remarks': remarks,
+            'StoreHouseItemModelList': allTableItem
+        }
+        var dataList = JSON.stringify({ objStoreHouseModel: dataObject });
+        if (allTableItem.length && validation()) {
+
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveAllStoreHouseData", "StoreHouseRequest")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.m !== null) {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                                $('#cover-spin').hide();
+                            }
+                            //if (storeReceiveChallanNo !== "") {
+                            //    window.open('/ProductReceive/ShowReport?storeReceiveChallanNo=' + storeReceiveChallanNo, '_blank');
+                            //}
+                        }
+                    }
+            });
+
+        } else {
+            toastr.error("Table Data Cann't Be Empty!");
+            $('#cover-spin').hide();
+        }
+    }
+</script>

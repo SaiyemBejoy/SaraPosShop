@@ -1,0 +1,430 @@
+﻿@using Models.AllModel
+@model Models.AllModel.ProductSearchModel
+@{
+    ViewBag.Title = "ProductSearch";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Product List
+                                </h3>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <div class="row" style="margin-left: 0px;">
+                                    <div class="col-md-2">
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold"><b>Receive:</b></label>
+                                            <div class="col-8">
+                                                <input type="text" class="form-control m-input--air m-input--pill" id="totalReceive" style="background-color: lightgreen; font-size: 20px;" readonly="readonly" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold"><b>Sale:</b></label>
+                                            <div class="col-8">
+                                                <input type="text" class="form-control m-input--air m-input--pill" id="totalSale" style=" background-color: darkturquoise ; font-size: 20px;" readonly="readonly" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold"><b>Transfer:</b></label>
+                                            <div class="col-8">
+                                                <input type="text" class="form-control m-input--air m-input--pill" id="totalTransfer" style=" background-color: bisque ; font-size: 20px;" readonly="readonly" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold"><b>Damage:</b></label>
+                                            <div class="col-8">
+                                                <input type="text" class="form-control m-input--air m-input--pill" id="totalDamage" style=" background-color: coral ; font-size: 20px;" readonly="readonly" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px;font-weight: bold"><b>Total Stock:</b></label>
+                                            <div class="col-8">
+                                                <input type="text" class="form-control m-input--air m-input--pill" id="currentStock" style=" background-color: yellow ; font-size: 20px;" readonly="readonly" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row" style="margin-left: 0px;">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-3">
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px;"><strong>StyleName:</strong></label>
+                                            <div class="col-8">
+                                                @Html.DropDownListFor(model => model.ProductId, (IEnumerable<SelectListItem>)ViewBag.StyleNameList, "Select Style", new { @class = " form-control m-input--air m-input--pill select2", @style = "width:200px" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3"></div>
+
+                                </div>
+                                <table class="table table-responsive-sm table-bordered m-table m-table--border-success" id="productSearchTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Brcode</th>
+                                            <th style="width: 20%;font-size: 15px ;text-align: center">Item Name</th>      
+                                            <th style="background-color: lightgreen">Rec.Qty</th>
+                                            <th style="background-color: darkturquoise">Sale.Qty</th>
+                                            <th style="background-color: coral">Dam.Qty</th>
+                                            <th style="background-color: gold">Shop Rec.</th>
+                                            <th style="background-color: aquamarine">Shop Dly.</th>
+                                            <th style="background-color: cornsilk">Shop TR.</th>
+                                            <th style="background-color: burlywood">Pending TR.</th>
+                                            <th style="background-color: yellow">Current Quantity</th>
+                                            <th>Category</th>
+                                            <th>SubCategory</th>
+                                            <th>Sale Price</th>
+                                            <th>Vat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productSearchTableBody"></tbody>
+                                    <tfoot id="productSearchTableFooter"></tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        $("#productSearchTable").dataTable();
+        //Calculate Summary
+        $.ajax({
+            type: 'GET',
+            url: '/ProductSearch/GetAllCalculateSummaryInfo/',
+            dataType: 'json',
+            success: function(data) {
+                $("#totalReceive").val(data.TotalReceive);
+                $("#totalSale").val(data.TotalSale);
+                $("#totalTransfer").val(data.TotalTransfer);
+                $("#currentStock").val(data.TotalCurrentStock);
+                $("#totalDamage").val(data.TotalDamage);
+            }
+        });
+        //End
+
+
+        $("#ProductId").change(function () {
+            var productId = parseInt($("#ProductId").val());
+            if (!isNaN(productId)) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/ProductSearch/GetAllInfoByProductId/',
+                    dataType: 'json',
+                    data: { productId: productId },
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data != null) {
+                            var stockProductData = data.length;
+                            $('#productSearchTable').DataTable().destroy();
+                            $("#productSearchTableBody").html("");
+                            for (var i = 0; i < stockProductData; i++) {
+                                if (parseInt(data[i].Quantity) == 0) {
+                                    $("#productSearchTableBody").append('<tr>' +
+                                        '<td style="background-color: red;text-align: center">' +
+                                        data[i].Barcode +
+                                        '</td>' +
+                                        '<td style="background-color: red">' +
+                                        data[i].ItemName +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ReceiveQuantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].SaleQuantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].DamageQuantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ShopToShopRecQty +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ShopToShopDeliQty +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ShopTrQty +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].PendingTrQty +
+                                        '</td>' +
+                                        '<td style="background-color: red;text-align: center">' +
+                                        data[i].Quantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].CategoryName +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].SubCategoryName +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].Price +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].Vat +
+                                        '</td>' +
+                                        '</tr>');
+                                }
+                                else {
+                                    $("#productSearchTableBody").append('<tr>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].Barcode +
+                                        '</td>' +
+                                        '<td>' +
+                                        data[i].ItemName +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ReceiveQuantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].SaleQuantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].DamageQuantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ShopToShopRecQty +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ShopToShopDeliQty +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].ShopTrQty +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].PendingTrQty +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].Quantity +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].CategoryName +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].SubCategoryName +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].Price +
+                                        '</td>' +
+                                        '<td style="text-align: center">' +
+                                        data[i].Vat +
+                                        '</td>' +
+                                        '</tr>');
+                                }
+                               
+                            }
+                            $('#productSearchTable').DataTable();
+                            tableFooterCalculate();
+                            $('#cover-spin').hide();
+                        } else {
+                            $('#cover-spin').hide();
+                            alert('No Data Found!.');
+                        }
+
+                    }
+                });
+            }
+       
+        });
+
+
+        $('#productSearchTable').on( 'draw.dt', function () {
+            tableFooterCalculate();
+        } );
+
+        function tableFooterCalculate() {
+            var totalReceive = 0;
+            var totalSale = 0;
+            var totalDamage = 0;
+            var totalShopRec = 0;
+            var totalShopDelivery = 0;
+            var totalTransfer = 0;
+            var totalPendingTransfer = 0;
+            var totalCurrentStock = 0;
+            $("#productSearchTableBody tr").each(function() {
+                totalReceive += parseInt($(this).find('td:eq(2)').text());
+                totalSale += parseInt($(this).find('td:eq(3)').text());
+                totalDamage += parseInt($(this).find('td:eq(4)').text());
+                totalShopRec += parseInt($(this).find('td:eq(5)').text());
+                totalShopDelivery += parseInt($(this).find('td:eq(6)').text());
+                totalTransfer += parseInt($(this).find('td:eq(7)').text());
+                totalPendingTransfer += parseInt($(this).find('td:eq(8)').text());
+                totalCurrentStock += parseInt($(this).find('td:eq(9)').text());
+            });
+            $("#productSearchTableFooter").html("");
+            $("#productSearchTableFooter").append('<tr style="background-color: burlywood">' +
+                '<td colspan="2" style="font-size: 20px ;text-align: center"><b>Total:</b></td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                    totalReceive +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                    totalSale +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                totalDamage +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                totalShopRec +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                totalShopDelivery +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                totalTransfer +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                totalPendingTransfer +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+                totalCurrentStock +
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+
+                '</td>' +
+                '<td style="font-size: 20px ;text-align: center">' +
+
+                '</td>' +
+                '</tr>');
+        }
+
+        //////////////////////////Server Side Data Table;
+        @*var vForm = $('#__AjaxAntiForgeryForm');
+        var vToken = $('input[name="__RequestVerificationToken"]', vForm).val();
+
+        var table = $("#productSearchTable").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "searchHighlight": true,
+            "order": [[1, "desc"]],
+            "ajax": {
+                data: {
+                    __RequestVerificationToken: vToken
+                },
+                url: '@Url.Action("GetAllItemInfoForDataTable", "ProductSearch")',
+                type: 'POST'
+            },
+            "columns": [
+                {
+                    "data": "Barcode",
+                    "orderable": false,
+                    render: function (data, type, productGrid) {
+                        if (productGrid.Quantity) {
+                            return "<p>" + productGrid.Barcode + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + productGrid.Barcode + "</p>";
+                        }
+                    }
+                },
+                {
+                    "data": "ItemName",
+                    render: function (data, type, productGrid) {
+                        if (productGrid.Quantity) {
+                            return "<p>" + productGrid.ItemName + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + productGrid.ItemName + "</p>";
+                        }
+                    },
+                    "orderable": false
+                },
+                {
+                    "data": "ReceiveQuantity"
+                },
+                {
+                    "data": "SaleQuantity"
+                },
+                {
+                    "data": "DamageQuantity"
+                },
+                {
+                    "data": "ShopToShopRecQty"
+                },
+                {
+                    "data": "ShopToShopDeliQty"
+                },
+                {
+                    "data": "ShopTrQty"
+                },
+                {
+                    "data": "PendingTrQty"
+                },
+                {
+                    "data": "Quantity",
+                    render: function (data, type, productGrid) {
+                        if (productGrid.Quantity) {
+                            return "<p>" + productGrid.Quantity + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + productGrid.Quantity + "</p>";
+                        }
+                    }
+                },
+                {
+                    "data": "Price",
+                    "orderable": false
+                },
+                {
+                    "data": "Vat",
+                    "orderable": false
+                }
+            ],
+            //render: function (data, type, productGrid) {
+            //    if (productGrid[9] === "0" ) {
+            //        $(row).addClass('red');
+
+            //    }
+
+
+            //}
+
+
+        });*@
+        ///////////////////////End
+
+    });
+
+
+</script>
+
+

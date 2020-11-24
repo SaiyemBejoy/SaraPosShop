@@ -1,0 +1,72 @@
+/* Formatted on 19-Nov-20 12:02:40 PM (QP5 v5.149.1003.31008) */
+CREATE OR REPLACE FORCE VIEW POSSHOP.VEW_ITEM_INFO
+(
+   ITEMID,
+   PRODUCTID,
+   ITEMNAME,
+   PRODUCTSTYLENAME,
+   BARCODE,
+   RECEIVEQUANTITY,
+   SALEQUANTITY,
+   DAMAGEQUANTITY,
+   SHOPTOSHOPRECEIVEQTY,
+   SHOPTOSHOPDELIVERYQTY,
+   WAREHOUSETRANSFERQTY,
+   PENDINGTRANSFERQTY,
+   TRANSITQTY,
+   TRANSITRETURNQTY,
+   STOCKFORTRANSIT,
+   ROUNDQTY,
+   QUANTITY,
+   CATEGORY_NAME,
+   SUB_CATEGORY_NAME,
+   SALEPRICE,
+   UMO,
+   VAT,
+   TOTALROWCOUNT
+)
+AS
+   SELECT ITEMID,
+          PRODUCTID,
+          ITEMNAME,
+          PRODUCTSTYLENAME,
+          BARCODE,
+          RECEIVEQUANTITY,
+          SALEQUANTITY,
+          DAMAGEQUANTITY,
+          SHOPTOSHOPRECEIVEQTY,
+          SHOPTOSHOPDELIVERYQTY,
+          WAREHOUSETRANSFERQTY,
+          PENDINGTRANSFERQTY,
+          TRANSITQTY,
+          TRANSITRETURNQTY,
+          NVL (
+             ( (QUANTITY - PENDINGTRANSFERQTY)
+              - (SELECT TRANSIT_BLANCE
+                   FROM VEW_RPT_TRANSIT_PRODUCT_INFO
+                  WHERE PRODUCT_ID = SI.PRODUCTID AND BARCODE = SI.BARCODE)), -- TRANSITQTY er bodole TRANSITQTY theke sale deyar por j balance thake ta minus hobe (TRANSITQTY minus hole transit a scan korar ability kome jay. tai balance theke minus hobe)
+             QUANTITY)
+             STOCKFORTRANSIT,
+          NVL ( (QUANTITY - PENDINGTRANSFERQTY), 0) ROUNDQTY,
+          QUANTITY,
+          CATEGORY_NAME,
+          SUB_CATEGORY_NAME,
+          CASE
+             WHEN (SELECT COUNT (*)
+                     FROM CIR_DIS_PROMOTION_INFO
+                    WHERE BARCODE = SI.BARCODE
+                          AND (VALID_FROM <= SYSDATE AND VALID_TO >= SYSDATE)) >
+                     0
+             THEN
+                (SELECT NEW_SALE_PRICE
+                   FROM CIR_DIS_PROMOTION_INFO
+                  WHERE BARCODE = SI.BARCODE
+                        AND (VALID_FROM <= SYSDATE AND VALID_TO >= SYSDATE))
+             ELSE
+                SALEPRICE
+          END
+             SALEPRICE,
+          UMO,
+          VAT,
+          TOTALROWCOUNT
+     FROM VEW_ALL_ITEM_INFO SI;

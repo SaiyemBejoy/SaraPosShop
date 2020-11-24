@@ -1,0 +1,324 @@
+﻿@using Models.AllModel
+
+@{
+    ViewBag.Title = "StoreHouseRequestList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var storeHouseRequestMainModel = ViewBag.StoreHouseRequestList as List<StoreHouseRequestMain>;
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Request List
+                                </h3>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+
+                                <table class="table table-responsive-sm table-bordered m-table m-table--border-danger" id="requestProductTable">
+                                    <thead>
+                                        <tr>
+                                            <th><b>Requisition NO</b></th>
+                                            <th><b>Floor</b></th>
+                                            <th><b>Details</b></th>
+                                            <th><b>Date</b></th>
+                                            <th><b>Created By</b></th>
+                                            <th><b>Action</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (storeHouseRequestMainModel != null)
+                                        {
+                                            foreach (var data in storeHouseRequestMainModel)
+                                            {
+                                                <tr>
+                                                    <td>@data.RequisitionNo</td>
+                                                    <td>@data.FloorNo</td>
+                                                    <td>
+                                                        <table class="table table-responsive-sm table-bordered m-table m-table--border-brand m-table--head-bg-success InlineBarcodeTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th><b>Barcode</b></th>
+                                                                    <th><b>Item Name</b></th>
+                                                                    <th><b>Qty</b></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="InlineBarcodeTableBody">
+                                                                @foreach (var dataItem in data.StoreHouseRequestMainItemList)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@dataItem.Barcode</td>
+                                                                        <td>@dataItem.ItemName</td>
+                                                                        <td>@dataItem.Quantity</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td>@data.CreatedDate</td>
+                                                    <td>@data.EmployeeName</td>
+                                                    <td>
+                                                        <button type="button" data-id="@data.RequisitionNo" data-filter="@data.FloorNo" id="reqSubmit" class=" reqSubmit btn m-btn--pill m-btn--gradient-from-danger m-btn--gradient-to-warning btn-lg"> Submit</button>
+                                                        @*<button type="button" data-id="@data.RequisitionNo" id="reqSubmit" class=" reqSubmit btn m-btn--pill m-btn--gradient-from-danger m-btn--gradient-to-warning btn-lg"> Submit</button>*@
+                                                    </td>
+
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade show" id="itemSubmitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group m-form__group row">
+                            <label class="col-md-4 control-label"><strong>Requisition NO:</strong></label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control m-input--air m-input--pill" id="requisitionNO" style=" background-color: yellow" readonly="readonly" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group m-form__group row">
+                            <label class="col-md-3 control-label"><strong>Floor NO:</strong></label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control m-input--air m-input--pill" id="floorNo" style=" background-color: yellow" readonly="readonly" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-responsive-sm table-striped- table-bordered table-hover dataTable dtr-inline" id="itemSubmitTable">
+                            <thead>
+                                <tr>
+                                    <th>BarCode</th>
+                                    <th>ItemName</th>
+                                    <th>Qty</th>
+                                    <th>Line</th>
+                                    <th>Rope</th>
+                                    <th>Rack</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemSubmitTableBody"></tbody>
+                        </table>
+                        <div style="text-align:end">
+                            <button type="button" id="confirm" class=" confirm btn m-btn--pill m-btn--gradient-from-success m-btn--gradient-to-warning btn-lg"> Confirm</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
+<script>
+    function validation() {
+        var checker = true;
+        $("#itemSubmitTableBody tr").each(function () {
+            LineNo= $(this).find('.lineNo').val();
+            RopeNo= $(this).find('.RopeNo').val();
+            RackNo = $(this).find('.RackNo').val();
+            $(this).css("background-color", "");
+            if (LineNo == "0" || RopeNo == "0") {
+                $(this).css("background-color", "#e9967a");
+                checker = false;
+                return false;
+            } 
+        });
+        if (checker) {
+            return true;
+        }
+
+    };
+
+    jQuery(document).ready(function () {
+        var table = $("#requestProductTable").dataTable();
+        //Line
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            url: '@Url.Action("GetAllLineNoForDropdown", "StoreHouseRequest")',
+            success: function (data) {
+                $(".lineNo").append('<option>Line</option>');
+                for (var i = 0; i < data.length; i++) {
+                    $(".lineNo").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                }
+            }
+        });
+        //End
+
+        $(".InlineBarcodeTable").on('change', '.lineNo', function () {
+            var thisRow = $(this);
+
+            var lineNo = thisRow.parents('tr').find('.lineNo').val();
+            thisRow.parents('tr').find(".ropeNo").empty("");
+            $.ajax({
+                type: 'GET',
+                url: '/StoreHouseRequest/GetAllRopeNoForDropdown/',
+                dataType: 'json',
+                data: { lineNo: lineNo },
+                success: function (data) {
+                    debugger;
+                    thisRow.parents('tr').find('.ropeNo').append('<option>Rope</option>');
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        thisRow.parents('tr').find('.ropeNo').append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                    }
+                }
+            });
+
+        });
+
+        $(".confirm").click(function () {
+            var requisitionNo = $("#requisitionNO").val();
+            var allConfirmRequestItem = [];
+            allConfirmRequestItem.length = 0;
+            $.each($("#itemSubmitTableBody tr"),
+                function () {
+                    allConfirmRequestItem.push({
+                        Barcode: $(this).find('td:eq(0)').text(),
+                        Quantity: $(this).find('td:eq(2)').text(),
+                        LineNo: $(this).find('.lineNo').val(),
+                        RopeNo: $(this).find('.RopeNo').val(),
+                        RackNo: $(this).find('.RackNo').val(),
+
+                    });
+                });
+
+            if (validation()) {
+                var dataObject = {
+                    'RequisitionNo': requisitionNo,
+                    'StoreHouseRequestMainItemConfirmList': allConfirmRequestItem
+                }
+                var dataList = JSON.stringify({ objStoreHouseRequestMain: dataObject });
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("SubmitData", "StoreHouseRequest")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.m  !== null) {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Update Successfully.");
+                            }else {
+                                toastr.error("Something is wrong !.");
+                                $('#cover-spin').hide();
+                            }
+                        }
+                    }
+                });
+            } else {
+            //    toastr.error("NOT FOUND !.");
+                $('#cover-spin').hide();
+            }
+
+        });
+
+        $(".reqSubmit").click(function () {
+            var requisitionNo = $(this).data('id');
+            var floorNo = $(this).data('filter');
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SubmitCheck", "StoreHouseRequest")',
+                data: { requisitionNo: requisitionNo },
+                success: function (data) {
+                    $("#requisitionNO").val(requisitionNo);
+                    $("#floorNo").val(floorNo);
+                    var tableQuantity = data.length;
+                    $("#itemSubmitTableBody").html("");
+                    for (var i = 0; i < tableQuantity; i++) {
+                        $("#itemSubmitTableBody").append('<tr>' +
+                            '<td>' +
+                            data[i].Barcode +
+                            '</td>' +
+                            '<td>' +
+                            data[i].ItemName +
+                            '</td>' +
+                            '<td>' +
+                            data[i].Quantity +
+                            '</td>' +
+                            '<td><select class="form-control m-input--air m-input--pill lineNo" required="required" style="width:100px;" id="lineNo' + data[i].Barcode +'">'+
+                            ' <option value="0">--Line--</option></select></td > ' +
+                            '<td>' +
+                            '<select class="form-control m-input--air m-input--pill RopeNo" style="width:100px;" id="RopeNo' + data[i].Barcode +'">'+
+                            ' <option value="0">--Rope--</option></select>'+
+                            '</td>' +
+                            '<td>' +
+                            '<select class="form-control m-input--air m-input--pill RackNo" style="width:100px;" id="RackNo' + data[i].Barcode + '">' +
+                            ' <option value="0">--Rack--</option></select>' +
+                            '</td>' +
+                            '</tr>'
+                        );
+                        for (var j = 0; j < data[i].LineRopeRackList.length; j++) {
+
+                            $("#lineNo" + data[i].Barcode).append('<option  value="' + data[i].LineRopeRackList[j].LineNo + '">' + data[i].LineRopeRackList[j].LineNo + '</option>');
+                            $("#RopeNo" + data[i].Barcode).append('<option  value="' + data[i].LineRopeRackList[j].RopeNo + '">' + data[i].LineRopeRackList[j].RopeNo + '</option>');
+                            $("#RackNo" + data[i].Barcode).append('<option  value="' + data[i].LineRopeRackList[j].RackNo + '">' + data[i].LineRopeRackList[j].RackNo + '</option>');
+
+                        }
+                        $("#itemSubmitModal").modal("show");
+
+                    }
+
+                }
+
+            })
+        });
+    });
+</script>

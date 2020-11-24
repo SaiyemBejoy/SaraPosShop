@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "PrivilegeCard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    Privilege Card
+                                </h3>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                    <div class="m-portlet__body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <form class="m-form m-form--fit">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">First Name:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill"  autocomplete="off" type="text"id="firstName" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Last Name:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" autocomplete="off" id="lastname" placeholder="Last Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Card Number:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" autocomplete="off" id="cardNum"  placeholder="Card Number">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Phone Number:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="number" autocomplete="off" id="phoneNum" min="0" placeholder="Phone Number">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Date Of Birth:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill " type="date" id="dateOfBirth" autocomplete="off"  placeholder="Date of Birth" style="width: 507px">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <form class="m-form m-form--fit">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Address:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" autocomplete="off" id="address" placeholder="Address">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Email:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="email" autocomplete="off" id="email" placeholder="Email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">City:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" autocomplete="off" id="city" placeholder="City">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Post Code:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="number" autocomplete="off" id="postCode" placeholder="Post Code">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-2 col-form-label">Country:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" value="Bangladesh" id="country" placeholder="Country">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4"></div>
+                            <div class="col-4 text-center">
+                                <button type="submit" id="Save" class="btn m-btn--pill btn-primary m-btn--wide">Save</button>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function() {
+
+        $("#Save").click(function() {
+            privilegeCustomerDataSave();
+        });
+    });
+
+    function validationCheck() {
+        var firstName = $("#firstName").val();
+        if (firstName === '') {
+            toastr.error("Enter FirstName !!");
+
+            return false;
+        }
+        var lastname = $("#lastname").val();
+        if (lastname === '') {
+            toastr.error("Enter LastName !!");
+            return false;
+        }
+        var cardNum = $("#cardNum").val();
+        if (cardNum === '') {
+            toastr.error("Enter Card Number !!");
+
+            return false;
+        }
+        var address = $("#address").val();
+        if (address === '') {
+            toastr.error("Enter Address !!");
+
+            return false;
+        }
+        var dateOfBirth = $(".datepicker").val();
+        if (dateOfBirth === '') {
+            toastr.error("Select Date of birth !!");
+
+            return false;
+        }
+        var phoneNum = $("#phoneNum").val();
+        if (phoneNum === '') {
+            toastr.error("Type Phone Number!!");
+
+            return false;
+        }
+        return true;
+    }
+
+    function privilegeCustomerDataSave() {
+        var firstName = $("#firstName").val();
+        var lastname = $("#lastname").val();
+        var cardNum = $("#cardNum").val();
+        var phoneNum = $("#phoneNum").val();
+        var dateOfBirth = $("#dateOfBirth").val();
+        var address = $("#address").val();
+        var email = $("#email").val();
+        var city = $("#city").val();
+        var postCode = $("#postCode").val();
+        var country = $("#country").val();
+        var dataObject = {
+            'CustomerCode': cardNum,
+            'CustomerFirstName': firstName,
+            'CustomerLastName': lastname,
+            'ContactNo': phoneNum,
+            'DateOfBirth': dateOfBirth,
+            'Email': email,
+            'Address': address,
+            'City': city,
+            'PostalCode': postCode
+        }
+        var dataList = JSON.stringify({ objPrivilegeCustomerModel: dataObject });
+        if (validationCheck()) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SavePrivilegeCardData", "PrivilegeCard")',
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                    success: function (data) {
+                        if (data.m === "OK") {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                            }
+                            //if (storeReceiveChallanNo !== "") {
+                            //    window.open('/ProductReceive/ShowReport?storeReceiveChallanNo=' + storeReceiveChallanNo, '_blank');
+                            //}
+                        } else {
+                            toastr.error("Connection Problem.");
+                            $('#cover-spin').hide();
+                        }
+                        
+                    }
+                });
+            }
+    }
+</script>

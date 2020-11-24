@@ -1,0 +1,262 @@
+﻿@model Models.AllModel.Report.SaleReportModel
+@{
+    ViewBag.Title = "SaleReport";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+
+                                        @using (Html.BeginForm("SaleReport", "AllReport", FormMethod.Post, new { @class = "m-form m-form--fit" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-form__group row" id="fromDateDiv">
+                                                        <label class="col-4 col-form-label">From Date:</label>
+                                                        <div class="col-8">
+                                                            @*<input class="form-control m-input--air m-input--pill datepicker" value="@ViewBag.dateTime" style="width: 160px;">*@
+                                                            @Html.TextBoxFor(c => c.FromDate, new { @class = "form-control m-input--air m-input--pill datepicker", @placeholder = "From Date", @readonly = "readonly" })
+                                                            @Html.ValidationMessageFor(c => c.FromDate)
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row" id="toDateDiv">
+                                                        <label class="col-4 col-form-label">To Date:</label>
+                                                        <div class="col-8">
+                                                            @*<input class="form-control m-input--air m-input--pill datepicker" value="@ViewBag.dateTime" style="width: 160px;" >*@
+                                                            @Html.TextBoxFor(c => c.ToDate, new { @class = "form-control m-input--air m-input--pill datepicker ", @placeholder = "From Date", @readonly = "readonly" })
+                                                            @Html.ValidationMessageFor(c => c.ToDate)
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row" id="categoryDiv">
+                                                        <label class="col-4 col-form-label"> Category:</label>
+                                                        <div class="col-8">
+                                                            @Html.DropDownListFor(model => model.CategoryName, (IEnumerable<SelectListItem>)ViewBag.CategoryList, "-Select Option-", new { @class = " form-control m-input--air m-input--pill", style = "width: 268px;" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row" id="subCategoryDiv">
+                                                        <label class="col-4 col-form-label">Sub Category:</label>
+                                                        <div class="col-8">
+                                                            <select name="subcategoryName" id="subcategoryName" class="form-control m-input--air m-input--pill" style="width: 268px;">
+                                                                <option value="">--SubCategory--</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row" id="fromDateTimeDiv">
+                                                        <label class="col-4 col-form-label">From Date/Time:</label>
+                                                        <div class="col-8">
+                                                            <input name="FromDateAndTime" id="FromDateAndTime" class="form-control m-input--air m-input--pill" type="datetime-local" style="width: 268px" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row"  id="toDateTimeDiv">
+                                                        <label class="col-4 col-form-label">To Date/Time:</label>
+                                                        <div class="col-8">
+                                                            <input name="ToDateAndTime" id="ToDateAndTime" class="form-control m-input--air m-input--pill" type="datetime-local" style="width: 268px" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                  
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h2>Options:</h2>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Invoice Sale Summary:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "S", new { @checked = true, @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Category/SubCatgy Wise Sale Summary:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "C", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Invoice Wise Details:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "D", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Cashier Sale Summary:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "CS", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Cashier Sale Details:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "CSD", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Time Wise Sale Summary:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "TWSS", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-5"><b>Void Invoice History:</b></label>
+                                                        <div class="col-7">
+                                                            @Html.RadioButtonFor(model => model.RadioFor, "VIH", new { @style = "top: 0;left: 0;height: 22px;width: 22px;" })
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                
+                                            </div>
+
+                                            <br/>
+                                            <div class="row">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group m-form__group row">
+                                                        <div class="col-8">
+                                                            <button type="submit" formtarget="_blank" class="btn m-btn m-btn--gradient-from-danger m-btn--gradient-to-warning"><i class="m-menu__link-icon flaticon-technology"></i> Show Now</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4"></div>
+                                                
+                                            </div>
+
+                                        }
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+
+    jQuery(document).ready(function () {
+        $("#fromDateTimeDiv").hide();
+        $("#toDateTimeDiv").hide();
+
+        $(function() {
+            $( ".datepicker" ).datepicker({
+                format: 'dd/mm/yyyy',//check change
+                changeMonth: true,
+                changeYear: true
+            }).datepicker("setDate", new Date());
+        });
+
+        $("#CategoryName").change(function () {
+            var categoryName = $("#CategoryName").val();
+            $.ajax({
+                type: 'GET',
+                url: '/AllReport/GetAllSubCategoryName/',
+                dataType: 'json',
+                data: { categoryName: categoryName },
+                success: function (data) {
+                    if (data != null) {
+                        $("#subcategoryName").val(0).text("");
+                        $("#subcategoryName").append('<option value="">--SubCategory--</option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $("#subcategoryName").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                        }
+
+                    } else {
+                        toastr.error("No Data Found.");
+                    }
+
+                }
+            });
+
+        });
+
+        $(':radio[name=RadioFor]').change(function () {
+            var value = $(this).val();
+
+            if (value === 'S') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'C') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'D') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'CS') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'CSD') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+            else if (value === 'TWSS') {
+                $("#categoryDiv").show();
+                $("#subCategoryDiv").show();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show();
+                $("#fromDateTimeDiv").show();
+                $("#toDateTimeDiv").show();
+            }
+            else if (value === 'VIH') {
+                $("#categoryDiv").hide();
+                $("#subCategoryDiv").hide();
+                $("#fromDateDiv").show();
+                $("#toDateDiv").show(); 
+                $("#fromDateTimeDiv").hide();
+                $("#toDateTimeDiv").hide();
+            }
+        });
+
+    });
+   
+</script>

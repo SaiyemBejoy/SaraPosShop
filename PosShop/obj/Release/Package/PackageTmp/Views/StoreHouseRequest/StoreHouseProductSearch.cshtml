@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "StoreHouseProductSearch";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid blue">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                     Store House Product List
+                                </h3>
+                                <div class="m-portlet__head-tools">
+                                    <ul class="m-portlet__nav">
+                                        <li class="m-portlet__nav-item">
+                                           <a href="@Url.Action("StoreHouseSave","StoreHouseRequest")" class="m-portlet__nav-link btn btn-success m-btn m-btn--pill m-btn--air">Save New Product</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-responsive-sm table-responsive-sm table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="storeHouseProductSearchTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Line No</th>
+                                            <th>Rope no</th>
+                                            <th>Rack No</th>
+                                            <th>Item Name</th>
+                                            <th>Barcode</th>
+                                            <th>Category</th>
+                                            <th>SubCategory</th>
+                                            <th>Quantity</th> 
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    jQuery(document).ready(function () {
+        var vForm = $('#__AjaxAntiForgeryForm');
+        var vToken = $('input[name="__RequestVerificationToken"]', vForm).val();
+
+        var table = $("#storeHouseProductSearchTable").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "searchHighlight": true,
+            "order": [[0, "desc"]],
+            "ajax": {
+                data: {
+                    __RequestVerificationToken: vToken
+                },
+                url: '@Url.Action("StoreHouseProductSearchDataTable", "StoreHouseRequest")',
+                type: 'POST'
+            },
+            "columns": [
+                {
+                    "data": "LineNo"
+                   
+                },
+                {
+                    "data": "RopeNo"
+                },
+                {
+                    "data": "RackNo"
+                },
+                {
+                    "data": "ItemName",
+                    "orderable": false,
+                    render: function (data, type, productGrid) {
+                        if (productGrid.Quantity) {
+                            return "<p>" + productGrid.ItemName + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + productGrid.ItemName + "</p>";
+                        }
+                    }
+                },
+                {
+                    "data": "Barcode"
+                },
+                {
+                    "data": "CategoryName"
+                },
+                {
+                    "data": "SubCategoryName"
+                },
+                {
+                    "data": "Quantity"
+                },
+                {
+                    "data": null,
+                    "orderable": false,
+                    render: function (data, type, productGrid) {
+                        return "<a href='/StoreHouseRequest/RemoveItem?productBarcode=" +
+                            productGrid.Barcode + "&storehouseId=" + productGrid.StoreHouseId+
+                            "' class='btn btn-circle' style='color:red;'><i class='fa fa-trash' style='color:red;'></i> Remove</a>";
+                        ;
+                    }
+                }
+            ]
+        });
+
+    });
+
+
+</script>

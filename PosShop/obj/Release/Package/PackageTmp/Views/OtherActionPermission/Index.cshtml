@@ -1,0 +1,201 @@
+﻿@using Models.AllModel
+@model Models.AllModel.OtherActionPermissionModel
+@{
+    ViewBag.Title = "OtherActionPermissionList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Role Name:</b></label>
+                                                <div class="col-4">
+                                                    @Html.DropDownListFor(model => model.RoleName, (IEnumerable<SelectListItem>)ViewBag.UserRoleList, "--Select Option--", new { @class = " form-control m-input--air m-input--pill" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Controller:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="controllerName">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Action Name:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="actionName">
+                                                </div>
+
+                                            </div>
+                                            <br />
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"></label>
+                                                <div class="col-4">
+                                                    <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-success m-btn--gradient-to-danger" id="otherPermissionSave"><b>SAVE</b></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--rounded">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    <b>Other Permission List</b>
+                                                </h3>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="m-portlet__body" style="background-color: gainsboro">
+                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="m-section">
+                                                        <div class="m-section__content">
+                                                            <table class="table table-responsive-sm table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="otherPermissionListTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Role Name</th>
+                                                                        <th>Controller</th>
+                                                                        <th>Action Name</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="otherPermissionListTableBody">
+                                                                    @if (ViewBag.OtherPermissionList != null)
+                                                                    {
+
+                                                                        foreach (var data in ViewBag.OtherPermissionList)
+                                                                        {
+                                                                            <tr>
+                                                                                <td> @data.RoleName</td>
+                                                                                <td>@data.Controller</td>
+                                                                                <td>@data.Action</td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function validationCheck() {
+        var roleName = $("#RoleName").val();
+        if (roleName === '') {
+            toastr.error("Enter Role Name !!");
+            return false;
+        }
+
+        var controllerName = $("#controllerName").val();
+        if (controllerName === '') {
+            toastr.error("Enter controller name !!");
+            return false;
+        }
+
+        var actionName = $("#actionName").val();
+        if (actionName === '') {
+            toastr.error("Enter action name !!");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function OtherPermissionDataSave() {
+        var roleName = $("#RoleName").val();
+        var controllerName = $("#controllerName").val();
+        var actionName = $("#actionName").val();
+
+        var dataObject = {
+            'RoleName': roleName,
+            'Controller': controllerName,
+            'Action': actionName
+        }
+        var dataList = JSON.stringify({ objOtherPermissionModel: dataObject });
+        if (validationCheck()) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveOtherPermissionData", "OtherActionPermission")',
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                    success: function (data) {
+                        if (data.m != null) {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                            }
+                        } else {
+                            toastr.error("Connection Problem !.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+           }
+    }
+
+    jQuery(document).ready(function () {
+
+        $("#otherPermissionSave").click(function () {
+            OtherPermissionDataSave();
+        });
+        
+    });
+
+</script>
+
+
+

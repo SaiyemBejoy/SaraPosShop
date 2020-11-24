@@ -1,0 +1,3249 @@
+﻿@using Models.AllModel
+@model Models.AllModel.SaleInfoModel
+@{
+    ViewBag.Title = "PointOfSale";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var employeeList = (IEnumerable<SelectListItem>)ViewBag.employeelist;
+    var employee = Session["authentication"] as AuthModel;
+}
+
+<link href="/Content/Typehead/typeahead.css" rel="stylesheet" />
+
+<div class="m-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <!--begin::Portlet-->
+                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                <div class="m-portlet__body">
+                                    <form class="m-form m-form--fit">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-5 col-form-label" style="font-size: 15px; font-weight: bold;">Sales Man: <span style="color: red"><b>*</b></span></label>
+                                                    <div class="col-7" style="margin-left: -12px;">
+                                                        @Html.DropDownListFor(model => model.SalesManName, (IEnumerable<SelectListItem>)ViewBag.employeelist, "-Select Sales Man-", new { @class = " form-control m-input--air m-input--pill select2", @style = "display:none;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Barcode:</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control m-input--air m-input--pill" type="text" id="barcode" style="width: 150px" autocomplete="off">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" data-toggle="modal" data-target="#searchModal" id="productDrictSearch" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" style="margin-left: -15px;"><i class="la la-search"></i></button>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Date:</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control m-input--air m-input--pill" type="text" id="date" disabled="disabled" style="background-color: gold; width: 100px;font-weight: bold;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">InVoice NO#:</label>
+                                                    <div class="col-8">
+                                                        <input type="hidden" name="saleInfoId" id="saleInfoId" />
+                                                        <input type="hidden" name="exchange" id="exchangeHiddenField" />
+                                                        <input type="hidden" name="return" id="returnHiddenField" />
+                                                        <input type="hidden" name="shopToShopExcg" id="exchangeShopToShopHiddenField" />
+                                                        <input type="hidden" name="shopName" id="exchangeShopHiddenField" />
+                                                        <input class="form-control m-input--air m-input--pill" type="text" id="invoiceNo" value="@ViewBag.maxInvoice" disabled="disabled" style="width: 170px; background-color: yellow;font-weight: bold;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!--end::Portlet-->
+                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                <div class="m-portlet__body">
+                                    <form class="m-form m-form--fit">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="hidden" id="customerInfoId" />
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Customer Code:</label>
+                                                    <div class="col-4">
+                                                        <input class="form-control m-input--air m-input--pill" type="text" id="customerCode">
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label class="m-checkbox" style="margin-top: 11px;font-size: 15px; font-weight: bold;">
+                                                            <input type="checkbox" id="checkbox"> Active Code
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Mobile:</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control m-input--air m-input--pill" autocomplete="off" type="number" id="mobile" maxlength="11" tabindex="2">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Customer Name:</label>
+                                                    <div class="col-8">
+                                                        <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" id="customerName" placeholder="Customer Name (Select For F3) " tabindex="1">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px;"><b>Address:</b></label>
+                                                    <div class="col-8">
+                                                        <input class="form-control m-input--air m-input--pill" autocomplete="off" type="text" id="address">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @*use hoi na tai hide kore raksi*@
+                                            @*<div class="col-md-6">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label" style="font-size: 11px;">Old Barcode(Ex):</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" style="width: 200px" id="BarcodeForExchange" placeholder="Exchange Barcode">
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+                                            @*End*@
+                                            <div class="col-md-6">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px;"><b>Medium:</b></label>
+                                                    <div class="col-8">
+                                                        <select class="form-control m-input--air m-input--pill customerMedium" id="customerMedium" style="width: 200px">
+                                                            <option value="0">--Select Option--</option>
+                                                            <option>E-Commerce</option>
+                                                            <option>Facebook</option>
+                                                            <option>Online</option>
+                                                            <option>Offline</option>
+                                                            <option>Others</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-4 col-form-label" style="font-size: 15px;"><b>MarketPlace:</b></label>
+                                                    <div class="col-8">
+                                                        @Html.DropDownListFor(model => model.MarketPlaceId, (IEnumerable<SelectListItem>)ViewBag.marketPlaceList, "--MarketPlace--", new { @class = " form-control m-input--air m-input--pill" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                <div class="m-portlet__body">
+                                    <div class="table-responsive">
+                                        <table class="table table-responsive-sm m-table m-table--head-bg-success" id="gridTable">
+                                            <thead style="font-size: 15px; font-weight: bold;">
+                                                <tr>
+                                                    @*<th>SL No</th>*@
+                                                    <th>BarCode</th>
+                                                    <th>Description</th>
+                                                    <th>Unit Price</th>
+                                                    <th>SQty</th>
+                                                    <th>Stock</th>
+                                                    <th>VAT</th>
+                                                    <th>Total Value</th>
+                                                    <th>Sales Man</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="pointOfSaleGridTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen">
+                                <div class="m-portlet__body">
+                                    <div class="row m-demo__preview  m-demo__preview--btn">
+                                        <div class="col-md-3">
+                                            <button type="button" id="holdInvoice" class="btn m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger" style="width: 80px; height: 60px; text-align: center; color: white"> Hold<br />Invoice<br />(F6)</button>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" data-toggle="modal" data-target="#pickHoldInvoiceModal" id="pickHoldInvoice" class="btn m-btn m-btn--gradient-from-warning m-btn--gradient-to-info" style="width: 80px; height: 60px; text-align: center; color: white"> Pick Hold<br />Invoice <br />(F7)</button>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" id="exchange" class="btn m-btn m-btn--gradient-from-accent m-btn--gradient-to-success" style="width: 85px; height: 60px; text-align: center"> Exchange<Br />(F9)</button>
+                                        </div>
+                                        @if (employee.VoidPermision == "Y")
+                                        {
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn m-btn m-btn--gradient-from-focus m-btn--gradient-to-danger" data-toggle="modal" data-target="#voidInvoiceModal" id="voidInvoice" style="width: 85px; height: 60px; text-align: center">Void</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                                <div class="m-portlet__body">
+                                    <form class="m-form m-form--fit">
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Total Item:</label>
+                                            <div class="col-8">
+                                                <input class="form-control m-input--air m-input--pill" type="text" id="totalItem" readonly="readonly" style="background-color: yellow; font-weight: bold; font-size: 15px;">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Total:</label>
+                                            <div class="col-8">
+                                                <input class="form-control m-input--air m-input--pill" type="text" id="total" readonly="readonly" style="background-color: yellow; font-weight: bold;font-size: 15px;">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">VAT:</label>
+                                            <div class="col-8">
+                                                <input class="form-control m-input--air m-input--pill" type="text" id="vatAmt" readonly="readonly" style="background-color: yellow; font-weight: bold;">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Discount(%):</label>
+                                            <div class="col-8">
+                                                <input class="form-control m-input--air m-input--pill" type="number" min="0" id="discount" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length===2) return false;" tabindex="3" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Discount:</label>
+                                            <div class="col-8">
+                                                <input class="form-control m-input--air m-input--pill" type="text" id="discountAmount" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Bag Discount:</label>
+                                            <div class="col-8">
+                                                <input class="form-control m-input--air m-input--pill" type="number" min="0" id="BagPrice" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length===6) return false;" tabindex="4">
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Sub-Total: <span style="color: red"><b>*</b></span></label>
+                                            <div class="col-8">
+                                                <input type="hidden" name="excGrandTotal" id="excGrandTotalForHidden" />
+                                                <input class="form-control m-input--air m-input--pill" type="text" id="grandTotal" readonly="readonly" style="background-color: yellow; font-weight: bold;font-size: 20px;">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group m-form__group row">
+                                            <label class="col-4 col-form-label" style="font-size: 15px; font-weight: bold;">Return Amount:</label>
+                                            <div class="col-8">
+                                                <input class="form-control m-input--air m-input--pill" id="returnAmount" type="text" readonly="readonly" style="background-color: yellow; font-weight: bold;">
+                                            </div>
+                                        </div>
+
+                                        <br />
+                                        <div class="form-group m-form__group row">
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-3">
+                                            @if (employee.ReturnPermision == "Y")
+                                            {
+                                                <button type="button" class="btn m-btn m-btn--gradient-from-danger m-btn--gradient-to-warning" id="returnInvoice" style="width: 90px; height: 60px; text-align: center">Return</button>
+                                            }
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info" id="rePrint" style="width: 90px; height: 60px; text-align: center">Reprint</button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn m-btn m-btn--gradient-from-success m-btn--gradient-to-accent" id="payNow" style="width: 90px; height: 60px; text-align: center; font-weight: bold;" tabindex="5">Pay Now<br />(S-Bar)</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Portlet-->
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade show" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width: 125% !important;">
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group m-form__group row">
+                            <label class="col-4 col-form-label"><b>Style/Barcode:</b></label>
+                            <div class="col-8">
+                                <input type="text" autocomplete="off" class="form-control m-input--air m-input--pill" placeholder="Barcode/Style" id="ModalSearchValue">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-responsive-sm table-striped- table-bordered table-hover dataTable dtr-inline" id="SearchTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>BarCode</th>
+                                    <th>ItemName</th>
+                                    <th>Price</th>
+                                    <th>Pending Tr.</th>
+                                    <th>Stock</th>
+                                    <th>VAT</th>
+                                    <th>Category</th>
+                                    <th>SubCategory</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!--PickHold Invoice Modal -->
+<div class="modal fade show " id="pickHoldInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="example2ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width: 1000px">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-responsive-sm table-striped- table-bordered table-hover dataTable dtr-inline" id="holdInvoiceTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Invoice No</th>
+                                    <th>Invoice Date</th>
+                                    <th>Cashier ID</th>
+                                    <th>Total Item</th>
+                                    <th>Discount</th>
+                                    <th>Dis.Amount</th>
+                                    <th>Net Amount</th>
+                                    <th>Customer Name</th>
+                                    <th>Cashier Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="holdInvoiceTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--end::Modal-->
+<!--RETURN Modal -->
+<div class="modal fade show " id="returnAmountDisplay" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="example3ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group row">
+                            <h2 class="col-12 text-center">Invoice Number:</h2>
+                            <h1 id="InvoiceNumberPop" class="text-center col-12" style="color: red;"></h1>
+                            <h2 class="col-12 text-center">Change Amount:</h2>
+                            <h1 id="ChangeAmount" class="text-center col-12" style="color: red; font-size: -webkit-xxx-large;"></h1>
+                            <h4 id="PaymentType" class="text-center col-12" style="color: blue; font-size: -webkit-xxx-small;"></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content: center">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" id="changeModalClose">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--end::Modal-->
+<!--Exchange  Modal -->
+<div class="modal fade show " id="exchangeModal" tabindex="-1" role="dialog" aria-labelledby="example3ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Product Exchange</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                    <div class="m-portlet__body">
+                        @*@if (ViewData["shopList"] != null)
+                            {*@
+                        <form>
+                            <div class="form-group">
+                                <label class="form-control-label">ShopName:</label>
+                                @*@Html.DropDownList("ShopName", (IEnumerable<SelectListItem>)ViewData["shopList"], "Select Shop", new { @class = " form-control m-input--air m-input--pill shopId", @id = "shopId" })*@
+                                <select name="ShopName" id="shopId" class="form-control m-input--air m-input--pill shopId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">InvoiceNo:</label>
+                                <input type="text" class="form-control m-input--air m-input--pill" id="invoiceNoForExchange" autocomplete="off" placeholder="Enter InvoiceNo">
+                            </div>
+                            <div class="form-group text-right">
+                                <button type="button" class="btn m-btn--pill btn-outline-success" id="select">Select</button>
+                            </div>
+                        </form>
+                        @*}
+                            else
+                            {*@
+                        @*<div class="m-alert m-alert--outline alert alert-danger alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                <strong>Warning! Internet Connection Is not Available</strong>
+                            </div>*@
+                        @*}*@
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!--Void  Modal -->
+<div class="modal fade show " id="voidInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="example4ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Void Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                    <div class="m-portlet__body">
+                        <form>
+                            <div class="form-group">
+                                <label class="form-control-label">InvoiceNo:</label>
+                                <input type="text" class="form-control m-input--air m-input--pill" id="invoiceNoForVoid" autocomplete="off" placeholder="Enter InvoiceNo">
+                            </div>
+                            <div class="form-group text-right">
+                                <button type="button" class="btn m-btn--pill btn-outline-success" id="selectVoid">Select</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!--Return  Modal -->
+<div class="modal fade show " id="returnInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="example5ModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Return Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+                    <div class="m-portlet__body">
+                        <form>
+                            <div class="form-group">
+                                <label class="form-control-label">InvoiceNo:</label>
+                                <input type="text" class="form-control m-input--air m-input--pill" id="invoiceNoForReturn" autocomplete="off" placeholder="Enter InvoiceNo">
+                            </div>
+                            <div class="form-group text-right">
+                                <button type="button" class="btn m-btn--pill btn-outline-success" id="selectReturn">Select</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<script src="/Scripts/Typehead/typeahead.js"></script>
+
+<script>
+
+
+    //All Function Start
+
+    function scrollStopNumberField() {
+        $('input[type=number]').on('mousewheel', function(e) {
+            $(e.target).blur();
+        });
+    }
+
+    function voidInvoice(invoiceNum) {
+        if (invoiceNum  !== "") {
+            $.ajax({
+                type: 'GET',
+                url: '/PointOfSale/VoidInvoice/',
+                dataType: 'json',
+                data: { invoiceNum: invoiceNum },
+                success: function (data) {
+                    if (data === "SUCCESS") {
+                        toastr.success("Invoice Void successfully.");
+                        $("#barcode").val("");
+                    }
+                    else if (data === 0) {
+                        toastr.warning("Connection Error!");
+                    }else {
+                        toastr.warning("WARNING!!.You can Void Only current date invoice Number!");
+                    }
+                }
+            });
+        }
+    }
+
+    function tableBindForExchangeAndPickHoldInvoice(data) {
+        var pickHoldInvoiceItem = data.SaleItemList.length;
+        $("#pointOfSaleGridTableBody").html("");
+        for (var i = 0; i < pickHoldInvoiceItem; i++) {
+            $("#pointOfSaleGridTableBody").append('<tr>' +
+                '<td style="display:none" >' +
+                data.SaleItemList[i].ItemId +
+                '</td>' +
+                '<td style="display:none" >' +
+                data.SaleItemList[i].ProductId +
+                '</td>' +
+                '<td>' +
+                data.SaleItemList[i].Barcode +
+                '</td>' +
+                '<td>' +
+                data.SaleItemList[i].StyleName +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' + data.SaleItemList[i].Price + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" value="' + data.SaleItemList[i].Quantity + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.SaleItemList[i].Stock +'">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill vat "  disabled="disabled" id="vat" value="' + data.SaleItemList[i].Vat + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow"  value="' + parseInt(data.SaleItemList[i].Price) * parseInt(data.SaleItemList[i].Quantity) + '">' +
+                '</td>' +
+                '<td>' +
+                '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' + data.SaleItemList[i].Barcode + '" name="SalesManName2">' +
+
+                '</select>' +
+                '</td>' +
+                '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                '</tr>');
+                var empList = [];
+                @{
+                    foreach (var emp in employeeList)
+                    {
+                        <text>
+                            var employee = {
+                                'id': '@emp.Value',
+                                'name': '@emp.Text'
+                            }
+                            empList.push(employee);
+                        </text>
+                    }
+                }
+            for (var j = 0; j < empList.length; j++) {
+                if (data.SaleItemList[i].SalesManId === empList[j].id) {
+                    $("#SalesManName" + data.SaleItemList[i].Barcode).append('<option selected value="' +
+                        empList[j].id +
+                        '">' +
+                        empList[j].name +
+                        '</option>');
+                } else {
+                    $("#SalesManName" + data.SaleItemList[i].Barcode)
+                        .append('<option  value="' + empList[j].id + '">' + empList[j].name + '</option>');
+                }
+
+            }
+            scrollStopNumberField();
+
+            compute(data.SaleItemList[i].Vat);
+            finalDataCalculation();
+
+        }
+
+        $('#BarcodeForExchange').attr('disabled', false);
+    }
+
+    function ItemDecreaseForBarcodeScan(exBarcode) {
+        $.each($("#pointOfSaleGridTableBody tr"),
+            function() {
+                var value = $(this).find('td:eq(2)').html();
+                var vat = $(this).find('#vat').val();
+                var quantity = $(this).find('#orderQuantity').val();
+                if (exBarcode === value) {
+                    if (quantity === "1") {
+                        $(this).remove();
+                    } else {
+                        $(this).find('#orderQuantity').val(parseInt(quantity) - 1);
+                    }
+
+                    //This For SameBarcode Scan Calculation
+                    var decrementValue = $(this).find('#orderQuantity').val();
+                    var salePrice = $(this).find('#salePrice').val();
+                    var totalPrice = parseInt(salePrice) * parseInt(decrementValue);
+                    $(this).find('.subTotal').val(totalPrice);
+                    compute(vat);
+                    reset();
+                    //end
+                    $("#BarcodeForExchange").val("");
+                } else {
+                    toastr.error("Invalid Barcode !.");
+                }
+            });
+
+    }
+
+    function tableFooterChange() {
+        var totalAmount = 0;
+        $.each($("#gridTableForPayment tr"),
+            function() {
+                totalAmount += parseFloat($(this).find('td:eq(5)').html());
+            });
+        $('#payTotal').val(totalAmount);
+        $('.paymentTypeAmount').focus();
+    }
+    
+    function GetItemDetailsByBarCode(barcode, saleManId, transitStockBlance) {
+            if (saleManId !== "") {
+                $.ajax({
+                    type: 'GET',
+                    url: '/PointOfSale/GetAllInfoByBarcode/',
+                    dataType: 'json',
+                    data: { barcode: barcode },
+                    success: function (data) {
+                        if (transitStockBlance !== 0 && transitStockBlance > 0 ) {/// Transit product scan korar somoi transit er stock dakhanor jonno use kora
+                            data.RoundQuantity = transitStockBlance;
+                        };
+                        var barcode = $('#barcode').val();
+
+                        var allProductItemCode = [];
+                        allProductItemCode.length = 0;
+                        var checker = true;
+
+                        $.each($("#pointOfSaleGridTableBody tr"),
+                            function() {
+                                var value = $(this).find('td:eq(2)').html();
+                                var quantity = $(this).find('#orderQuantity').val();
+                                allProductItemCode.push({
+                                    value,
+                                    quantity
+                                });
+                            });
+                        if (allProductItemCode.length > 0) {
+                            $.each(allProductItemCode,
+                                function(i, val) {
+                                    if (data.Barcode == val.value) {
+                                        checker = false;
+                                    }
+                                });
+                            if (checker) {
+                                if (data.Barcode !== null && data.Barcode) {
+                                    if (!isNaN(data.RoundQuantity) && data.RoundQuantity > 0) {
+
+                                        $("#pointOfSaleGridTableBody").append('<tr>' +
+                                            '<td style="display:none" >' +
+                                            data.ItemId +
+                                            '</td>' +
+                                            '<td style="display:none" >' +
+                                            data.ProductId +
+                                            '</td>' +
+                                            '<td>' +
+                                            data.Barcode +
+                                            '</td>' +
+                                            '<td>' +
+                                            data.ItemName +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' +
+                                            data.SalePrice +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" min="0" value="' +
+                                            1 +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            //'<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.Quantity + '">' +
+                                            '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' +
+                                            data.RoundQuantity +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 10%">' +
+                                            '<input type="number" class="form-control m-input--air m-input--pill vat"  disabled="disabled" id="vat" value="' +
+                                            data.Vat +
+                                            '">' +
+                                            '</td>' +
+                                            '<td style="width: 13%">' +
+                                            '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow"  value="' +
+                                            parseInt(data.SalePrice) * 1 +
+                                            '">' +
+                                            '</td>' +
+                                            '<td>' +
+                                            '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' +
+                                            data.Barcode +
+                                            '" name="SalesManName2">' +
+                                            '</select>' +
+                                            '</td>' +
+                                            '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                                            '</tr>');
+                                        var empList = [];
+                                        @{
+                                        foreach (var emp in employeeList)
+                                        {
+                                            <text>
+                                                var employee = {
+                                                    'id': '@emp.Value',
+                                                    'name': '@emp.Text'
+                                                }
+                                                empList.push(employee);
+                                            </text>
+                                        }
+                                    }
+
+                                        for (var i = 0; i < empList.length; i++) {
+                                            if (saleManId === empList[i].id) {
+                                                $("#SalesManName" + data.Barcode).append('<option selected value="' +
+                                                    empList[i].id +
+                                                    '">' +
+                                                    empList[i].name +
+                                                    '</option>');
+                                            } else {
+                                                $("#SalesManName" + data.Barcode).append('<option  value="' +
+                                                    empList[i].id +
+                                                    '">' +
+                                                    empList[i].name +
+                                                    '</option>');
+                                            }
+
+                                        }
+
+                                        scrollStopNumberField();
+
+                                        compute(data.Vat);
+
+                                        $("#barcode").val("");
+                                        $("#discount").val("");
+                                        $("#discountAmount").val("");
+
+                                    } else {
+                                        toastr.error("This Item have No Stock!.");
+                                        $("#barcode").val("");
+                                    }
+                                } else {
+                                    toastr.error("Invalid BarCode!!.");
+                                    $("#barcode").val("");
+                                }
+                            } else {
+                                $.each($("#pointOfSaleGridTableBody tr"),
+                                    function() {
+                                        var value = $(this).find('td:eq(2)').html();
+                                        var vat = $(this).find('#vat').val();
+                                        var stock = $(this).find('.stock').val();
+                                        var quantity = $(this).find('#orderQuantity').val();
+                                        if (barcode.toLowerCase() === value.toLowerCase()) {
+                                            if (parseInt(quantity) >= parseInt(stock)) {
+                                                alert("Stock Not Available");
+                                                $("#barcode").val("");
+                                                return false;
+                                            } else {
+                                                $(this).find('#orderQuantity').val(parseInt(quantity) + 1);
+                                                //This For SameBarcode Scan Calculation
+                                                var incrementValue = $(this).find('#orderQuantity').val();
+                                                var salePrice = $(this).find('#salePrice').val();
+                                                var totalPrice = parseInt(salePrice) * parseInt(incrementValue);
+                                                $(this).find('.subTotal').val(totalPrice);
+
+                                                compute(vat);
+
+                                                //end
+
+                                                $("#barcode").val("");
+                                                $("#discount").val("");
+                                                $("#discountAmount").val("");
+                                                toastr.success(" Add Same Item.");
+                                            }
+                                        }
+                                    });
+
+                            }
+                        } else {
+                            if (data.Barcode !== null && data.Barcode) {
+                                if (!isNaN(data.RoundQuantity) && data.RoundQuantity > 0) {
+                                    $("#pointOfSaleGridTableBody").append('<tr>' +
+                                        '<td style="display:none" >' +
+                                        data.ItemId +
+                                        '</td>' +
+                                        '<td style="display:none" >' +
+                                        data.ProductId +
+                                        '</td>' +
+                                        '<td>' +
+                                        data.Barcode +
+                                        '</td>' +
+                                        '<td>' +
+                                        data.ItemName +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' +
+                                        data.SalePrice +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" min="0" value="' +
+                                        1 +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        //'<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + data.Quantity + '">' +
+                                        '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' +
+                                        data.RoundQuantity +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 10%">' +
+                                        '<input type="number" class="form-control m-input--air m-input--pill vat" disabled="disabled" id="vat" value="' +
+                                        data.Vat +
+                                        '">' +
+                                        '</td>' +
+                                        '<td style="width: 13%">' +
+                                        '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow" value="' +
+                                        parseInt(data.SalePrice) * 1 +
+                                        '">' +
+                                        '</td>' +
+                                        '<td>' +
+                                        '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' +
+                                        data.Barcode +
+                                        '" name="SalesManName2">' +
+                                        '' +
+                                        '</select>' +
+                                        '</td>' +
+                                        '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                                        '</tr>');
+
+                                    var empList = [];
+                                    @{
+                                    foreach (var emp in employeeList)
+                                    {
+                                        <text>
+                                            var employee = {
+                                                'id': '@emp.Value',
+                                                'name': '@emp.Text'
+                                            }
+                                            empList.push(employee);
+                                        </text>
+                                    }
+                                }
+
+                                    for (var i = 0; i < empList.length; i++) {
+                                        if (saleManId === empList[i].id) {
+                                            $("#SalesManName" + data.Barcode).append('<option selected value="' +
+                                                empList[i].id +
+                                                '">' +
+                                                empList[i].name +
+                                                '</option>');
+                                        } else {
+                                            $("#SalesManName" + data.Barcode).append('<option  value="' +
+                                                empList[i].id +
+                                                '">' +
+                                                empList[i].name +
+                                                '</option>');
+                                        }
+
+                                    }
+
+                                    scrollStopNumberField();
+                                    finalDataCalculation();
+                                    compute(data.Vat);
+
+                                    $("#barcode").val("");
+                                    $("#discount").val("");
+                                    $("#discountAmount").val("");
+
+                                } else {
+                                    toastr.error("This Item have No Stock!.");
+                                    $("#barcode").val("");
+                                }
+
+                            } else {
+                                toastr.error("Invalid BarCode!!.");
+                                $("#barcode").val("");
+                            }
+                        }
+                    }
+                });
+            } else {
+                toastr.error("Select Sales Man!..");
+                $('#barcode').val("");
+            }
+    }
+
+    function AllDataSave(holdInvoice, pAmount, paymentInfo, giftVoucherCode, giftVoucherValue, giftVoucherRemainingBal) {
+        var counterName = localStorage.getItem("counterName");
+        //customer
+        var customerInfoId = 0;
+        var discountPercent = 0;
+        var customerCode = $("#customerCode").val();
+        if (customerCode !== "") {
+            customerInfoId = $("#customerInfoId").val();
+            discountPercent = $("#discount").val();
+        }
+        var customerName = $("#customerName").val();
+        var contactNo = $("#mobile").val();
+        var address = $("#address").val();
+        var customerMedium = $("#customerMedium").val();
+        //end
+        //sale
+        var saleInfoId = $('input[name="saleInfoId"]').val();
+        var exchange = $('input[name="exchange"]').val();
+        var shopToShopExchange = $('input[name="shopToShopExcg"]').val();
+        var returnInvoice = $('input[name="return"]').val();
+        var hiddenShopId = $('input[name="shopName"]').val();
+        var saleManId = $("#SalesManName").val();
+        var marketPlaceId = $("#MarketPlaceId").val();
+        var invoiceNo = $("#invoiceNo").val();
+        var totalItem = $("#totalItem").val();
+        var totalAmount = $("#total").val();
+        var vat = $("#vatAmt").val();
+        var bagPrice = $("#BagPrice").val();
+        discountPercent = $("#discount").val();
+        var discountAmount = $("#discountAmount").val();
+        var subtotal = $("#grandTotal").val();
+        var paymentTypeSave = 0;
+        var cashAmountSave = 0;
+        var cardAmountSave = 0;
+
+        localStorage.setItem("invoiceNumber", invoiceNo);
+        //end
+        //saleItem
+        var allPointOfSaleItem = [];
+        allPointOfSaleItem.length = 0;
+        $.each($("#pointOfSaleGridTableBody tr"),
+            function () {
+                allPointOfSaleItem.push({
+                    ItemId: $(this).find('td:eq(0)').html(),
+                    ProductId: $(this).find('td:eq(1)').html(),
+                    Barcode: $(this).find('td:eq(2)').html(),
+                    StyleName: $(this).find('td:eq(3)').text(),
+                    Price: $(this).find('#salePrice').val(),
+                    Quantity: $(this).find('#orderQuantity').val(),
+                    Vat: $(this).find('#vat').val(),
+                    Total: $(this).find('.subTotal').val(),
+                    SalesManId: $(this).find('.SalesManName2').val()
+
+                });
+
+            });
+        //end
+
+        var customerObject = {
+            'CustomerInfoId': customerInfoId,
+            'CustomerCode': customerCode,
+            'CustomerName': customerName,
+            'ContactNo': contactNo,
+            'Address': address,
+            'Discount': discountPercent,
+            'CustomerMedium': customerMedium
+        }
+        var saleInfoObject = {
+            'InvoiceNumber': invoiceNo,
+            'SaleInfoId': saleInfoId,
+            'SalesManId': saleManId,
+            'MarketPlaceId':marketPlaceId,
+            'TotalItem': totalItem,
+            'TotalAmount': totalAmount,
+            'Vat': vat,
+            'DiscountPercent': discountPercent,
+            'DiscountAmount': discountAmount,
+            'BagPrice': bagPrice,
+            'PaymentType': paymentTypeSave,
+            'CashAmount': cashAmountSave,
+            'CardAmount': cardAmountSave,
+            'GiftVoucherCode': giftVoucherCode,
+            'GiftVoucherOldBalance': giftVoucherValue,
+            'GiftVoucherNewBalance': giftVoucherRemainingBal,
+            'SubTotal': subtotal,
+            'NetAmount': pAmount,
+            'HoldInvoiceYN': holdInvoice,
+            'ExchangeYN': exchange,
+            'ShopToShopExchangeYN': shopToShopExchange,
+            'ReturnYN': returnInvoice,
+            'ExchangeShopId': hiddenShopId,
+            'SaleItemList': allPointOfSaleItem,
+            'SalePaymentInfoList': paymentInfo
+
+        }
+        var dataList = JSON.stringify({ objCustomerSaleModel: customerObject, objSaleInfoModel: saleInfoObject, counterName: counterName });
+
+        if (allPointOfSaleItem.length) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveData", "PointOfSale")',
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                success: function (data) {
+                    if (data.isRedirect) {
+                        localStorage.setItem("invoiceNumber", JSON.stringify(data.m));
+                        window.setTimeout(function() {
+                            window.location = data.redirectUrl;
+                        }, 100);
+                        //popup dakanor jonno
+                        localStorage.setItem("paymentInfoForPopup", JSON.stringify(paymentInfo));
+                        //End
+                        toastr.success("Save Successfully.");
+
+                    } else {
+                        toastr.success("session out please login again.");
+                        location.reload(true);
+                    }
+                }
+            });
+        } else {
+            toastr.error("Table Data Cann't Be Empty!");
+            $('#cover-spin').hide();
+        }
+    }
+
+    function validation() {
+        var saleManId = $("#SalesManName").val();
+        if (saleManId === "") {
+            toastr.error("Select SaleMan!.");
+            $('#SalesManName').focus();
+            $("#payNow").prop("disabled", false);
+            return false;
+        }
+
+        var subtotal = $("#grandTotal").val();
+        if (subtotal === "" || isNaN(subtotal)) {
+            toastr.error("Subtotal Amount can't be empty!.");
+            return false;
+        }
+
+        return true;
+    }
+    function validationForQuickOpen() {
+        ////taratari bill korte gia space bar chaple discount a bag er calculation miss kore  key up kaj kore na
+        var subtotal = parseFloat($("#grandTotal").val());
+
+        var bagPrice = isNaN(parseFloat($("#BagPrice").val())) ? 0 : parseFloat($("#BagPrice").val());
+        var total = $("#total").val();
+        var discount = isNaN(parseFloat($("#discount").val())) ? 0 : parseFloat($("#discount").val());
+        var discountPrice = (parseFloat(total) * parseFloat(discount)) / 100;
+        var grandTotal = parseFloat(total) - ((parseFloat(total) * parseFloat(discount)) / 100);
+        grandTotal = parseFloat(grandTotal) - parseFloat(bagPrice);
+
+        if (grandTotal !== subtotal) {
+            toastr.error("CalCulation is Not Valid !. Press (S-BAR) Again for Open Payment Option !!...");
+            return false;
+        }
+        return true;
+    }
+    function BagPriceCalculation() {
+        var discount = isNaN(parseFloat($("#discount").val())) ? 0 : parseFloat($("#discount").val());
+
+        var total = parseFloat($("#total").val());
+        var bagPrice = parseFloat($("#BagPrice").val());
+        if (bagPrice !== "") {
+            var discountPrice = (parseFloat(total) * parseFloat(discount)) / 100;
+            var grandTotal = parseFloat(parseFloat(total) - ((parseFloat(total) * parseFloat(discount)) / 100));
+            var grandTotal = parseFloat(parseFloat(grandTotal) - parseFloat(bagPrice));
+            if (isNaN(bagPrice)) {
+                finalDataCalculation();
+            } else {
+                $("#grandTotal").val(grandTotal);
+            }
+            var grandTotalForDis = parseFloat($("#grandTotal").val());
+            var vat = parseFloat($("#vat").val());
+            compute(vat, grandTotalForDis);
+        }
+
+    }
+
+    function finalDataCalculation() {
+        $("#BagPrice").val("");
+        var total = $("#total").val();
+        var discount = $("#discount").val();
+        if (discount !== "") {
+        var discountPrice = (parseFloat(total) * parseFloat(discount)) / 100;
+        var grandTotal = parseFloat(total) - ((parseFloat(total) * parseFloat(discount)) / 100);
+        if (discount === "") {
+            $("#grandTotal").val(total);
+            $("#discountAmount").val(0);
+        } else {
+            var abc = Math.round(discountPrice);
+            $("#discountAmount").val(discountPrice);
+            $("#grandTotal").val(grandTotal);
+        }
+        var grandTotalForDis = parseFloat($("#grandTotal").val());
+        var vat = parseFloat($("#vat").val());
+            compute(vat, grandTotalForDis);
+
+        } else {
+            $("#grandTotal").val(total);
+            $("#discountAmount").val(0);
+        }
+    }
+
+    function CalculationForDiscountAmount() {
+        var total = $("#total").val();
+        var discount = $("#discountAmount").val();
+        if (total != null || discount > total) {
+            var grandTotal = parseFloat(total) - parseFloat(discount);
+            //var roundGrandTotal = Math.round(grandTotal);
+            $("#grandTotal").val(grandTotal);
+        }
+    }
+
+    function finalDataCalculationForCustomer(value) {
+        var total = $("#total").val();
+        var discount = value;
+        var discountPrice = (parseFloat(total) * parseFloat(discount)) / 100;
+        var grandTotal = parseFloat(total) - ((parseFloat(total) * parseFloat(discount)) / 100);
+        $("#discountAmount").val(discountPrice);
+        $("#grandTotal").val(grandTotal);
+
+    }
+
+    function rowDataCalculation(data) {
+        var stock = data.parents('tr').find('.stock').val();
+        var quantity = data.parents('tr').find('.orderQuantity').val();
+        if (parseInt(quantity) > parseInt(stock)) {
+            alert("Stock Not Available");
+            data.parents('tr').find('.orderQuantity').val(stock);
+            return false;
+        } else {
+            var subTotal = data.parents('tr').find('.subTotal');
+            var vat = data.parents('tr').find('.vat').val();
+            var salePrice = data.parents('tr').find('.salePrice').val();
+
+            var totalSubPrice = quantity * salePrice;
+            //debugger;
+            //var includePrice = 100 + parseFloat(vat);
+            //var actualPrice = (100 / parseFloat(includePrice)) * parseFloat(salePrice);
+            //var totalPrice = quantity * actualPrice;
+            //var totalVat = (vat / 100) * parseFloat(totalPrice);
+
+            subTotal.val(totalSubPrice);
+            //vatAmount.val(totalVat);
+        }
+
+    }
+
+    function compute(vat, netAmount) {
+        var totalValue = 0;
+        var totalItem = 0;
+
+        $("#pointOfSaleGridTableBody tr").each(function () {
+            totalValue += parseFloat($(this).find('.subTotal').val());
+            totalItem += parseFloat($(this).find('.orderQuantity').val());
+        });
+
+        $("#total").val(Math.round(totalValue *100) /100 );
+        $("#grandTotal").val(Math.round(totalValue * 100) / 100);
+        $("#totalItem").val(totalItem);
+
+        if (netAmount != null && parseFloat(netAmount) > 0) {
+            $("#grandTotal").val(Math.round(netAmount * 100) / 100 );
+        } else if (netAmount ===0) {
+            $("#grandTotal").val(netAmount);
+            $("#vatAmt").val(0);
+        }
+
+        var totalGrandTotal = $("#grandTotal").val();
+        var includePrice = 100 + parseFloat(vat);
+        var actualPrice = (100 / parseFloat(includePrice)) * parseFloat(totalGrandTotal);
+        var totalVat = (vat / 100) * parseFloat(actualPrice);
+
+        $("#vatAmt").val(totalVat.toFixed(2));
+    }
+
+    //some Text box Value Reset
+    function reset() {
+        $("#discount").val("");
+        $("#discountAmount").val("");
+        $("#cashAmount").val("");
+        $("#paidAmount").val("");
+        $("#returnAmount").val("");
+        $("#paymentAmount").val("");
+        $("#paymentType").val(0);
+    }
+    //End
+
+    //All Function End
+    jQuery(document).ready(function () {
+        $("body").addClass("m-brand--minimize m-aside-left--minimize");
+        $('#barcode').focus();
+        $('#BarcodeForExchange').attr('disabled', true);
+        scrollStopNumberField();
+        //ChangeAmount Er popup dakanor jonno
+        var changeAmountPopup = null;
+        if (localStorage.getItem('paymentInfoForPopup') !== "undefined") {
+            changeAmountPopup = JSON.parse(localStorage.getItem('paymentInfoForPopup'));
+        }
+        var invoiceNumberPop = JSON.parse(localStorage.getItem('invoiceNumber'));
+        //var voidAmountPopup = localStorage.getItem('VoidAmount') !== null ? JSON.parse(localStorage.getItem('VoidAmount')) : 0;
+        if (changeAmountPopup != null) {
+            $('#returnAmountDisplay').modal('show');
+            var paymentChangeValue = changeAmountPopup.length;
+            $("#InvoiceNumberPop").html(invoiceNumberPop);
+            for (var i = 0; i < paymentChangeValue; i++) {
+                if (changeAmountPopup[i].PaymentType != null ) {
+                    if (changeAmountPopup[i].PaymentType.toLowerCase() === "cash" ) {
+                        $('#ChangeAmount').html(changeAmountPopup[i].ReturnAmount + '&#x09F3;');
+                    }
+                    $('#PaymentType').append(changeAmountPopup[i].PaymentType + ':' + changeAmountPopup[i].Amount +'/ ');
+                }
+            }
+            $("#changeModalClose").click(function() {
+                $('#returnAmountDisplay').modal('hide');
+                localStorage.removeItem('paymentInfoForPopup');
+                $('#barcode').focus();
+            });
+
+            $(document).keypress(function (e) {
+                if (e.keyCode === 13) //if its a enter key
+                {
+                    $('#returnAmountDisplay').modal('hide');
+                    localStorage.removeItem('paymentInfoForPopup');
+                    $('#barcode').focus();
+                }
+            });
+        }
+
+        //corsor focus change korar jonno
+        $('input').bind('keypress', function (eInner) {
+            var id = $(this).attr('id');
+            if (id === "barcode") {
+                return true;
+            } else {
+                if (eInner.keyCode === 13) //if its a enter key
+                {
+                    var tabindex = $(this).attr('tabindex');
+                    tabindex++; //increment tabindex
+                    $('[tabindex=' + tabindex + ']').focus();
+                    return false;
+                }
+            }
+        });
+        // ShortCut Key
+        $(window).keydown(function (event) {
+
+            if (event.keyCode === 32) { //space For PayNow
+                    if ($("#payNow").is(":disabled")) {
+                        alert("Already open");
+                    } else {
+                       var  exchangeHiddenField = $("#exchangeHiddenField").val();
+                        var allPointOfSaleItem = [];
+                            allPointOfSaleItem.length = 0;
+                            $.each($("#pointOfSaleGridTableBody tr"),
+                                function () {
+                                    allPointOfSaleItem.push({
+                                        ItemId: $(this).find('td:eq(0)').text()
+                                    });
+                                });
+                            var mobile = $("#mobile").is(':focus'); //mobile,customer, address a space bar a pay now open hobe na
+                            var customer = $("#customerName").is(':focus');//karon cahaier a phone dia onik time a inter dai na..jar jonno discount er value bad na gia paynow a cole jai...report mile na bill vul hoi.
+                        var address = $("#address").is(':focus');
+                        var ModalSearchValue = $("#ModalSearchValue").is(':focus');
+                            if (allPointOfSaleItem.length !== 0) {
+                                if (customer === false && address === false && mobile === false && ModalSearchValue === false ) {
+                                    if (validationForQuickOpen()) {
+                                        $("#payNow").click();
+                                        $("#payNow").prop("disabled", true);
+                                    }
+                                }
+                                return true;
+                            }
+                    }
+
+            }
+            else if (event.keyCode === 117) {//f6 Hold Invoice
+                $("#holdInvoice").click();
+                event.preventDefault();
+            }
+            else if (event.keyCode === 118) {//f7 Pick Hold
+                $("#pickHoldInvoice").click();
+                event.preventDefault();
+            }
+            else if (event.keyCode === 114) { //f3 Exchange
+                $("#customerName").focus();
+                event.preventDefault();
+            }
+            else if (event.keyCode === 120) { //f9 Customer Select
+                $("#exchange").click();
+                event.preventDefault();
+            }
+            else if (event.keyCode === 112) { //f1 saleMan Select
+                $('#SalesManName').select2('open');
+                event.preventDefault();
+            }
+            else if (event.keyCode === 113) { //f2 barcode Select
+                $('#barcode').focus();
+                event.preventDefault();
+            }
+            else if (event.keyCode === 115) { //f4 paymentType open
+                $("#openPaymentType").focus();
+            }
+
+        });
+        //End
+        //End
+
+        $(document).on("keydown", ".paymentTypeAmount", function (e) {
+
+            var invoiceAmount = $('.inVoiceAmount').val();
+            var total = $('#payTotal').val();
+
+            if (parseInt(invoiceAmount) === parseInt(total)) {
+                if (e.keyCode === 13) {
+                    $('.payNowButton').focus();
+                }
+
+            }
+
+        });
+        //End
+        //corsor focus change korar jonno
+        $('input').bind('keypress', function(eInner) {
+            if (eInner.keyCode === 13) //if its a enter key
+            {
+                var tabindex = $(this).attr('tabindex');
+                tabindex++; //increment tabindex
+                $('[tabindex=' + tabindex + ']').focus();
+            }
+        });
+        //End
+
+        var vForm = $('#__AjaxAntiForgeryForm');
+        var vToken = $('input[name="__RequestVerificationToken"]', vForm).val();
+        $('#customerCode').attr('disabled', true);
+        $("#checkbox").change(function () {
+            if (this.checked) {
+                $('#customerCode').attr('disabled', false);
+
+            } else {
+                $('#customerCode').attr('disabled', true);
+            }
+        });
+
+        //Reprint
+        $("#rePrint").click(function () {
+            var invoiceNumber = localStorage.getItem("invoiceNumber");
+            if (invoiceNumber != null) {
+                invoiceNumber = invoiceNumber.replace(/^"(.*)"$/, '$1');
+            }
+            var counterName = localStorage.getItem("counterName");
+            if (invoiceNumber == null)
+                invoiceNumber = "";
+
+            $.confirm({
+                title: 'Re-Print Invoice',
+                content: '' +
+                    '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                    '<input type="text" placeholder="Invoice Number" class="name form-control" value="' + invoiceNumber +'" required />' +
+                    '</div>' +
+                    '</form>',
+                buttons: {
+                    formSubmit: {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function () {
+                            var name = this.$content.find('.name').val();
+                            if(!name){
+                                $.alert('provide a valid Invoice Number');
+                                return false;
+                            }
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '/PointOfSale/RePrintInvoice/',
+                                dataType: 'json',
+                                data: { invoice: name, counterName: counterName},
+                                success: function (data) {
+                                    return true;
+                                }, error: function() {
+                                    $.alert('Invalid Invoice Number');
+                                    return false;
+                                }
+                            });
+                        }
+                    },
+                    cancel: function () {
+                        //close
+                    }
+                },
+                onContentReady: function () {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
+            });
+        });
+        //End Reprint
+
+        //Start PayNow Button Action
+        $("#payNow").click(function () {
+            var grandTotal = $("#grandTotal").val();
+            //Exchange er Jonno
+            var grandTotalForExchange = $('input[name="excGrandTotal"]').val();
+            if (grandTotalForExchange !== "") {
+                var exchangeAmount = parseFloat(grandTotal) - parseFloat(grandTotalForExchange);
+                grandTotal=exchangeAmount;
+            }
+            //End
+            //Payment Type Data
+            @*$.ajax({
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("GetAllPaymentType", "PointOfSale")',
+                success: function (data) {
+                    if (data != null) {
+                        for (var i = 0; i < data.length; i++) {
+                            $(".paymentType").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                        }
+                    } else {
+                        $.alert('Payment Type Cannt Load.Please ReOpen Payment Section.');
+                    }
+
+                }
+            });*@
+
+            //End
+            if (validation()) {
+                $.confirm({
+                    title: 'Payment',
+                    columnClass: 'col-md-8',
+                    content: '' +
+                        '<div class="m-portlet m-portlet--rounded" id="paymentSection" style="border: 1px solid darkgreen;">' +
+                        '<div class="m-portlet__body">' +
+                        '<form class="m-form m-form--fit">' +
+                        '<div class="row">' +
+                        //start
+                        '<div class="col-md-6">' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-4 col-form-label">Invoice Amount:</label>' +
+                        ' <div class="col-8">' +
+                        '<input type="text" placeholder="" class="form-control m-input--air m-input--pill inVoiceAmount"  value = "' + grandTotal + '" readonly="readonly" style="background-color: yellow;font-weight: bold;font-size:20px" />' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-4 col-form-label">Payment Type:</label>' +
+                        ' <div class="col-8">' +
+                        '<select class="form-control m-input--air m-input--pill paymentType" id = "openPaymentType">' +
+
+                        //'<option>Cash</option>' +
+                        //'<option>BKash</option>' +
+                        //'<option>BracBank</option>' +
+                        //'<option>Rocket</option>' +
+                        //'<option>DBBL</option>' +
+                        //'<option>SCB</option>' +
+                        //'<option>SIBL</option>' +
+                        //'<option>CITY</option>' +
+                        //'<option>EBL</option>' +
+                        //'<option>GiftVoucher</option>' +
+                        '</select>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-4 col-form-label">Machine No:</label>' +
+                        '<div class="col-8">' +
+                        '<input type="text" placeholder="" class="form-control m-input--air m-input--pill"  />' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-4 col-form-label">Remain Amount:</label>' +
+                        '<div class="col-8">' +
+                        '<input type="number" placeholder="" class="form-control m-input--air m-input--pill cashAmount" id = "cashAmount" value = ""  readonly="readonly" style="background-color: yellow;font-weight: bold;font-size:20px"  />' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-4 col-form-label">Discount(%):</label>' +
+                        '<div class="col-8">' +
+                        '<input type="number" readonly="readonly" class="form-control m-input--air m-input--pill discountForCard"  />' +
+                        '</div>' +
+                        '</div>' +
+                        //'<div class="form-group m-form__group row">' +
+                        //'<label class="col-4 col-form-label">Paid Amount:</label>' +
+                        //'<div class="col-8">' +
+                        //'<input type="number" placeholder="" class="form-control m-input--air m-input--pill paidAmount" style="background-color: gold" id="paidAmount"  />' +
+                        //'</div>' +
+                        //'</div>' +
+                        '</div>' +
+                        //end div class 6
+                        //Start Div
+                        '<div class="col-md-6">' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-5 col-form-label">Gift Voucher:</label>' +
+                        '<div class="col-7">' +
+                        '<input type="text" placeholder="Gift Voucher Scan" class="form-control m-input--air m-input--pill" id="giftVoucherScan"  />' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-5 col-form-label">Gift Voucher Value:</label>' +
+                        '<div class="col-7">' +
+                        '<input type="text" class="form-control m-input--air m-input--pill" id="giftVoucherValue" readonly="readonly" style="background-color: yellow" />' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-5 col-form-label">GiftVoucher Balance:</label>' +
+                        '<div class="col-7">' +
+                        '<input type="number" placeholder="" class="form-control m-input--air m-input--pill" id="giftVoucherRemainingBal" readonly="readonly" style="background-color: yellow" />' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-5 col-form-label">Card Number:</label>' +
+                        '<div class="col-7">' +
+                        '<input type="number" placeholder="" class="form-control m-input--air m-input--pill"  />' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group m-form__group row">' +
+                        '<label class="col-5 col-form-label">Amount:</label>' +
+                        '<div class="col-7">' +
+                        '<input type="number" class="form-control m-input--air m-input--pill paymentTypeAmount" style="font-weight: bold;font-size:20px" />' +
+                        '</div>' +
+                        '</div>' +
+
+
+                        '</div>' +
+
+                        '</div>' +
+                        //end
+                        '</br>' +
+                        '<div class="row">' +
+                        '<div class="col-md-12">' +
+                        '<div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">' +
+                        '<div class="m-portlet__body">' +
+                        '<table class="table  m-table m-table--head-bg-success" id="">' +
+                            ' <thead>' +
+                                    '<tr>' +
+                                        '<th><b>Description</b></th>' +
+                                        '<th><b>Machine No</b></th>' +
+                                        '<th><b>Card No</b></th>' +
+                                        '<th><b>Total</b></th>' +
+                                        '<th><b>Discount</b></th>' +
+                                        '<th><b>Amount</b></th>' +
+                                    '</tr>' +
+                            ' </thead>' +
+                            ' <tbody id ="gridTableForPayment" style ="font-size:20px;">' +
+
+                            ' </tbody>' +
+                            ' <tfoot id ="gridTableForPaymentFoot">' +
+                                '<tr>' +
+                                            '<td>'+
+
+                                            '</td>' +
+                                            '<td>'+
+
+                                            '</td>' +
+                                            '<td>'+
+
+                                            '</td>' +
+                                            '<td>'+
+
+                                            '</td>' +
+                                            '<td>'+
+                                            '<label style ="font-size:18px; color: Green;font-weight: bold;">Total Payable Amount:</label>' +
+                                            '</td>' +
+                                            '<td>' +
+                                            '<input type="text" class="form-control m-input--air m-input--pill" readonly="readonly" id="payTotal"  style="background-color: gold;width: 150px;font-weight: bold; font-size:20px;"  />' +
+                                             '</td>' +
+                                '</tr>' +
+                            ' </tfoot>' +
+                        '</table>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="row">' +
+                                '<div class="col-md-2">' +
+
+                                '</div>' +
+                                '<div class="col-md-5">' +
+                                    '<p style ="font-size:15px; color: red;font-weight: bold;">Double (F4) For Payment Type</p>'+
+                                '</div>' +
+                                '<div class="col-md-5">' +
+                                    '<p style ="font-size:15px; color: red;font-weight: bold;"> (Enter) For Ok</p>'+
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '</div>' +
+
+                        '</form>' +
+                        '</div>' +
+                        '</div>',
+                    buttons: {
+                        formSubmit: {
+                            text: 'OK',
+                            btnClass: 'btn-blue payNowButton',
+                            //keys: ['enter', 'shift'],
+                            action: function () {
+                                var tableTotalAmount = 0;
+                                var paymentTypeNull = "";
+                                var pAmount = 0;
+                                var holdInvoice = "N";
+                                var cashAmount = parseFloat($("#cashAmount").val());
+                                var totalAmount = parseFloat($(".inVoiceAmount").val());
+                                var paymentType = "";
+                                var cashAmountForShow = 0;
+                                //GiftVoucher Section
+                                var giftVoucherCode = $("#giftVoucherScan").val();
+                                var giftVoucherValue = $("#giftVoucherValue").val();
+                                var giftVoucherRemainingBal = $("#giftVoucherRemainingBal").val();
+                                //End
+
+                                $("#gridTableForPayment tr").each(function () {
+                                    var isCash = $(this).find('.aPaymentType').html();
+                                    paymentTypeNull = $(this).find('.aPaymentType').html();
+                                    if (isCash === "Cash") {
+                                        cashAmountForShow = parseFloat($(this).find('.pAmount').html());
+                                    }
+                                    tableTotalAmount += parseFloat($(this).find('.totalAmount').html());
+                                    pAmount += parseFloat($(this).find('.pAmount').html());
+                                });
+                                if (totalAmount === tableTotalAmount && paymentTypeNull != "null") {
+                                    //Payment Item
+                                    var allPaymentItem = [];
+                                    allPaymentItem.length = 0;
+                                    $.each($("#gridTableForPayment tr"),
+                                        function () {
+                                            allPaymentItem.push({
+                                                PaymentType: $(this).find('td:eq(0)').html(),
+                                                Amount: $(this).find('td:eq(3)').html(),
+                                                DiscountPercent: $(this).find('td:eq(4)').html(),
+                                                SubTotal: $(this).find('td:eq(5)').html(),
+                                                PaidAmount: 0,
+                                                ReturnAmount: 0
+                                            });
+
+                                        });
+                                    //End
+                                    if (parseFloat(cashAmountForShow) > 0) {
+                                        $.confirm({
+                                            title: '',
+                                            content: '' +
+                                                '<form action="" class="formName">' +
+                                                '<div class="form-group">' +
+                                                '<h2 class="text-center col-12" >Cash Amount:</h2>'+
+                                                '<h1 class="text-center col-12"><b class= "payableAmountC" style="color: orange">' + cashAmountForShow + '</b></h1>' +
+                                                //'<input type="text" placeholder="" readonly="readonly" class="payableAmountC form-control" style="background-color: yellow"  value="' +
+                                                //cashAmountForShow +
+                                                //'" />' +
+                                                '</div>' +
+                                                '<div class="form-group">' +
+                                                '<h2 class="text-center col-12">Return Amount:</h2>'+
+                                                '<h1 class="text-center col-12"><b class= "returnAmountC" style="color: red"> 0 </b></h1>'+
+                                                //'<input type="text" placeholder="" readonly="readonly" class="returnAmountC form-control" style="background-color: orange"  value="" />' +
+                                                '</div>' +
+                                                '<div class="form-group">' +
+                                                '<h2 class="text-center col-12">Paid Amount</h2>' +
+                                                '<input type="text" placeholder="" class="paidAmountC form-control" value="" style="text-align:center; font-size:20px;;font-weight: bold" />' +
+                                                '</div>' +
+
+                                                '</form>',
+                                            buttons: {
+                                                formSubmit: {
+                                                    text: 'Submit',
+                                                    btnClass: 'btn-blue',
+                                                    action: function () {
+
+                                                        var paidAmountC = parseFloat($('.paidAmountC').val());
+                                                        var returnAmountC = $('.returnAmountC').text();
+                                                        for (var i = 0; i < allPaymentItem.length; i++) {
+                                                            if (allPaymentItem[i].PaymentType.toLowerCase() === "cash") {
+                                                                allPaymentItem[i].PaidAmount = paidAmountC;
+                                                                allPaymentItem[i].ReturnAmount = returnAmountC;
+                                                            }
+                                                        }
+
+                                                        if (isNaN(paidAmountC) || paidAmountC < cashAmountForShow) {
+                                                            $.alert('Provide a valid amount');
+
+                                                            return false;
+                                                        } else {
+
+                                                            AllDataSave(holdInvoice, pAmount, allPaymentItem, giftVoucherCode, giftVoucherValue, giftVoucherRemainingBal);
+                                                        }
+
+                                                    }
+                                                },
+                                                cancel: function () {
+                                                    $("#payNow").prop("disabled", false);
+                                                },
+                                            },
+                                            onContentReady: function () {
+                                                $('.paidAmountC').focus();
+                                                // bind to events
+                                                var jc = this;
+                                                this.$content.find('form').on('submit', function (e) {
+                                                    // if the user submits the form by pressing enter in the field.
+                                                    e.preventDefault();
+                                                    jc.$$formSubmit.trigger('click'); // reference the button and click it
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        AllDataSave(holdInvoice, pAmount, allPaymentItem, giftVoucherCode, giftVoucherValue, giftVoucherRemainingBal);
+                                    }
+                                } else {
+                                    $.alert("Calculation not valid");
+                                    //this.$content.find('.paidAmountC').focus();
+                                    return false;
+                                }
+                            }
+                        },
+                        cancel: function () {
+                            $("#payNow").prop("disabled", false);
+                        }
+                    },
+                    onContentReady: function () {
+                        $.ajax({
+                            type: 'GET',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            url: '@Url.Action("GetAllPaymentType", "PointOfSale")',
+                            success: function (data) {
+                                if (data != null) {
+                                    for (var i = 0; i < data.length; i++) {
+                                        $(".paymentType").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                                    }
+                                } else {
+                                    $.alert('Payment Type Cannt Load.Please ReOpen Payment Section.');
+                                }
+                                autoCashSelect();
+                            }
+                        });
+
+
+                        $('.paymentTypeAmount').focus();
+                        // bind to events
+                        var jc = this;
+                        this.$content.find('form').on('submit', function (e) {
+                            e.preventDefault();
+                            jc.$$formSubmit.trigger('click');
+                        });
+                    }
+                });
+            }
+        });
+
+        function giftVoucherCalculation(paymentType, total, discount, netAmount) {
+            var giftVoucherRemainingBalance = parseFloat($("#giftVoucherRemainingBal").val());
+            var paymentTypeAmount = parseFloat($('.paymentTypeAmount').val());
+            var remainAmount = 0;
+
+            if (giftVoucherRemainingBalance >= parseFloat(netAmount)) {
+
+                remainAmount = netAmount -  paymentTypeAmount;
+                remainAmount = Math.round(remainAmount * 100) / 100;
+                parseFloat($("#giftVoucherRemainingBal").val((giftVoucherRemainingBalance - netAmount)));
+                $('.cashAmount').val(remainAmount);
+                $('.paymentTypeAmount').focus();
+
+            } else {
+                total = parseFloat($("#giftVoucherRemainingBal").val());
+                netAmount = parseFloat($("#giftVoucherRemainingBal").val());
+                remainAmount = paymentTypeAmount - netAmount;
+                remainAmount = Math.round(remainAmount * 100) / 100;
+                parseFloat($("#giftVoucherRemainingBal").val((giftVoucherRemainingBalance - netAmount)));
+                $('.cashAmount').val(remainAmount);
+                $('.paymentTypeAmount').focus();
+            }
+
+            if (paymentType !== 0 && total !== 0) {
+                $("#gridTableForPayment").append('<tr>' +
+                    '<td class="aPaymentType">' +
+                    paymentType +
+                    '</td>' +
+                    '<td>' +
+                    '</td>' +
+                    '<td>' +
+                    '</td>' +
+                    '<td class="totalAmount">' +
+                    total +
+                    '</td>' +
+                    '<td class="pDisCardAmount">' +
+                    discount +
+                    '</td>' +
+                    '<td class="pAmount">' +
+                    netAmount +
+                    '</td>' +
+                    '</tr>');
+            }
+        }
+
+        function paymentTypeTable(paymentType, total, discount, netAmount) {
+            if (paymentType !== "GiftVoucher") {
+            var checker = true;
+            $("#gridTableForPayment tr").each(function () {
+                var value = $(this).find('.aPaymentType').html();
+                if (paymentType === value) {
+                    checker = false;
+                    $.alert("Already exist");
+                }
+                return false;
+            });
+
+                if (checker && paymentType !== 0 && total !== 0) {
+                $("#gridTableForPayment").append('<tr>' +
+                    '<td class="aPaymentType">' +
+                    paymentType +
+                    '</td>' +
+                    '<td>' +
+                    '</td>' +
+                    '<td>' +
+                    '</td>' +
+                    '<td class="totalAmount">' +
+                    total +
+                    '</td>' +
+                    '<td class="pDisCardAmount">' +
+                    discount +
+                    '</td>' +
+                    '<td class="pAmount">' +
+                    netAmount +
+                    '</td>' +
+                    '</tr>');
+                }
+            } else {
+                var giftVoucherScan = $("#giftVoucherScan").val();
+                if (giftVoucherScan !== "") {
+                    giftVoucherCalculation(paymentType, total, discount, netAmount);
+                } else {
+                    $.alert("GiftVoucher Scan !.");
+                }
+
+            }
+
+        }
+
+        //Auto cashSelect Option
+        function autoCashSelect() {
+            var paymentType = $('.paymentType').val();
+            var invoiceAmount = $('.inVoiceAmount').val();
+            var remainAmount = $('.cashAmount').val();
+
+            var gridTotalAmount = 0;
+            $("#gridTableForPayment tr").each(function () {
+                gridTotalAmount += (isNaN(parseFloat($(this).find('.totalAmount').html())) ? 0 : parseFloat($(this).find('.totalAmount').html()));
+            });
+            if (gridTotalAmount < invoiceAmount || gridTotalAmount < - invoiceAmount) {
+                if (!isNaN(remainAmount) && remainAmount) {
+                    $('.paymentTypeAmount').val(remainAmount);
+                    $('.paidAmount').val("");
+                    $('.changeAmount').val("");
+                    $('.paymentTypeAmount').attr('disabled', false);
+
+                    paymentTypeTable(paymentType, remainAmount, 0, remainAmount);
+                } else {
+                    $('.paymentTypeAmount').val(invoiceAmount);
+                    $('.cashAmount').val("");
+                    $('.paidAmount').val("");
+                    $('.changeAmount').val("");
+                    $('.paymentTypeAmount').attr('disabled', false);
+
+                    $("#gridTableForPayment").empty().append(paymentTypeTable(paymentType, invoiceAmount, 0, invoiceAmount));
+                    $('.payNowButton').focus();
+                }
+            } else {
+                    $("#gridTableForPayment").empty().append(paymentTypeTable(paymentType, invoiceAmount, 0, invoiceAmount));
+                    //alert("Invalid entry");
+                    //$('.cashAmount').val("");
+                    if (paymentType !== "GiftVoucher") {
+                        $("#giftVoucherValue").val("");
+                        $("#giftVoucherRemainingBal").val("");
+                        $("#giftVoucherScan").val("");
+
+                    }
+                    $('.paymentTypeAmount').val(invoiceAmount).focus();
+            }
+            tableFooterChange();
+            $('.paymentTypeAmount').focus();
+        }
+        //End
+
+        $("#exchange").click(function () {
+            $("#shopId").empty().append("<option value='0'>--Select Shop--</option>").append($.trim());
+            $("#invoiceNoForExchange").val('');
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("GetAllShopForEx", "PointOfSale")',
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                success: function (data) {
+                    $("#exchangeModal").modal('show');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#shopId").append('<option  value="' + data[i].Value + '">' + data[i].Text + '</option>');
+                    }
+                    $('#cover-spin').hide();
+                }
+            });
+        });
+        //Start Payment
+        $(document).on("change", ".paymentType", function (e) {
+            autoCashSelect();
+
+        });
+
+        $(document).on("keyup", ".paidAmountC", function (e) {
+            var payableAmountC = $('.payableAmountC').text();
+            var paidAmountC = $('.paidAmountC').val();
+            var returnAmt = (isNaN(parseFloat(paidAmountC)) ? 0 : parseFloat(paidAmountC)) -
+                (isNaN(parseFloat(payableAmountC)) ? 0 : parseFloat(payableAmountC));
+            $('.returnAmountC').text(returnAmt.toFixed(2));
+
+        });
+
+        $(document).on("change", ".paymentTypeAmount", function () {
+            var paymentType = $('.paymentType').val();
+            var paymentTypeAmount = $('.paymentTypeAmount').val();
+            var invoiceAmount = $('.inVoiceAmount').val();
+            var remainAmount = $('.cashAmount').val();
+            var totalAmount = (isNaN(parseFloat(remainAmount)) ? 0 : parseFloat(remainAmount));
+            if (totalAmount === 0) {
+                totalAmount = parseFloat(invoiceAmount);
+                $('.paymentTypeAmount').focus();
+            }
+            if (parseFloat(paymentTypeAmount) <= parseFloat(totalAmount)) {
+                $("#gridTableForPayment tr").each(function () {
+                    var value = $(this).find('.aPaymentType').html();
+                    if (paymentType === value) {
+                        $(this).find('.totalAmount').html(paymentTypeAmount);
+                        $(this).find('.pAmount').html(paymentTypeAmount);
+                        $(this).find('.pDisCardAmount').html(0);
+                        $('.paymentTypeAmount').focus();
+
+                        var remainingBal = parseFloat($("#giftVoucherValue").val());
+                        parseFloat($("#giftVoucherRemainingBal").val((remainingBal - paymentTypeAmount)));
+                    }
+                });
+
+                if (!isNaN(remainAmount) && remainAmount) {
+                    if (paymentType !== "GiftVoucher") {
+                        remainAmount = remainAmount - paymentTypeAmount;
+                        remainAmount = Math.round(remainAmount * 100) / 100;
+                        $('.cashAmount').val(remainAmount);
+                        $('.paymentTypeAmount').focus();
+                    } else {
+                        if (parseFloat(remainAmount) <= parseFloat(invoiceAmount)) {
+                            remainAmount = invoiceAmount - paymentTypeAmount;
+                            remainAmount = Math.round(remainAmount * 100) / 100;
+                            $('.cashAmount').val(remainAmount);
+                            $('.paymentTypeAmount').focus();
+                        }
+                    }
+                } else {
+                    remainAmount = invoiceAmount - paymentTypeAmount;
+                    remainAmount = Math.round(remainAmount * 100) / 100;
+                    $('.cashAmount').val(remainAmount);
+                    $('.paymentTypeAmount').focus();
+                }
+            } else {
+                if (paymentType !== "GiftVoucher") {
+                    $.alert("Amount can't grater then invoice amount");
+                    if (!isNaN(remainAmount) && remainAmount) {
+                        $('.cashAmount').val(remainAmount);
+                        $('.paymentTypeAmount').focus();
+                    } else {
+                        $('.cashAmount').val(remainAmount);
+                        $('.paymentTypeAmount').focus();
+                    }
+                } else {
+                    if (parseFloat(remainAmount) <= parseFloat(invoiceAmount)) {
+                        remainAmount = invoiceAmount - paymentTypeAmount;
+                        remainAmount = Math.round(remainAmount * 100) / 100;
+                        $('.cashAmount').val(remainAmount);
+                        $('.paymentTypeAmount').focus();
+                    }
+                }
+            }
+            tableFooterChange();
+            $('.paymentTypeAmount').focus();
+        });
+
+        //GiftVoucher Scan
+        $(document).on("change", "#giftVoucherScan", function () {
+            var giftVoucherCode = $("#giftVoucherScan").val();
+            $.ajax({
+                type: 'GET',
+                url: '/PointOfSale/GetAllInfoByGiftVoucherCode/',
+                data: { giftVoucherCode: giftVoucherCode },
+                success: function (data) {
+                    if (data != 0) {
+                        $("#giftVoucherValue").val(data.RemainingValue);
+                        $("#giftVoucherRemainingBal").val(data.RemainingValue);
+                    } else {
+                        $.alert("Data Not Found !.Giftvoucher Code Not Active !.");
+                        $("#giftVoucherScan").val("");
+                    }
+
+                }
+            });
+        });
+        //End
+        //for discount
+        $(document).on("change",
+            ".discountForCard",
+            function () {
+                var paymentTypeAmount = $('.paymentTypeAmount').val();
+                var paymentType = $('.paymentType').val();
+                var discountForCard = $('.discountForCard').val();
+
+                $("#gridTableForPayment tr").each(function () {
+                    var value = $(this).find('.aPaymentType').html();
+                    var pAmount = $(this).find('.pAmount').html();
+                    var result = parseFloat(paymentTypeAmount)-((parseFloat(pAmount) * parseFloat(discountForCard)) / 100);
+                    if (paymentType === value) {
+                        $(this).find('.pDisCardAmount').html(discountForCard);
+                        $(this).find('.pAmount').html(result);
+                        $('.discountForCard').val("");
+                    }
+
+                });
+                tableFooterChange();
+            });
+        //end
+        $(document).on("keyup",
+            ".paidAmount",
+            function (e) {
+                var paidAmount = $('.paidAmount').val();
+                var cashAmount = $('.cashAmount').val();
+                var changeAmount = paidAmount - cashAmount;
+                $('.changeAmount').val(changeAmount);
+            });
+        //End Payment
+        //End PayNow Button Action.
+
+        //Search button
+
+        $('#ModalSearchValue').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+        },
+            {
+                async: true,
+                source: function (query, processSync, processAsync) {
+                    return $.ajax({
+                        url: "/PointOfSale/GetSearchHintsList",
+                        type: 'GET',
+                        data: { model: query },
+                        dataType: 'json',
+                        success: function (json) {
+                            // in this example, json is simply an array of strings
+                            return processAsync(json);
+                        }
+                    });
+                }
+            });
+
+
+        $('#searchModal').on('shown.bs.modal', function () {
+            $('#ModalSearchValue').trigger('focus');
+            $("#searchTableBody").html("");
+        });
+
+        @*var table = $("#SearchTable").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "searchHighlight": true,
+            "ajax": {
+                data: {
+                    __RequestVerificationToken: vToken
+                },
+                url: '@Url.Action("GetAllItemInfoForDataTable", "PointOfSale")',
+                type: 'POST'
+            },
+            "columns": [
+                {
+                    "data": "Barcode",
+                    render: function (data, type, object) {
+                        return "<input type ='checkbox' class ='checker'style='top: 0; left: 0; height: 25px; width: 25px;' id='checkbox2' value='" + object.Barcode +"'/>" +
+                            "<input type = 'hidden' class ='itemId' value = '" + object.ItemId + "' />"+
+                            "<input type = 'hidden' class ='productId' value = '" + object.ProductId + "' />";
+                    }
+                },
+                {
+                    "data": "Barcode",
+                    "orderable": false,
+                    render: function (data, type, object) {
+                        if (object.RoundQuantity) {
+                            return "<p>" + object.Barcode + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + object.Barcode + "</p>";
+                        }
+                    }
+                },
+                {
+                    "data": "ItemName",
+                    "orderable": false,
+                    render: function (data, type, object) {
+                        if (object.RoundQuantity) {
+                            return "<p>" + object.ItemName + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + object.ItemName + "</p>";
+                        }
+                    }
+                },
+                {
+                    "data": "SalePrice"
+                },
+                {
+                    "data": "PendingTransferQuantity"
+                },
+                {
+                    "data": "RoundQuantity",
+                    render: function (data, type, object) {
+                        if (object.RoundQuantity) {
+                            return "<p>" + object.RoundQuantity + "</p>";
+                        } else {
+                            return "<p style='background-color: #FF8C00'>" + object.RoundQuantity + "</p>";
+                        }
+                    }
+
+                },
+                {
+                    "data": "Vat"
+                }
+            ]
+        });*@
+
+        $('#ModalSearchValue').on('keypress', function (e) {
+            if (e.keyCode === 13) //if its a enter key
+            {
+                var searchValue = $('#ModalSearchValue').val();
+                if (searchValue != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/ProductSearch/GetAllInfoBySearchTextBoxValue/',
+                        dataType: 'json',
+                        data: { searchValue: searchValue },
+                        beforeSend: function () {
+                            $('#cover-spin').show();
+                        },
+                        success: function (data) {
+                            if (data != null) {
+                                var stockProductData = data.length;
+                                $('#SearchTable').DataTable().destroy();
+                                $("#searchTableBody").html("");
+                                for (var i = 0; i < stockProductData; i++) {
+                                    if (parseInt(data[i].RoundQuantity) == 0) {
+                                        $("#searchTableBody").append('<tr>' +
+                                            '<td style="text-align: center">' +
+                                            '<input type="checkbox" class="checker" style="top: 0; left: 0; height: 25px; width: 25px;" id="checkbox2" value="' + data[i].Barcode + '" />' +
+                                            '</td>' +
+                                            '<td style="text-align: center">' +
+                                            data[i].Barcode +
+                                            '</td>' +
+                                            '<td style="background-color: red; width: 100%; text-align: left">' +
+                                            data[i].StyleName +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].Price +
+                                            '</td>' +
+                                            '<td style="width: 10%; text-align: center">' +
+                                            data[i].PendingTrQty +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].RoundQuantity +
+                                            '</td>' +
+                                            '<td style="width: 10%; text-align: center">' +
+                                            data[i].Vat +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].CategoryName +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].SubCategoryName +
+                                            '</td>' +
+                                            '</tr>');
+                                    } else {
+                                        $("#searchTableBody").append('<tr>' +
+                                            '<td style="text-align: center">' +
+                                            '<input type="checkbox" class="checker" style="top: 0; left: 0; height: 25px; width: 25px;" id="checkbox2" value="' + data[i].Barcode + '" />' +
+                                            '</td>' +
+                                            '<td style="text-align: center">' +
+                                            data[i].Barcode +
+                                            '</td>' +
+                                            '<td style="width: 100%; text-align: left">' +
+                                            data[i].StyleName +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].Price +
+                                            '</td>' +
+                                            '<td style="width: 10%; text-align: center">' +
+                                            data[i].PendingTrQty +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].RoundQuantity +
+                                            '</td>' +
+                                            '<td style="width: 10%; text-align: center">' +
+                                            data[i].Vat +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].CategoryName +
+                                            '</td>' +
+                                            '<td style="width: 10%;text-align: center">' +
+                                            data[i].SubCategoryName +
+                                            '</td>' +
+                                            '</tr>');
+                                    }
+
+                                }
+                                $('#SearchTable').DataTable();
+                                //$('#ModalSearchValue').val("");
+                                $('#cover-spin').hide();
+                            } else {
+                                //$('#ModalSearchValue').val("");
+                                $('#cover-spin').hide();
+                                alert('No Data Found!.');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        $("#SearchTable").on('change', 'input[Id="checkbox2"]', function () {
+            if ($(this).is(':checked')) {
+                var barcode = $(this).val();
+                var saleManId = $("#SalesManName").val();
+                var marketPlaceId = $("#MarketPlaceId").val();
+                if (marketPlaceId !== "") {//transit product scan korar somoy validation check kora hoise...stock asa ki na
+                    $.ajax({
+                        type: 'GET',
+                        url: '/PointOfSale/GetAllInfoByBarcodeFromTransit/',
+                        dataType: 'json',
+                        data: { barcode: barcode, marketPlaceId: marketPlaceId },
+                        success: function (data) {
+                            if (data !== 0) {
+                                GetItemDetailsByBarCode(barcode, saleManId, data.TransitStockBlance)
+                            } else {
+                                alert("This Product have not avaiable in this marketplace!.")
+                            } 
+                        }
+                    });;
+                } else {
+                    GetItemDetailsByBarCode(barcode, saleManId,0);
+                } 
+            }
+        });
+        //End
+        //Get all Customer info
+        $('#customerCode').on('change', function () {
+            var customerCode = $('#customerCode').val();
+            $.ajax({
+                type: 'GET',
+                url: '/PointOfSale/GetAllInfoByCustomerCode/',
+                dataType: 'json',
+                data: { customerCode: customerCode },
+                success: function (data) {
+                    $('#customerInfoId').val(data.CustomerId);
+                    $('#customerName').val(data.CustomerFirstName);
+                    $('#mobile').val(data.ContactNo);
+                    $('#address').val(data.Address);
+                    $('#discount').val(data.DiscountPercent);
+                    var discountPercent = data.DiscountPercent;
+                    finalDataCalculationForCustomer(discountPercent);
+                }
+            });
+
+        });
+        //End
+        //Get all Customer info BY mobile
+        $('#mobile').on('change', function () {
+            var mobile = $('#mobile').val();
+            $.ajax({
+                type: 'GET',
+                url: '/PointOfSale/GetAllInfoByCustomerPhone/',
+                dataType: 'json',
+                data: { customerPhone: mobile },
+                success: function (data) {
+                    $('#customerInfoId').val(data.CustomerId);
+                    $('#customerName').val(data.CustomerFirstName);
+                    $('#mobile').val(data.ContactNo);
+                    $('#address').val(data.Address);
+
+                    if (data.DiscountPercent != "") {
+                        $('#discount').val(data.DiscountPercent);
+                        var discountPercent = data.DiscountPercent;
+                        finalDataCalculationForCustomer(discountPercent);
+                    }
+
+                }
+            });
+
+        });
+        //End
+        //Barcode Scan
+        $('#barcode').on('change', function () {
+            var barcode = $("#barcode").val();
+            var saleManId = $("#SalesManName").val();
+            var marketPlaceId = $("#MarketPlaceId").val();
+            if (marketPlaceId !== "") {//transit product scan korar somoy validation check kora hoise...stock asa ki na
+                $.ajax({
+                    type: 'GET',
+                    url: '/PointOfSale/GetAllInfoByBarcodeFromTransit/',
+                    dataType: 'json',
+                    data: { barcode: barcode, marketPlaceId: marketPlaceId },
+                    success: function (data) {
+                        if (data !== 0) {
+                            GetItemDetailsByBarCode(barcode, saleManId, data.TransitStockBlance)
+                        } else {
+                            alert("This Product have not avaiable in this marketplace!.")
+                        } 
+                    }
+                });;
+            } else {
+                GetItemDetailsByBarCode(barcode, saleManId,0);
+            } 
+        });
+        //End
+        // BarcodeForExchange
+        $('#BarcodeForExchange').on('change', function () {
+            var exBarcode = $("#BarcodeForExchange").val();
+            ItemDecreaseForBarcodeScan(exBarcode);
+        });
+        //End
+
+
+        //end
+        $("#pointOfSaleGridTableBody").on('keyup', '.orderQuantity', function () {
+            var thisRow = $(this);
+            var vat = thisRow.parents('tr').find('.vat').val();
+            rowDataCalculation(thisRow);
+            compute(vat);
+            finalDataCalculation();
+        });
+
+        //Start Discount
+        $('#discount').on('keyup', function () {
+            finalDataCalculation();
+        });
+        $('#BagPrice').on('keyup', function () {
+            BagPriceCalculation();
+        });
+        $('#discountAmount').on('keyup', function () {
+            $('#discount').val("");
+            CalculationForDiscountAmount();
+        });
+        //End Discount
+        //Hold Invoice Section
+        $('#holdInvoice').on('click', function () {
+            var customerName = $("#customerName").val();
+            if (customerName !=="") {
+                var holdInvoice = "Y";
+                AllDataSave(holdInvoice,0);
+            } else {
+                toastr.error("Customer Name can't Empty For Hold !.");
+                return false;
+            }
+
+        });
+        //End
+        //Cancel Invoice
+        $(document).on('click', 'a.deleteHoldInvoiceItem', function(e) {
+            e.preventDefault();
+            var self = $(this);
+            if (self != null) {
+                var invoiceNumber = $(this).parents('tr').find('#invoiceNumber').html();
+                if (!isNaN(invoiceNumber)) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/PointOfSale/DeleteAllHoldInvoice/',
+                        dataType: 'json',
+                        data: { invoiceNumber: invoiceNumber },
+                        success: function (data) {
+                            if (data !== "") {
+                                if (data.isRedirect) {
+                                    window.setTimeout(function() {
+                                        window.location = data.redirectUrl;
+                                    },300);
+                                    toastr.success(data.m);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        //End
+        //Pick HoldInvoice
+        $('#pickHoldInvoice').on('click', function () {
+            $.ajax({
+                type: 'GET',
+                url: '/PointOfSale/GetAllHoldInvoice/',
+                dataType: 'json',
+                success: function (data) {
+
+                    var pickHoldInvoice = data.length;
+                    $("#holdInvoiceTableBody").html("");
+                    for (var i = 0; i < pickHoldInvoice; i++) {
+                        $("#holdInvoiceTableBody").append('<tr>' +
+                            '<td>' +
+                            (i+1)+
+                            '</td>' +
+                            '<td id ="invoiceNumber">' +
+                            data[i].InvoiceNumber +
+                            '</td>' +
+                            '<td>' +
+                            data[i].InvoiceDate +
+                            '</td>' +
+                            '<td>' +
+                            data[i].CreatedBy +
+                            '</td>' +
+                            '<td>' +
+                            data[i].TotalItem +
+                            '</td>' +
+                            '<td>' +
+                            data[i].DiscountPercent +
+                            '</td>' +
+                            '<td>' +
+                            data[i].DiscountAmount +
+                            '</td>' +
+                            '<td>' +
+                            data[i].SubTotal +
+                            '</td>' +
+                            '<td>' +
+                            data[i].CustomerName +
+                            '</td>' +
+                            '<td>' +
+                            data[i].CreatedByName +
+                            '</td>' +
+                            '<td>' +
+                            '<a href="#" class=" selectItem btn btn-success m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="fa fa-history"></i></a>' +
+                            '<a href="#" class=" deleteHoldInvoiceItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="fa fa-trash"></i></a>' +
+                            '</td>' +
+                            '</tr>');
+
+                    }
+                }
+
+            });
+
+            var table = $("#holdInvoiceTable").dataTable();
+        });
+        //End
+        //Select Hold Invoice Item
+        $(document).on('click', 'a.selectItem', function (e) {
+            e.preventDefault();
+            var self = $(this);
+            if (self != null) {
+                var invoiceNumber = $(this).parents('tr').find('#invoiceNumber').html();
+                if (!isNaN(invoiceNumber)) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/PointOfSale/GetAllDataByInvoiceNumber/',
+                        dataType: 'json',
+                        data: { invoiceNumber:invoiceNumber},
+                        success: function (data) {
+                            $("#invoiceNo").val(data.saleData.InvoiceNumber);
+                            $("#discount").val(data.saleData.DiscountPercent);
+                            //$("#discountAmount").val(data.saleData.DiscountAmount);
+                            $("#SalesManName").val(data.saleData.SalesManId);
+                            $("#saleInfoId").val(data.saleData.SaleInfoId);
+
+                            if (data.customerData !== null ) {
+                                $("#customerCode").val(data.customerData.CustomerCode);
+                                $("#customerName").val(data.customerData.CustomerName);
+                                $("#mobile").val(data.customerData.ContactNo);
+                                $("#address").val(data.customerData.Address);
+                            } else {
+                                $('#customerCode').val("");
+                                $("#customerName").val("");
+                                $("#mobile").val("");
+                                $("#address").val("");
+                            }
+                            tableBindForExchangeAndPickHoldInvoice(data.saleData);
+                            $("#pickHoldInvoiceModal").modal("hide");
+                            $('.modal-backdrop').remove();
+                        }
+                    });
+                }
+            }
+        });
+        //End
+        //Delete from grid Table
+        $(document).on('click', 'a.deleteItem', function (e) {
+            e.preventDefault();
+            var self = $(this);
+            var vat = self.parents('tr').find('#vat').val();
+            if (self) {
+                $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+                    $(this).remove();
+                    compute(vat);
+                    reset();
+                });
+            } else {
+                //t("delete hoi ni");
+                toastr.error("Data cann't delete");
+            }
+        });
+        //deleteItemForReturn
+        $(document).on('click', 'a.deleteItemForReturn', function (e) {
+            e.preventDefault();
+            var self = $(this);
+            var price = self.parents('tr').find('.TotalItemAmount').val();
+            if (self) {
+                $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+                    computeForReturn(price);
+                    $(this).remove();
+                });
+            } else {
+
+                toastr.error("Data cann't delete");
+            }
+
+        });
+        //End
+        //Start Exchange
+        var shopToShopExc = false;
+        var shopToShopExcShopId= null;
+        $('#select').click(function () {
+            var exchange = "Y";
+            var invoiceNumber = $("#invoiceNoForExchange").val();
+            var shopId = parseInt($(".shopId").val());
+            if (invoiceNumber !== "" && shopId !== 0 ) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/PointOfSale/GetAllDataByInvoiceNumberForExchange/',
+                    dataType: 'json',
+                    data: { invoiceNumber: invoiceNumber, shopId: shopId },
+                    success: function (result) {
+                        shopToShopExc = result.shopToShopExc;
+                        if (result.data !== null) {
+                            var exchangeTable = '';
+                            var data = result.data;
+                            shopToShopExcShopId = data.ShopId;
+                            for (var i = 0; i < result.data.SaleItemList.length; i++) {
+                                exchangeTable += '<tr>' +
+                                    '<td style="display:none" >' +
+                                    data.SaleItemList[i].ItemId +
+                                    '</td>' +
+                                    '<td style="display:none" >' +
+                                    data.SaleItemList[i].ProductId +
+                                    '</td>' +
+                                    '<td>' +
+                                    data.SaleItemList[i].Barcode +
+                                    '</td>' +
+                                    '<td>' +
+                                    data.SaleItemList[i].StyleName +
+                                    '</td>' +
+                                    '<td style="width: 13%">' +
+                                    '<input type="text" class="form-control m-input--air m-input--pill"  readonly="readonly" style="background-color: yellow" value="' +
+                                    data.SaleItemList[i].Price +
+                                    '">' +
+                                    '</td>' +
+                                    '<td style="width: 13%">' +
+                                    '<input type="text" class="form-control m-input--air m-input--pill salePrice"  readonly="readonly" style="background-color: yellow" value="' +
+                                    data.SaleItemList[i].DiscountPrice +
+                                    '">' +
+                                    '</td>' +
+                                    '<td style="width: 13%">' +
+                                    '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" value="' +
+                                    data.SaleItemList[i].Quantity +
+                                    '">' +
+                                    '</td>' +
+                                    '<td style="display:none">' +
+                                    '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  readonly="readonly" value="' + data.SaleItemList[i].Stock + '">' +
+                                    '</td>' +
+                                    '<td style="display:none">' +
+                                    '<input type="number" class="form-control m-input--air m-input--pill vat"  readonly="readonly" value="' + data.SaleItemList[i].Vat + '">' +
+                                    '</td>' +
+                                    '<td style="width: 13%">' +
+                                    '<input class="form-control m-input--air m-input--pill subTotal" type="text"  readonly="readonly" style="background-color: yellow"  value="' +
+                                    parseFloat(data.SaleItemList[i].DiscountPrice) * parseInt(data.SaleItemList[i].Quantity) +
+                                    '">' +
+                                    '</td>' +
+                                    '<td style="display:none">' +
+                                    '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' + data.SaleItemList[i].Barcode + '" name="SalesManName2">' +
+
+                                    '</select>' +
+                                    '</td>' +
+                                    '<td><a href="#" class="exchange-item btn m-btn btn-link">exchange</a></td>' +
+                                    '</tr>';
+
+                                scrollStopNumberField();
+                            }
+
+                            result.data.SaleItemList = [];
+                            localStorage.setItem('ExchangeDate', JSON.stringify(result));
+
+                            $.confirm({
+                                title: 'Exchange Invoice: ' + result.data.InvoiceNumber,
+                                columnClass: 'col-md-12',
+                                content: '' +
+                                    '<div class="row col-md-12 text-center">' +
+                                    '<table class="table m-table m-table--head-bg-success" id="exchangeTable">' +
+                                    '<thead>' +
+                                    '<tr>' +
+                                    '<th>BarCode</th>' +
+                                    '<th>Description</th>' +
+                                    '<th>Price</th>' +
+                                    '<th>Dis Price</th>' +
+                                    '<th>SQty</th>' +
+                                    '<th>Total Value</th>' +
+                                    '<th>Action</th>' +
+                                    '</tr>' +
+                                    '</thead>' +
+                                    '<tbody>' + exchangeTable +'</tbody>' +
+                                    '</table>' +
+                                    '</div>',
+                                buttons: {
+                                    cancel: function () {
+                                        //close
+                                    },
+                                }
+                            });
+                            $("#exchangeModal").modal("hide");
+                            $('.modal-backdrop').remove();
+                            //End
+                        } else {
+                            toastr.error("Invoice Not found !.");
+                            return false;
+                        }
+                    }
+                });
+            } else {
+                toastr.error("Value cann't be Empty !.");
+                return false;
+            }
+        });
+
+        $(document).on('click', '.exchange-item', function () {
+
+            var result = JSON.parse(localStorage.getItem('ExchangeDate'));
+            var exchange = "Y";
+
+            $("#invoiceNo").val(result.data.InvoiceNumber);
+            //$("#SalesManName").val(result.data.SalesManId);
+            $("#SalesManName").append('<option selected value="' + result.data.SalesManId + '">' + result.data.SalesManName + '</option>');
+            $("#saleInfoId").val(result.data.SaleInfoId);
+            $("#exchangeHiddenField").val(exchange);
+            $("#exchangeShopHiddenField").val(shopToShopExcShopId);
+            if (shopToShopExc === true) {
+                $("#exchangeShopToShopHiddenField").val('Y');
+            }
+            var exchangeItem = "";
+
+            var itemId = $(this).parents('tr').find('td:eq(0)').html();
+            var productId = $(this).parents('tr').find('td:eq(1)').html();
+            var barcode = $(this).parents('tr').find('td:eq(2)').html();
+            var itemName = $(this).parents('tr').find('td:eq(3)').text();
+            var unitPrice = $(this).parents('tr').find('.salePrice').val();
+            var quantity = $(this).parents('tr').find('.orderQuantity').val();
+            var stock = $(this).parents('tr').find('.stock').val();
+            var vat = $(this).parents('tr').find('.vat').val();
+            var totalPrice = $(this).parents('tr').find('.subTotal').val();
+            var paidAmount = parseInt(quantity) * parseFloat(unitPrice);
+
+            var checker = true;
+            $.each($("#pointOfSaleGridTableBody tr"), function() {
+                var itemIds = $(this).find('td:eq(0)').html();
+                var totalPriceI = $(this).find('.subTotal').val();
+                if (parseInt(itemIds) === parseInt(itemId) && parseFloat(totalPriceI) === parseFloat(-totalPrice)) {
+                    checker = false;
+                }
+            });
+
+            if (checker && parseFloat(paidAmount) > 0) {
+                $("#pointOfSaleGridTableBody").append('<tr>' +
+                '<td style="display:none" >' +
+                itemId +
+                '</td>' +
+                '<td style="display:none" >' +
+                productId +
+                '</td>' +
+                '<td>' +
+                barcode +
+                '</td>' +
+                '<td>' +
+                itemName +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' + parseFloat(-unitPrice) + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" value="' + parseInt(-quantity) + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + stock +'">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill vat "  disabled="disabled" id="vat" value="' + vat + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                    '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow"  value="' + parseFloat(-paidAmount) + '">' +
+                '</td>' +
+                '<td>' +
+                '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManNameE' + barcode + '" name="SalesManName2">' +
+
+                '</select>' +
+                '</td>' +
+                '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                '</tr>');
+                var empList = [];
+                @{
+                    foreach (var emp in employeeList)
+                    {
+                        <text>
+                            var employee = {
+                                'id': '@emp.Value',
+                                'name': '@emp.Text'
+                            }
+                            empList.push(employee);
+                        </text>
+                    }
+                }
+                //for (var j = 0; j < empList.length; j++) {
+                //    $("#SalesManNameE" + barcode).append('<option  value="' + empList[j].id + '">' + empList[j].name + '</option>');
+                //}
+                for (var j = 0; j < empList.length; j++) {
+                    if (result.data.SalesManId === empList[j].id) {
+                        $("#SalesManNameE" + barcode).append('<option selected value="' + empList[j].id + '">' + empList[j].name + '</option>');
+                    } else {
+                        $("#SalesManNameE" + barcode).append('<option  value="' + empList[j].id + '">' + empList[j].name + '</option>');
+                    }
+
+                }
+                scrollStopNumberField();
+                var totalValue = 0;
+                var totalItem = 0;
+                $("#pointOfSaleGridTableBody tr").each(function () {
+                    totalValue = totalValue + parseFloat($(this).find('.subTotal').val());
+                    totalItem += parseInt($(this).find('.orderQuantity').val());
+                });
+                var discountAmount = parseFloat($("#discountAmount").val()) > 0 ? parseFloat($("#discountAmount").val()) : 0;
+                var bagDiscountAmount = parseFloat($("#BagPrice").val()) > 0 ? parseFloat($("#BagPrice").val()) : 0;
+
+                var check = Math.round(totalValue * 100) / 100;
+                var grandTotal = (check - (discountAmount + bagDiscountAmount));
+                var checkGrandTotal = Math.round(grandTotal * 100) / 100;
+                grandTotal = checkGrandTotal;
+                $("#grandTotal").val(grandTotal);
+
+                //Vat Calculation
+                var totalGrandTotal = $("#grandTotal").val();
+                var includePrice = 100 + parseFloat(vat);
+                var actualPrice = (100 / parseFloat(includePrice)) * parseFloat(totalGrandTotal);
+                var totalVat = (vat / 100) * parseFloat(actualPrice);
+                $("#vatAmt").val(totalVat.toFixed(2));
+                //End
+                $("#barcode").attr('disabled', true);
+                $("#discount").attr('disabled', true);
+                $("#discountAmount").attr('disabled', true);
+                $("#BagPrice").attr('disabled', true);
+                $("#productDrictSearch").attr('disabled', true);
+                $("#holdInvoice").attr('disabled', true);
+                $("#pickHoldInvoice").attr('disabled', true);
+                $("#voidInvoice").attr('disabled', true);
+                $("#returnInvoice").attr('disabled', true);
+                $("#rePrint").attr('disabled', true);
+
+            } else {
+                if (parseFloat(paidAmount) < 0) {
+                    toastr.error("Product already exchanged");
+                } else {
+                    toastr.error("Item already added");
+                }
+
+            }
+
+            //Customer info
+            if (result.data2 !== null ) {
+                $('#customerInfoId').val(result.data2.CustomerId);
+                $('#customerCode').val(result.data2.CustomerCode);
+                $('#customerName').val(result.data2.CustomerName);
+                $('#mobile').val(result.data2.ContactNo);
+                $('#address').val(result.data2.Address);
+            } else {
+                $('#customerInfoId').val(0);
+                $('#customerCode').val("");
+                $('#customerName').val("");
+                $('#mobile').val("");
+                $('#address').val("");
+            }
+        });
+
+        //End
+
+        //VOID Invoice Start
+        $('#selectVoid').click(function () {
+            var invoiceNumber = $("#invoiceNoForVoid").val();
+            if (invoiceNumber !== "") {
+            $.ajax({
+                type: 'GET',
+                url: '/PointOfSale/GetAllDataByInvoiceNumberForVoid/',
+                dataType: 'json',
+                data: { invoiceNumber: invoiceNumber },
+                success: function (result) {
+                    if (result !== 0) {
+                    var voidTable = '';
+                    for (var i = 0; i < result.SaleItemList.length; i++) { voidTable += '<tr>' +
+                            '<td style="display:none" >' +
+                            result.SaleItemList[i].ItemId +
+                            '</td>' +
+                            '<td style="display:none" >' +
+                            result.SaleItemList[i].ProductId +
+                            '</td>' +
+                            '<td>' +
+                            result.SaleItemList[i].Barcode +
+                            '</td>' +
+                            '<td>' +
+                            result.SaleItemList[i].StyleName +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="text" class="form-control m-input--air m-input--pill"  readonly="readonly" style="background-color: yellow" value="' +
+                            result.SaleItemList[i].Price +
+                            '">' +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="text" class="form-control m-input--air m-input--pill salePrice"  readonly="readonly" style="background-color: yellow" value="' +
+                            result.SaleItemList[i].DiscountPrice +
+                            '">' +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="text" class="form-control m-input--air m-input--pill readonly="readonly" style="background-color: yellow" orderQuantity" value="' +
+                            result.SaleItemList[i].Quantity +
+                            '">' +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input class="form-control m-input--air m-input--pill subTotal" type="text"  readonly="readonly" style="background-color: yellow"  value="' +
+                            parseInt(result.SaleItemList[i].DiscountPrice) * parseInt(result.SaleItemList[i].Quantity) +
+                            '">' +
+                            '</td>' +
+                            '</tr>';
+
+                        scrollStopNumberField();
+                    }
+                    $.confirm({
+                        title: 'Void Invoice: ' + result.InvoiceNumber ,
+                        columnClass: 'col-md-12',
+                        content: '' +
+                            '<div class="row col-md-12 text-center">' +
+                            '<table class="table m-table m-table--head-bg-success" id="voidTable">' +
+                            '<thead>' +
+                            '<tr>' +
+                            '<th>BarCode</th>' +
+                            '<th>Description</th>' +
+                            '<th>Price</th>' +
+                            '<th>Dis Price</th>' +
+                            '<th>SQty</th>' +
+                            '<th>Total Value</th>' +
+                            '</tr>' +
+                            '</thead>' +
+                            '<tbody>' + voidTable +'</tbody>' +
+                            '</table>' +
+                            '</div>',
+                        buttons: {
+                            formSubmit: {
+                                text: 'VOID',
+                                btnClass: 'btn-blue',
+                                action: function () {
+                                    var invoiceNum = result.InvoiceNumber;
+                                    voidInvoice(invoiceNum);
+                                }
+                            },
+                            cancel: function () {
+                                //close
+                            },
+                        }
+                    });
+
+                    $("#voidInvoiceModal").modal("hide");
+                        $('.modal-backdrop').remove();
+                    } else {
+                        toastr.error("Data not Found !.");
+                        $("#invoiceNoForVoid").focus();
+                    }
+                }
+
+                });
+            } else {
+                toastr.error("Invoice Number Can't be Empty !.");
+                $("#invoiceNoForVoid").focus();
+            }
+            //End
+        });
+        //End
+
+        //Return Invoice Start
+        //voidForReturn
+        $("#returnInvoice").click(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/PointOfSale/GetAllShopList/',
+                dataType: 'json',
+                success: function(result) {
+                    if (result.length !== null) {
+                        for (var i = 0; i < result.length; i++) {
+
+                            $("#returnShopId").append('<option  value="' + result[i].Value + '">' + result[i].Text + '</option>');
+                        }
+                    }
+                }
+                });
+            $.confirm({
+                title: 'Return Invoice',
+                content: '' +
+                    '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                    '<label>Shop Name</label>' +
+                    '<select class="form-control m-input--air m-input--pill " id="returnShopId" autofocus="autofocus">' +
+                    '<option value = "' + 0 + '">--Select Shop--</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label>Invoice Number</label>' +
+                    '<input type="text" autocomplete="off" placeholder="Invoice Number" id="returnInvoice" class="form-control m-input--air m-input--pill" required />' +
+                    '</div>' +
+                    '</form>',
+                buttons: {
+                    formSubmit: {
+                        text: 'Submit',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            var returnInvoice = this.$content.find('#returnInvoice').val();
+                            var returnShopId = this.$content.find("#returnShopId").val();
+                            if (returnInvoice !== "" && returnShopId !== "") {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: '/PointOfSale/GetAllDataByInvoiceNumberForExchange/',
+                                    dataType: 'json',
+                                    data: { invoiceNumber: returnInvoice, shopId: returnShopId },
+                                    success: function (result) {
+                                        if (result.data !== null) {
+                                            var returnTable = '';
+                                            var data = result.data;
+
+                                            for (var i = 0; i < result.data.SaleItemList.length; i++) {
+                                                returnTable += '<tr>' +
+                                                    '<td style="display:none" >' +
+                                                    data.SaleItemList[i].ItemId +
+                                                    '</td>' +
+                                                    '<td style="display:none" >' +
+                                                    data.SaleItemList[i].ProductId +
+                                                    '</td>' +
+                                                    '<td>' +
+                                                    data.SaleItemList[i].Barcode +
+                                                    '</td>' +
+                                                    '<td>' +
+                                                    data.SaleItemList[i].StyleName +
+                                                    '</td>' +
+                                                    '<td style="width: 13%">' +
+                                                    '<input type="text" class="form-control m-input--air m-input--pill"  readonly="readonly" style="background-color: yellow" value="' +
+                                                    data.SaleItemList[i].Price +
+                                                    '">' +
+                                                    '</td>' +
+                                                    '<td style="width: 13%">' +
+                                                    '<input type="text" class="form-control m-input--air m-input--pill salePrice"  readonly="readonly" style="background-color: yellow" value="' +
+                                                    data.SaleItemList[i].DiscountPrice +
+                                                    '">' +
+                                                    '</td>' +
+                                                    '<td style="width: 13%">' +
+                                                    '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" value="' +
+                                                    data.SaleItemList[i].Quantity +
+                                                    '">' +
+                                                    '</td>' +
+                                                    '<td style="display:none">' +
+                                                    '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  readonly="readonly" value="' + data.SaleItemList[i].Stock + '">' +
+                                                    '</td>' +
+                                                    '<td style="display:none">' +
+                                                    '<input type="number" class="form-control m-input--air m-input--pill vat"  readonly="readonly" value="' + data.SaleItemList[i].Vat + '">' +
+                                                    '</td>' +
+                                                    '<td style="width: 13%">' +
+                                                    '<input class="form-control m-input--air m-input--pill subTotal" type="text"  readonly="readonly" style="background-color: yellow"  value="' +
+                                                    parseFloat(data.SaleItemList[i].DiscountPrice) * parseInt(data.SaleItemList[i].Quantity) +
+                                                    '">' +
+                                                    '</td>' +
+                                                    '<td style="display:none">' +
+                                                    '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManName' + data.SaleItemList[i].Barcode + '" name="SalesManName2">' +
+
+                                                    '</select>' +
+                                                    '</td>' +
+                                                    '<td><a href="#" class="Return-Item btn m-btn btn-link">Return Item</a></td>' +
+                                                    '</tr>';
+
+                                                scrollStopNumberField();
+                                            }
+
+                                            result.data.SaleItemList = [];
+                                            localStorage.setItem('ReturnDate', JSON.stringify(result));
+
+                                            $.confirm({
+                                                title: 'Return Invoice: ' + result.data.InvoiceNumber,
+                                                columnClass: 'col-md-12',
+                                                content: '' +
+                                                    '<div class="row col-md-12 text-center">' +
+                                                    '<table class="table m-table m-table--head-bg-success" id="returnInvoiceTable">' +
+                                                    '<thead>' +
+                                                    '<tr>' +
+                                                    '<th>BarCode</th>' +
+                                                    '<th>Description</th>' +
+                                                    '<th>Price</th>' +
+                                                    '<th>Dis Price</th>' +
+                                                    '<th>SQty</th>' +
+                                                    '<th>Total Value</th>' +
+                                                    '<th>Action</th>' +
+                                                    '</tr>' +
+                                                    '</thead>' +
+                                                    '<tbody>' + returnTable + '</tbody>' +
+                                                    '</table>' +
+                                                    '</div>',
+                                                buttons: {
+                                                    cancel: function () {
+                                                        //close
+                                                    },
+                                                }
+                                            });
+                                            //End
+                                        } else {
+                                            toastr.error("Invoice Not found !.");
+                                            return false;
+                                        }
+                                    }
+                                });
+                            } else {
+                                toastr.error("Value cann't be Empty !.");
+                                return false;
+                            }
+                        }
+                    },
+                    cancel: function () {
+                        //close
+                    },
+                },
+                onContentReady: function () {
+                    // bind to events
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        // if the user submits the form by pressing enter in the field.
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.Return-Item', function () {
+            var result = JSON.parse(localStorage.getItem('ReturnDate'));
+            var returnInvoice = "Y";
+            $("#invoiceNo").val(result.data.InvoiceNumber);
+            //$("#SalesManName").val(result.data.SalesManId);
+            $("#SalesManName").append('<option selected value="' + result.data.SalesManId + '">' + result.data.SalesManName + '</option>');
+            $("#saleInfoId").val(result.data.SaleInfoId);
+            $("#returnHiddenField").val(returnInvoice);
+
+
+            var returnItem = "";
+
+            var itemId = $(this).parents('tr').find('td:eq(0)').html();
+            var productId = $(this).parents('tr').find('td:eq(1)').html();
+            var barcode = $(this).parents('tr').find('td:eq(2)').html();
+            var itemName = $(this).parents('tr').find('td:eq(3)').text();
+            var unitPrice = $(this).parents('tr').find('.salePrice').val();
+            var quantity = $(this).parents('tr').find('.orderQuantity').val();
+            var stock = $(this).parents('tr').find('.stock').val();
+            var vat = $(this).parents('tr').find('.vat').val();
+            var totalPrice = $(this).parents('tr').find('.subTotal').val();
+            var paidAmount = parseInt(quantity) * parseFloat(unitPrice);
+
+            var checker = true;
+            $.each($("#pointOfSaleGridTableBody tr"), function() {
+                var itemIds = $(this).find('td:eq(0)').html();
+                var totalPriceI = $(this).find('.subTotal').val();
+                if (parseInt(itemIds) === parseInt(itemId) && parseFloat(totalPriceI) === parseFloat(-totalPrice)) {
+                    checker = false;
+                }
+            });
+
+            if (checker && parseFloat(paidAmount) > 0) {
+                $("#pointOfSaleGridTableBody").append('<tr>' +
+                '<td style="display:none" >' +
+                itemId +
+                '</td>' +
+                '<td style="display:none" >' +
+                productId +
+                '</td>' +
+                '<td>' +
+                barcode +
+                '</td>' +
+                '<td>' +
+                itemName +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="text" class="form-control m-input--air m-input--pill salePrice"  disabled="disabled" style="background-color: yellow"  id="salePrice" value="' + parseFloat(-unitPrice) + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill orderQuantity" id="orderQuantity" value="' + parseInt(-quantity) + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill stock" style="background-color: yellow"  disabled="disabled" id="" value="' + stock +'">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                '<input type="number" class="form-control m-input--air m-input--pill vat "  disabled="disabled" id="vat" value="' + vat + '">' +
+                '</td>' +
+                '<td style="width: 13%">' +
+                    '<input class="form-control m-input--air m-input--pill subTotal" type="text"  disabled="disabled" style="background-color: yellow"  value="' + parseFloat(-paidAmount) + '">' +
+                '</td>' +
+                '<td>' +
+                '<select class="form-control m-input--air m-input--pill select2 SalesManName2" id="SalesManNameE' + barcode + '" name="SalesManName2">' +
+
+                '</select>' +
+                '</td>' +
+                '<td><a href="#" class=" deleteItem btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"><i class="la la-archive"></i></a></td>' +
+                '</tr>');
+                var empList = [];
+                @{
+                    foreach (var emp in employeeList)
+                    {
+                        <text>
+                            var employee = {
+                                'id': '@emp.Value',
+                                'name': '@emp.Text'
+                            }
+                            empList.push(employee);
+                        </text>
+                    }
+                }
+                //for (var j = 0; j < empList.length; j++) {
+                //    $("#SalesManNameE" + barcode).append('<option  value="' + empList[j].id + '">' + empList[j].name + '</option>');
+                //}
+                for (var j = 0; j < empList.length; j++) {
+                    if (result.data.SalesManId === empList[j].id) {
+                        $("#SalesManNameE" + barcode).append('<option selected value="' + empList[j].id + '">' + empList[j].name + '</option>');
+                    } else {
+                        $("#SalesManNameE" + barcode).append('<option  value="' + empList[j].id + '">' + empList[j].name + '</option>');
+                    }
+
+                }
+            scrollStopNumberField();
+                var totalValue = 0;
+                var totalItem = 0;
+                $("#pointOfSaleGridTableBody tr").each(function () {
+                    totalValue = totalValue + parseFloat($(this).find('.subTotal').val());
+                    totalItem += parseInt($(this).find('.orderQuantity').val());
+                });
+
+                var discountAmount = parseFloat($("#discountAmount").val()) > 0 ? parseFloat($("#discountAmount").val()) : 0;
+                var bagDiscountAmount = parseFloat($("#BagPrice").val()) > 0 ? parseFloat($("#BagPrice").val()) : 0;
+                var check = Math.round(totalValue * 100) / 100;
+                var grandTotal = (check - (discountAmount + bagDiscountAmount));
+                var checkGrandTotal = Math.round(grandTotal * 100) / 100;
+                grandTotal = checkGrandTotal;
+                $("#grandTotal").val(grandTotal);
+                //Vat Calculation
+                var totalGrandTotal = $("#grandTotal").val();
+                var includePrice = 100 + parseFloat(vat);
+                var actualPrice = (100 / parseFloat(includePrice)) * parseFloat(totalGrandTotal);
+                var totalVat = (vat / 100) * parseFloat(actualPrice);
+                $("#vatAmt").val(totalVat.toFixed(2));
+                //End
+                $("#totalItem").val(totalItem);
+                $("#total").val(grandTotal);
+                $("#barcode").attr('disabled', true);
+                $("#discount").attr('disabled', true);
+                $("#discountAmount").attr('disabled', true);
+                $("#BagPrice").attr('disabled', true);
+                $("#productDrictSearch").attr('disabled', true);
+                $("#holdInvoice").attr('disabled', true);
+                $("#pickHoldInvoice").attr('disabled', true);
+                $("#voidInvoice").attr('disabled', true);
+                $("#exchange").attr('disabled', true);
+                $("#rePrint").attr('disabled', true);
+
+
+            } else {
+                if (parseFloat(paidAmount) < 0) {
+                    toastr.error("Product already exchanged");
+                } else {
+                    toastr.error("Item already added");
+                }
+
+            }
+
+            //Customer info
+            if (result.data2 !== null ) {
+                $('#customerInfoId').val(result.data2.CustomerId);
+                $('#customerCode').val(result.data2.CustomerCode);
+                $('#customerName').val(result.data2.CustomerName);
+                $('#mobile').val(result.data2.ContactNo);
+                $('#address').val(result.data2.Address);
+            } else {
+                $('#customerInfoId').val(0);
+                $('#customerCode').val("");
+                $('#customerName').val("");
+                $('#mobile').val("");
+                $('#address').val("");
+            }
+        });
+
+        //End
+
+        //End
+
+        $("#date").datepicker({ dateFormat: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+    });
+
+</script>
+

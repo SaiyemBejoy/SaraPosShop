@@ -108,7 +108,10 @@ namespace DAL.Repository
                          "DBBLGATEWAY," +
                          "CITYGATEWAY," +
                          "REDX," +
-                          "ACILOGISTICS, " + 
+                          "ACILOGISTICS, " +
+                          "NAGADAMOUNT, " +
+                          "DHAMAKA, " +
+                          "SHOPUP, " +
                         "TOTAL_PAYMENT_TYPE_AMOUNT, " +
                         "PAYMENT_AMOUNT_ALL  " +
 
@@ -551,6 +554,7 @@ namespace DAL.Repository
                         " SHOP_ADDRESS, " +
                         "CASHAMOUNT," +
                         "BKASHAMOUNT," +
+                        "NAGADAMOUNT," +
                         "BRACKBANKAMOUNT," +
                         "ROCKETAMOUNT," +
                         "DBBLAMOUNT," +

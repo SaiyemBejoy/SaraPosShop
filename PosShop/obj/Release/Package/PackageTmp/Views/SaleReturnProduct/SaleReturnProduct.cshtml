@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "SaleReturnProduct";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="la la-thumb-tack"></i>
+                                </span>
+                                <h3 class="m-portlet__head-text">
+                                    All Exchange List
+                                </h3>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-section">
+                            <div class="m-section__content">
+                                <table class="table table-responsive-sm table-bordered m-table m-table--border-success" id="ExchangeproductSearchTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Old Invoice Number</th>
+                                            <th>New Invoice Number</th>
+                                            <th>New Invoice Date</th>
+                                            <th>Exchange By</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ExchangeproductSearchTableBody"></tbody>
+                                  
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        //////////////////////////Server Side Data Table;
+        var vForm = $('#__AjaxAntiForgeryForm');
+        var vToken = $('input[name="__RequestVerificationToken"]', vForm).val();
+
+        var table = $("#ExchangeproductSearchTable").dataTable({
+            "processing": true,
+            "serverSide": true,
+            "searchHighlight": true,
+            "order": [[1, "desc"]],
+            "ajax": {
+                data: {
+                    __RequestVerificationToken: vToken
+                },
+                url: '@Url.Action("GetAllExchangeItemInfoForDataTable", "SaleReturnProduct")',
+                type: 'POST'
+            },
+            "columns": [
+                {
+                    "data": "PreviousInvoiceNumber"
+                },
+                {
+                    "data": "NewInvoiceNumber"
+                },
+                {
+                    "data": "NewInvoiceDate"
+                },
+                {
+                    "data": "CreateBy"
+                },
+                {
+                    "data": "NewInvoiceNumber",
+                    "orderable": false,
+                    render: function (data, type, productGrid) {
+                        return "<a href='#' class='btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info exchangeInvoiceNumber' data-id=" +
+                            productGrid.NewInvoiceNumber +
+                            "><i class='m-menu__link-icon flaticon-technology'></i> Show Report</a>";
+                    }
+                }
+   
+            ],
+            render: function (data, type, productGrid) {
+                if (productGrid[9] === "0" ) {
+                    $(row).addClass('red');
+                }
+            }
+        });
+        ///////////////////////End
+
+        $("#ExchangeproductSearchTable").on('click',
+            '.exchangeInvoiceNumber',
+            function () {
+                var NewInvoiceNumber = $(this).data('id');
+                if (NewInvoiceNumber !== null) {
+                    window.open('/SaleReturnProduct/ShowReport?newInvoiceNUmber=' + NewInvoiceNumber, '_blank');
+                }
+            });
+    });
+</script>

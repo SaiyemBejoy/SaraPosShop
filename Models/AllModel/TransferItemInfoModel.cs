@@ -38,9 +38,11 @@ namespace Models.AllModel
                 SalePrice = row.Table.Columns.Contains("SALE_PRICE") ? Convert.ToDouble(row["SALE_PRICE"]) : 0.0,
                 TransitSaleQty = row.Table.Columns.Contains("TRANSIT_SALE_QTY") ? Convert.ToInt32(row["TRANSIT_SALE_QTY"]) : 0,
                 TransitStockBlance = row.Table.Columns.Contains("TRANSIT_BLANCE") ? Convert.ToInt32(row["TRANSIT_BLANCE"]) : 0,
+                Stock = row.Table.Columns.Contains("STOCK") ? Convert.ToInt32(row["STOCK"]) : 0,
             };
         }
 
+       
         public static TransitItemInfoModel ConvertTransitItemInfoByChallanNoModel(DataRow row)
         {
             return new TransitItemInfoModel

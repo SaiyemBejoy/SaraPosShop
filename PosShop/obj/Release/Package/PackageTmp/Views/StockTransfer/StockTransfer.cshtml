@@ -1,0 +1,797 @@
+﻿@model Models.AllModel.StockTransferModel
+@{
+    ViewBag.Title = "StockTransfer";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+</style>
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Date:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill" value="@ViewBag.dateTime" style="background-color: gold" readonly="readonly">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">ShopReqChallanNo:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill" type="text" id="ShopToShopChallanNo"  readonly="readonly" style="background-color: rosybrown">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Challan:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill" type="text" id="transferChallanNo" value="@ViewBag.GetMaxChallanNo" readonly="readonly" style="background-color: gold">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Transfer To:</label>
+                                                <div class="col-8">
+                                                    @if (ViewBag.ShopList != null)
+                                                    {
+                                                        @Html.DropDownListFor(model => model.TransferToShopId, (IEnumerable<SelectListItem>)ViewBag.ShopList, "Select", new { @class = "form-control m-input--air m-input--pill", @style = "width: 220px;" })
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="m-alert m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                                            <strong>Warning!</strong> Internet Connection Is Not Avaiable.
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Requisition:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill" type="text" id="requisitionNum" value="@ViewBag.GetRequisitionNo" readonly="readonly" style="background-color: gold">
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid brown;">
+
+                                                <div class="m-portlet__body">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">Barcode:</label>
+                                                        <div class="col-7">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" placeholder="Barcode Scan" id="Barcode">
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <button type="button" data-toggle="modal" data-target="#SearchAndAddModal" id="productDrictSearchAndAdd" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" style="margin-left: -15px;"><i class="la la-plus"></i></button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger" id="transferProduct">Transfer Product</button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-9">
+                                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--rounded">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    Stock Transfer
+                                                </h3>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6"></div>
+                                                <div class="col-md-6">
+
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-7 col-form-label"><b>Total:</b></label>
+                                                        <div class="col-5">
+                                                            <strong>
+                                                                <input type="text" class="form-control m-input--air m-input--pill" id="totalItemCount" style="width: 350%; background-color: yellow" readonly="readonly" />
+                                                            </strong>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="m-portlet__body" style="background-color: gainsboro">
+                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="m-section">
+                                                        <div class="m-section__content">
+                                                            <table class="table table-responsive-sm table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="transferTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>BarCode</th>
+                                                                        <th>Name</th>
+                                                                        <th>Trans.QTY</th>
+                                                                        <th>Stock</th>
+                                                                        <th>Sale Price</th>
+                                                                        <th>UOM</th>
+                                                                        <th>Vat</th>
+                                                                        <th>ExcessQty</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="transferTableBody"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade show" id="SearchAndAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group m-form__group row">
+                                    <label class="col-4 col-form-label"><b>Style/Barcode:</b></label>
+                                    <div class="col-8">
+                                        <input type="text" autocomplete="off" class="form-control m-input--air m-input--pill" placeholder="Barcode/Style" id="SearchValue">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <table class="table table-responsive-sm table-striped- table-bordered table-hover dataTable dtr-inline" id="SearchAndAddTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>BarCode</th>
+                                    <th>ItemName</th>
+                                    <th>Price</th>
+                                    <th>Pending Tr.</th>
+                                    <th>Stock</th>
+                                    <th>VAT</th>
+                                </tr>
+                            </thead>
+                            <tbody id="SearchAndAddTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
+<script>
+    var shopToShopRequisitionInfoObject = {};
+
+    jQuery(document).ready(function () {
+        $("#Barcode").focus();
+        $("#SearchAndAddTable").dataTable();
+        //LocalStorage data auto Load
+        var localStorageData = JSON.parse(localStorage.getItem('transferProduct'));
+        if (localStorageData != null) {
+            tableBodyGenerateForLocalStorage(localStorageData);
+        } 
+        //End
+        totalItemCount();
+        //Barcode Scan
+        $('#Barcode').on('change', function () {
+            var barcode = $("#Barcode").val();
+            GetItemDetailsByBarCode(barcode);
+
+        });
+        //End
+
+        $('#SearchAndAddModal').on('shown.bs.modal', function () {
+            $('#SearchValue').trigger('focus');
+        });
+
+        $("#transferTableBody").on('change', '.transferQuantity', function () {
+            var thisRow = $(this);
+            deliveryQuantityValidation(thisRow);
+            totalItemCount();
+        });
+
+        $("#transferProduct").click(function() {
+            transferDataSave();
+        });
+
+        $('#SearchValue').on('change', function () {
+            var searchValue = $('#SearchValue').val();
+            $.ajax({
+                type: 'GET',
+                url: '/ProductSearch/GetAllInfoBySearchTextBoxValue/',
+                dataType: 'json',
+                data: { searchValue: searchValue },
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                success: function (data) {
+                    if (data != null) {
+                        var stockProductData = data.length;
+                        $('#SearchAndAddTable').DataTable().destroy();
+                        $("#SearchAndAddTableBody").html("");
+                        for (var i = 0; i < stockProductData; i++) {
+                            if (parseInt(data[i].RoundQuantity) == 0) {
+                                $("#SearchAndAddTableBody").append('<tr>' +
+                                    '<td style="text-align: center">' +
+                                    '<input type="checkbox" class="checker" style="top: 0; left: 0; height: 25px; width: 25px;" id="checkbox2" value="' + data[i].Barcode +'" />'+
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Barcode +
+                                    '</td>' +
+                                    '<td style="background-color: red; width: 90%; text-align: left">' +
+                                    data[i].StyleName +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Price +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].PendingTrQty +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].RoundQuantity +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Vat +
+                                    '</td>' +
+                                    '</tr>');
+                            } else {
+                                $("#SearchAndAddTableBody").append('<tr>' +
+                                    '<td style="text-align: center">' +
+                                    '<input type="checkbox" class="checker" style="top: 0; left: 0; height: 25px; width: 25px;" id="checkbox2" value="' + data[i].Barcode + '" />' +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Barcode +
+                                    '</td>' +
+                                    '<td style="width: 90%; text-align: left">' +
+                                    data[i].StyleName +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Price +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].PendingTrQty +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].RoundQuantity +
+                                    '</td>' +
+                                    '<td style="text-align: center">' +
+                                    data[i].Vat +
+                                    '</td>' +
+                                    '</tr>');
+                            }
+
+                        }
+                        $('#SearchAndAddTable').DataTable();
+                        $('#SearchValue').val("");
+                        $('#cover-spin').hide();
+                    } else {
+                        $('#SearchValue').val("");
+                        $('#cover-spin').hide();
+                        alert('No Data Found!.');
+                    }
+                }
+            });
+
+        });
+
+        $("#SearchAndAddTable").on('change', 'input[Id="checkbox2"]', function () {
+            if ($(this).is(':checked')) {
+                var barcode = $(this).val();
+                GetItemDetailsByBarCode(barcode);
+                //$("#searchModal").modal("hide");
+                //$('.modal-backdrop').remove();
+            }
+        });
+
+    });
+
+
+    function totalItemCount() {
+        var total = 0;
+        $("#transferTableBody tr").each(function () {
+            total += parseInt($(this).find('#transferQuantity').val());
+
+        });
+        $("#totalItemCount").val(total);
+    }
+    function deliveryQuantityValidation(data2) {
+        var barcode = data2.parents('tr').find('td:eq(2)').text();
+        var quantity = parseInt(data2.parents('tr').find('.transferQuantity').val());
+        var currentStock = parseInt(data2.parents('tr').find('.currentStock').val());
+
+        if (quantity > currentStock) {
+            toastr.error("Transfer Quantity Must Be Equal Or Less Than CurrentStock");
+            data2.parents('tr').find('.transferQuantity').val(currentStock);
+            var quantity = currentStock;
+        }
+        //for local storage a save
+        LocalStorageUpdateData = {
+            'Barcode': barcode,
+            'TransferQuantity': quantity
+        };
+        manageGridUpdateDelete(null,LocalStorageUpdateData);
+        //end
+
+    }
+
+    function deliveryQuantityValidationForLocalStorage(barcode) {
+       
+        $.each($("#transferTableBody tr"), function () {
+
+            var value = $(this).find('td:eq(2)').text();
+            var quantity = parseInt($(this).find('#transferQuantity').val());
+            var currentStock = parseInt($(this).find('#currentStock').val());
+            var excessScanQty = $(this).find('#extraScanQty').val();
+            if (value.toLowerCase() === barcode.toLowerCase()) {
+                if (quantity >= currentStock ) {
+                    toastr.error(" Product Stock Out!");
+                    $("#Barcode").val("");
+                    //for local storage a  Product Stockout hole oo save hossilo ai jonno
+                    var quantity = currentStock;
+                    LocalStorageUpdateData = {
+                        'Barcode': barcode,
+                        'TransferQuantity': quantity
+                    };
+                    manageGridUpdateDelete(null, LocalStorageUpdateData);
+                    //end
+
+                    $(this).css("background-color", "#cd5c5c");
+                    $(this).find('#extraScanQty').val(parseInt(excessScanQty) + 1);
+                    return false;
+                } 
+            }
+        });
+
+    }
+
+
+    function validationCheckWithStock() {
+        var transferShopId = $("#TransferToShopId").val();
+
+        var totalCurrentStock = 0;
+        var totalTransferItem = 0;
+        $("#transferTableBody tr").each(function () {
+            totalCurrentStock += parseInt($(this).find('.currentStock').val());
+            totalTransferItem += parseInt($(this).find('#transferQuantity').val());
+        });
+        if (totalTransferItem > totalCurrentStock || totalTransferItem === 0) {
+            toastr.info("Transfer Quantity Must Be Equal Or Less Than CurrentStock");
+            return false;
+        }
+        if (transferShopId === "Select" || transferShopId === "" ) {
+            toastr.info("Transfer To Can't Be Empty !.");
+            return false;
+        }
+
+        return true;
+    }
+
+    //Delete from grid Table
+    $(document).on('click', 'a.deleteItem', function (e) {
+        e.preventDefault();
+        var self = $(this);
+        var vat = self.parents('tr').find('#vat').val();
+        var barcode = self.parents('tr').find('td:eq(2)').text();
+        if (self) {
+            $(this).parents('tr').css("background-color", "#dc143c").fadeOut(800, function () {
+                $(this).remove();
+                totalItemCount();
+                manageGridUpdateDelete(barcode, null);
+                var localStorageData = JSON.parse(localStorage.getItem('transferProduct'));
+                if (localStorageData.length == 0) {
+                    $("#ShopToShopChallanNo").val("");
+                } 
+            });
+        } else {
+
+            toastr.error("Data cann't delete");
+        }
+    });
+
+    function scrollStopNumberField() {
+        $('input[type=number]').on('mousewheel', function (e) {
+            $(e.target).blur();
+        });
+    }
+    function GetItemDetailsByBarCode(barcode) {
+
+        $.ajax({
+            type: 'POST',
+            url: '/StockTransfer/GetProductInfoByBarcode/',
+            dataType: 'json',
+            data: { barcode: barcode },
+            success: function (data) {
+                if (data !== 0) {
+                    //for local storage a save
+                    if (deliveryQuantityValidationForLocalStorage(data.Barcode)) {
+                        manageGridForScan(data); 
+                    }
+                    
+                    //end
+                }
+
+                var barcode = $('#Barcode').val();
+
+                var allProductItemCode = [];
+                allProductItemCode.length = 0;
+                var checker = true;
+
+                $.each($("#transferTableBody tr"), function () {
+                    var value = $(this).find('td:eq(2)').text();
+                    var quantity = $(this).find('#transferQuantity').val();
+                    allProductItemCode.push({
+                        value, quantity
+                    });
+                });
+
+                if (allProductItemCode.length > 0) {
+
+                    $.each(allProductItemCode, function (i, val) {
+                        if (data.Barcode.toLowerCase() === val.value.toLowerCase()) {
+                            checker = false;
+                        }
+                    });
+                    if (checker) {
+                        if (!isNaN(data.ItemId) && data.ItemId) {
+                            if (data.RoundQuantity !== 0 && data.RoundQuantity > 0) {
+
+                                tableBodyGenerate(data);
+                                $("#Barcode").val("");
+                                totalItemCount();
+                            } else {
+                                toastr.info("This Product is not Available!");
+                                $("#Barcode").val("");
+
+                            }
+
+                        } else {
+                            toastr.error("Invalid BarCode!!.");
+                            $("#Barcode").val("");
+
+                        }
+                    } else {
+                        $.each($("#transferTableBody tr"), function () {
+                            var value = $(this).find('td:eq(2)').html();
+                            var quantity = parseInt($(this).find('#transferQuantity').val());
+                            var currentStock = parseInt($(this).find('#currentStock').val());
+                            if (barcode.toLowerCase() === value.toLowerCase()) {
+                                if (quantity < currentStock) {
+                                    $(this).find('#transferQuantity').val(parseInt(quantity) + 1);
+
+                                    totalItemCount();
+                                    toastr.success(" Add Same Item.");
+                                    $("#Barcode").val("");
+                                } else {
+                                    toastr.error(" Product Stock Out!");
+                                    $("#Barcode").val("");
+                                    //for local storage a  Product Stockout hole oo save hossilo ai jonno
+                                    var quantity = currentStock;
+                                    LocalStorageUpdateData = {
+                                        'Barcode': barcode,
+                                        'TransferQuantity': quantity
+                                    };
+                                    manageGridUpdateDelete(null,LocalStorageUpdateData);
+                                    //end
+                                    return false;
+                                }
+
+                            }
+                        });
+
+                    }
+                } else {
+                    if (!isNaN(data.ItemId) && data.ItemId) {
+
+                        if (data.RoundQuantity !== 0 && data.RoundQuantity > 0) {
+                            tableBodyGenerate(data);
+                            $("#Barcode").val("");
+                            totalItemCount();
+                        } else {
+                            toastr.info("This Product is not Available!");
+                            $("#Barcode").val("");
+                        }
+
+                    } else {
+                        toastr.error("Invalid BarCode!!.");
+                        $("#Barcode").val("");
+
+                    }
+
+                }
+
+                
+            }
+
+        });
+    }
+
+    function tableBodyGenerate(data) {
+
+        $("#transferTableBody").append('<tr>' +
+            '<td style="display:none;">' +
+            data.ProductId +
+            '</td>' +
+            '<td style="display:none;">' +
+            data.ItemId +
+            '</td>' +
+            '<td>' +
+            data.Barcode +
+            '</td>' +
+            '<td>' +
+            data.ItemName +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle transferQuantity" id="transferQuantity" value="' + 1 + '"' +
+            '</td>' +
+            '<td style ="width: 10%">' +
+            '<input type="number" class="form-control input-circle currentStock" readonly="readonly" id="currentStock" value="' + data.RoundQuantity + '"' +
+            '</td>' +
+            '<td>' +
+            data.SalePrice +
+            '</td>' +
+            '<td>' +
+            data.Umo +
+            '</td>' +
+            '<td>' +
+            data.Vat +
+            '</td>' +
+            '<td style="width: 11%">' +
+            '<input type="text" class="form-control input-circle readonly="readonly" extraScanQty" id="extraScanQty" value="' +
+            0 +
+            '" placeholder="Qty">' +
+            '</td>' +
+            '<td><a href="#" class="deleteItem btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove</a></td>' +
+            '</tr>');
+
+        $("#Barcode").val("");
+        scrollStopNumberField();
+    }
+
+    function tableBodyGenerateForLocalStorage(data) {
+
+        var stockTransferData = data.length;
+        $("#transferTableBody").html("");
+        if (stockTransferData !== 0) {
+            for (var i = 0; i < stockTransferData; i++) {
+                $("#ShopToShopChallanNo").val(data[0].ShopToShoprequisitionNum);//shop requisition er challan number textbox a display korar jonno
+                $("#transferTableBody").append('<tr>' +
+                    '<td style="display:none;">' +
+                    data[i].ProductId +
+                    '</td>' +
+                    '<td style="display:none;">' +
+                    data[i].ItemId +
+                    '</td>' +
+                    '<td>' +
+                    data[i].Barcode +
+                    '</td>' +
+                    '<td>' +
+                    data[i].ItemName +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle transferQuantity" id="transferQuantity" value="' + data[i].TransferQuantity + '"' +
+                    '</td>' +
+                    '<td style ="width: 10%">' +
+                    '<input type="number" class="form-control input-circle currentStock" readonly="readonly" id="currentStock" value="' + data[i].CurrentStock + '"' +
+                    '</td>' +
+                    '<td>' +
+                    data[i].SalePrice +
+                    '</td>' +
+                    '<td>' +
+                    data[i].Umo +
+                    '</td>' +
+                    '<td>' +
+                    data[i].Vat +
+                    '</td>' +
+                    '<td style="width: 11%">' +
+                    '<input type="text" class="form-control input-circle" readonly="readonly" extraScanQty" id="extraScanQty" value="' +
+                    0 +
+                    '" placeholder="Qty">' +
+                    '</td>' +
+                    '<td><a href="#" class="deleteItem btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove</a></td>' +
+                    '</tr>');
+                scrollStopNumberField();
+            }
+        }
+    }
+
+    function transferDataSave() {
+        var transferChallanNo = $("#transferChallanNo").val();
+        var transferToShopId = $("#TransferToShopId").val();
+        var transferToShopName = $("#TransferToShopId option:selected").text();
+        var requisitionNum = $("#requisitionNum").val();
+        var shopToShopRequisitionNUm = $("#ShopToShopChallanNo").val();
+
+        var allTransferItem = [];
+        allTransferItem.length = 0;
+        $.each($("#transferTableBody tr"),
+            function() {
+                allTransferItem.push({
+                    ProductId: $(this).find('td:eq(0)').text(),
+                    ItemId: $(this).find('td:eq(1)').text(),
+                    Barcode: $(this).find('td:eq(2)').text(),
+                    ItemName: $(this).find('td:eq(3)').text(),
+                    TransferQuantity: $(this).find('#transferQuantity').val(),
+                    SalePrice: $(this).find('td:eq(6)').text(),
+                    Vat: $(this).find('td:eq(8)').text()
+
+                });
+            });
+
+        var dataObject = {
+            'StockTransferChallanNumber': transferChallanNo,
+            'RequisitionNumber': requisitionNum,
+            'ShopToShopRequisitionNumber': shopToShopRequisitionNUm,
+            'TransferToShopId': transferToShopId,
+            'TransferToShopName': transferToShopName,
+            'StockTransferItemList': allTransferItem
+        }
+        var dataList = JSON.stringify({ objStockTransferModel: dataObject });
+        if (allTransferItem.length) {
+            if (validationCheckWithStock()) {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("SaveTransferData", "StockTransfer")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.m  !== null) {
+                            if (data.isRedirect) {
+                                window.open('/StockTransfer/ShowReport?transferChallanNo=' + data.m, '_blank');
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                                localStorage.removeItem('transferProduct');
+                            }else {
+                                toastr.error("Something is wrong !.");
+                                $('#cover-spin').hide();
+                            }
+
+                        } else {
+                            toastr.error("Something is wrong !.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+            }
+        } else {
+            toastr.error("Table Data Cann't Be Empty!");
+            $('#cover-spin').hide();
+        }
+    }
+
+    // Local Storage a add
+    function manageGridForScan(addItem) {
+        if (addItem.RoundQuantity) {
+            filterData = {
+                'ItemId': addItem.ItemId,
+                'ProductId': addItem.ProductId,
+                'Barcode': addItem.Barcode,
+                'ItemName': addItem.ItemName,
+                'TransferQuantity': 1,
+                'CurrentStock': addItem.RoundQuantity,
+                'SalePrice': addItem.SalePrice,
+                'Umo': addItem.Umo,
+                'Vat': addItem.Vat
+            };
+            var productItemList = JSON.parse(localStorage.getItem('transferProduct'));
+            if (filterData) {
+                if (productItemList == null) {
+                    productItemList = [];
+                    productItemList.push(filterData);
+                } else {
+                    var checker = true;
+                    var barcode = filterData.Barcode;
+                    for (var i = 0; i < productItemList.length; i++) {
+                        if (productItemList[i].Barcode === barcode) {
+                            var transferQty = parseInt(productItemList[i].TransferQuantity);
+                            productItemList[i].TransferQuantity = transferQty + 1;
+                            checker = false;
+                            //toastr.success("Add Same Item.");
+                        }
+                    }
+                    if (checker) {
+                        productItemList.push(filterData);
+                    }
+                }
+            }
+
+            localStorage.setItem('transferProduct', JSON.stringify(productItemList));
+        }
+        
+    };
+
+    function manageGridUpdateDelete(deleteItem, updateItem) {
+        var tableRowDataForUpdate = JSON.parse(localStorage.getItem('transferProduct'));
+
+        if (tableRowDataForUpdate) {
+            if (deleteItem) {
+                for (var l = 0; l < tableRowDataForUpdate.length; l++) {
+                    if (tableRowDataForUpdate[l].Barcode === deleteItem) {
+                        tableRowDataForUpdate.splice(l, 1);
+                    }
+                }
+            }
+            if (updateItem) {
+                var productCode1 = updateItem.Barcode;
+                var quantity1 = updateItem.TransferQuantity;
+                for (var j = 0; j < tableRowDataForUpdate.length; j++) {
+                    if (tableRowDataForUpdate[j].Barcode === productCode1) {
+                        tableRowDataForUpdate[j].TransferQuantity = quantity1;
+                    }
+                }
+            }
+        }
+        
+        if (tableRowDataForUpdate) {
+            localStorage.setItem('transferProduct', JSON.stringify(tableRowDataForUpdate));
+        }
+       
+        //End
+    }
+
+
+    //end
+</script>

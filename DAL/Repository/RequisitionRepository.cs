@@ -60,7 +60,7 @@ namespace DAL.Repository
 
         public async Task<string> GetMaxRequisition()
         {
-            string query = " SELECT LPAD ( (SELECT SHOP_ID FROM Shop), 2, 0) || (SELECT LPAD (NVL (MAX (SUBSTR ( (REQUISITION_NO), 9, 8)), 0) + 1,8,0) FROM REQUISITION_MAIN) REQUISITION_NO FROM DUAL ";
+            string query = "SELECT LPAD ( (SELECT SHOP_ID FROM Shop), 2, 0) || (SELECT LPAD (NVL (MAX (SUBSTR ( (REQUISITION_NO), 8, 7)), 0) + 1,8,0)  FROM REQUISITION_MAIN) REQUISITION_NO FROM DUAL";
             var maxRequisition = await GetSingleStringAsync(query, null);
             return maxRequisition;
         }

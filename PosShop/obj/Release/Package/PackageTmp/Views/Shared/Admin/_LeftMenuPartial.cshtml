@@ -1,0 +1,109 @@
+﻿
+@using PosShop.Utility
+@model Models.AllModel.MenuMainModelList
+
+<button class="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn"><i class="la la-close"></i></button>
+<div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
+
+    <!-- BEGIN: Aside Menu -->
+    <div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark " m-menu-vertical="1" m-menu-scrollable="0" m-menu-dropdown-timeout="500">
+        <ul class="m-menu__nav ">
+            <li class="m-menu__section m-menu__section--first">
+                <h1 class="m-menu__section-text text-center" style="color: white;font-size: 20px">@UtilityClass.ShopName</h1>
+                <i class="m-menu__section-icon flaticon-more-v2"></i>
+            </li>
+            <li class="m-menu__item  m-menu__item--active" aria-haspopup="true"><a href="@Url.Action("Index", "Home")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-line-graph"></i><span class="m-menu__link-text">Dashboard</span></a></li>
+
+            @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("PointOfSale", "PointOfSale")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-shopping-basket"></i><span class="m-menu__link-text">Point Of Sale</span></a></li>
+            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("ProductReceive", "ProductReceive")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-download-1"></i><span class="m-menu__link-text">Receive</span></a></li>
+            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("StockTransfer", "StockTransfer")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-paper-plane"></i><span class="m-menu__link-text">Transfer</span></a></li>
+            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Requisition", "Requisition")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-cogwheel"></i><span class="m-menu__link-text">Requisition</span></a></li>
+            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Index", "DamageProduct")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-close"></i><span class="m-menu__link-text">Damage Product</span></a></li>
+            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                <a class="m-menu__link m-menu__toggle">
+                    <span class="m-menu__item-here"></span><i class=" m-menu__link-icon flaticon-arrows"></i><span class="m-menu__link-text">Shop To Shop</span><i class="m-menu__ver-arrow la la-angle-right"></i>
+                </a>
+                <div class="m-menu__submenu ">
+                    <span class="m-menu__arrow"></span>
+                    <ul class="m-menu__subnav">               
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("ShopRequisitionList", "ShopRequisition")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-cogwheel"></i><span class="m-menu__link-text">Shop Requisition</span></a></li>
+
+                    </ul>
+                </div>
+            </li>
+
+            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                <a class="m-menu__link m-menu__toggle">
+                    <span class="m-menu__item-here"></span><i class=" m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">Quick Search</span><i class="m-menu__ver-arrow la la-angle-right"></i>
+                </a>
+                <div class="m-menu__submenu ">
+                    <span class="m-menu__arrow"></span>
+                    <ul class="m-menu__subnav">
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("ProductSearch", "ProductSearch")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">Product Search</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("InvoiceSearch", "InvoiceSearch")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">Invoice Search</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("ShopProductSearch", "ShopProductSearch")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">Shop Product Search</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("WarehouseProductSearch", "Requisition")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">DC Product Search</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("ProductReceiveList", "ProductReceive")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">Receive Challan Search</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("StockTransferList", "StockTransfer")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">Transfer Challan Search</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("PrivilegeCardList", "PrivilegeCard")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-search-1"></i><span class="m-menu__link-text">Privilege Customer</span></a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                <a class="m-menu__link m-menu__toggle">
+                    <span class="m-menu__item-here"></span><i class=" m-menu__link-icon flaticon-menu-1"></i><span class="m-menu__link-text">Store House </span><i class="m-menu__ver-arrow la la-angle-right"></i>
+                </a>
+                <div class="m-menu__submenu ">
+                    <span class="m-menu__arrow"></span>
+                    <ul class="m-menu__subnav">
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("StoreHouseProductSearch", "StoreHouseRequest")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-more-v4"></i><span class="m-menu__link-text">StoreHouse Product</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("StoreHouseRequest", "StoreHouseRequest")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-more-v4"></i><span class="m-menu__link-text">StoreHouse Request</span></a></li>
+                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("StoreHouseRequestList", "StoreHouseRequest")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-more-v4"></i><span class="m-menu__link-text">StoreHouse Request List</span></a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("PrivilegeCard", "PrivilegeCard")" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-interface-3"></i><span class="m-menu__link-text">Privilege Card</span></a></li>*@
+
+
+
+            @if (Model != null)
+            {
+                foreach (var value in Model.MenuMainModelsList)
+                {
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                        <a href="@value.MenuUrl" class="m-menu__link m-menu__toggle">
+                            <span class="m-menu__item-here"></span>
+                            <i class=" m-menu__link-icon @value.MenuIcon"></i>
+                            <span class="m-menu__link-text">@value.MenuMainName</span>
+                            @if (value.MenuSubModels.ToList().Count > 0)
+                            {
+                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            }
+                        </a>
+                        @if (value.MenuSubModels.ToList().Count > 0)
+                        {
+                            foreach (var subMenu in value.MenuSubModels)
+                            {
+                                <div class="m-menu__submenu ">
+                                    <span class="m-menu__arrow"></span>
+                                    <ul class="m-menu__subnav">
+                                        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                            <a href="@subMenu.SubMenuUrl" class="m-menu__link ">
+                                                <span class="m-menu__item-here"></span>
+                                                <i class="m-menu__link-icon @subMenu.SubMenuIcon"></i>
+                                                <span class="m-menu__link-text">@subMenu.MenuSubName</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        }
+                    </li>
+                }
+            }
+            //End
+        </ul>
+    </div>
+
+    <!-- END: Aside Menu -->
+</div>

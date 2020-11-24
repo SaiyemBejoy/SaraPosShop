@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewBag.Title = "GiftVoucherDeposit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Customer Name:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="giftvoucherCustomerName">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Customer Phone:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="giftvoucherCustomerPhone" maxlength="11">
+                                                </div>
+                                            </div>
+                                          
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Gift Voucher Code:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="giftVoucherCode">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"><b>Gift Voucher Value:</b></label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control m-input--air m-input--pill" id="giftvoucherValue"  readonly="readonly">
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-3"></div>
+                                                <label class="col-1 col-form-label"></label>
+                                                <div class="col-4">
+                                                    <button type="button" class="btn m-btn--pill m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger" id="giftVoucherDeposit"><b>Deposit</b></button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                 
+                                      
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--rounded">
+                                    <div class="m-portlet__head">
+                                        <div class="m-portlet__head-caption">
+                                            <div class="m-portlet__head-title">
+                                                <span class="m-portlet__head-icon">
+                                                    <i class="la la-thumb-tack"></i>
+                                                </span>
+                                                <h3 class="m-portlet__head-text">
+                                                    <b>Gift Voucher Deposit List</b>
+                                                </h3>
+                                            </div>
+                                            
+                                        </div>
+
+                                    </div>
+                                    <div class="m-portlet__body" style="background-color: gainsboro">
+                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="m-section">
+                                                        <div class="m-section__content">
+                                                            <table class="table table-responsive-sm table-bordered m-table m-table--border-danger m-table--head-bg-primary" id="giftvoucherDepositListTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Gift Voucher Code</th>
+                                                                        <th>Gift Voucher Value</th>
+                                                                        <th>Deposit Date</th>
+                                                                        <th>Deposit by</th>
+                                                                        <th>Deposit Shop Name</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="giftvoucherDepositListTableBody">
+                                                                @if (ViewBag.GiftVoucherDataList != null)
+                                                                {
+                                                                   
+                                                                    foreach (var data in ViewBag.GiftVoucherDataList)
+                                                                    {
+                                                                        <tr>
+                                                                            <td> @data.GiftVoucherCode</td>
+                                                                            <td>@data.GiftVoucherValue</td>
+                                                                            <td>@data.UpdateDate</td>
+                                                                            <td>@data.UpdateBy</td>
+                                                                            <td>@data.DepositShopName</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                                    </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>.
+                                </div>
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function () {
+
+        $("#giftVoucherDeposit").click(function () {
+            GiftVoucherDepositDataSave();
+        });
+
+        $("#giftVoucherCode").change(function () {
+            GiftVoucherinfoByCode();
+        });
+    });
+    function validationCheck() {
+        var giftvoucherCustomerPhone = $("#giftvoucherCustomerPhone").val();
+        if (giftvoucherCustomerPhone === '') {
+            toastr.error("Enter Phone Number !!");
+
+            return false;
+        }
+        var giftVoucherCode = $("#giftVoucherCode").val().trim();
+        if (giftVoucherCode === '') {
+            toastr.error("Enter GiftVoucher Code !!");
+            return false;
+        }
+        var giftvoucherValue = $("#giftvoucherValue").val();
+        if (giftvoucherValue === '') {
+            toastr.error("Value Cannot Be Empty !!");
+
+            return false;
+        }
+       
+        return true;
+    }
+    function GiftVoucherDepositDataSave() {
+        var giftvoucherCustomerName = $("#giftvoucherCustomerName").val();
+        var giftvoucherCustomerPhone = $("#giftvoucherCustomerPhone").val();
+        var giftVoucherCode = $("#giftVoucherCode").val().trim();
+        var giftvoucherValue = $("#giftvoucherValue").val();
+        var dataObject = {
+            'GiftVoucherCustomerName': giftvoucherCustomerName,
+            'GiftVoucherCustomerPhone': giftvoucherCustomerPhone,
+            'GiftVoucherCode': giftVoucherCode,
+            'GiftVoucherValue': giftvoucherValue
+        }
+        var dataList = JSON.stringify({ objGiftVoucherModel: dataObject });
+        if (validationCheck()) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("SaveDepositData", "GiftVoucher")',
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                    success: function (data) {
+                        if (data.m === "OK") {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                            }
+                        } else {
+                            toastr.error("Connection Problem !.");
+                            $('#cover-spin').hide();
+                        }
+                        
+                    }
+                });
+           }
+    }
+
+    function GiftVoucherinfoByCode() {
+      
+        var giftVoucherCode = $("#giftVoucherCode").val().trim();
+       
+        var dataList = JSON.stringify({ giftVoucherCode: giftVoucherCode });
+
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                url: '@Url.Action("GiftVoucherInfoByCode", "GiftVoucher")',
+                data: dataList,
+                beforeSend: function () {
+                    $('#cover-spin').show();
+                },
+                success: function (data) {
+                    if (data != '0') {
+                        $("#giftvoucherValue").val(data.GiftVoucherValue);  
+                        $('#cover-spin').hide();
+                    } else {
+                        toastr.error("Already deposit this Code!.");
+                        $('#cover-spin').hide();
+                        $("#giftvoucherValue").val("");  
+                        $("#giftVoucherCode").val("")
+                    } 
+                    
+                }
+            });
+     }
+    
+
+</script>

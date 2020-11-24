@@ -1,0 +1,743 @@
+﻿@model Models.AllModel.StoreReceiveModel
+@{
+    ViewBag.Title = "ProductReceive";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid crimson">
+
+                    <div class="m-portlet__body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                                    <div class="m-portlet__body">
+                                        <form class="m-form m-form--fit">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Returne Receive:</label>
+                                                <div class="col-8" style="margin-top: 12px">
+                                                    <input type="checkbox" id="checkbox">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Date:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill datepicker" type="text" placeholder="Date" value="@ViewBag.dateTime" disabled="disabled" style="width: 220px">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label"> Delivery Challan #:</label>
+                                                <div class="col-8">
+                                                    @Html.DropDownListFor(model => model.StoreReceiveChallanNo, (IEnumerable<SelectListItem>)ViewBag.StoreDeliveryNumber, "Select Challan", new { @class = "form-control m-input--air m-input--pill" })
+                                                    @*@Html.DropDownList("StoreReceiveChallanNo", (List<SelectListItem>)ViewBag.StoreDeliveryNumber, "Select Option", new { @class = "form-control m-input--air m-input--pill" })*@
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label"> Return Challan #:</label>
+                                                <div class="col-8">
+                                                    <select name="ReturnChallanReceive" id="ReturnChallanReceive" class="form-control m-input--air m-input--pill">
+                                                        <option value="0">--Select Return ChallanNo--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Season Name:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill" type="text" id="seasonName" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Receive From:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill" type="text" id="receiveShopId" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-4 col-form-label">Receive From Shop:</label>
+                                                <div class="col-8">
+                                                    <input class="form-control m-input--air m-input--pill" type="text" id="receiveShopName" style="background-color: gold" readonly="readonly">
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet m-portlet--rounded" style="border: 1px solid brown;">
+
+                                                <div class="m-portlet__body">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">Barcode:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" id="barcode">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">Name:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" disabled="disabled" id="name">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">Category:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" disabled="disabled" id="category">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">SubCategory:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" disabled="disabled" id="subCategory">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">Brand:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" disabled="disabled" id="brand">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-4 col-form-label">Sale Price:</label>
+                                                        <div class="col-8">
+                                                            <input class="form-control m-input--air m-input--pill" type="text" disabled="disabled" id="salePrice">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--rounded">
+                                    <div class="m-portlet__head">
+                                        <div class="row">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                    <span class="m-portlet__head-icon">
+                                                        <i class="la la-thumb-tack"></i>
+                                                    </span>
+                                                    <h3 class="m-portlet__head-text">
+                                                        Store Receive
+                                                    </h3>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row" style="margin: 13px 0px 0px 360px;float: right;position: inherit;">
+                                                <div class="col-lg-2 col-md-2 col-sm-2"></div>
+                                                <div class="col-lg-5 col-md-5 col-sm-5">
+                                                    <div class="form-group m-form__group row" style="margin-left: -73px;">
+                                                        <label class="col-lg-4 col-md-4 col-sm-4 col-form-label"><b>Total:</b></label>
+                                                        <div class="col-lg-5 col-md-5 col-sm-5">
+                                                            <strong>
+                                                                <input type="text" class="form-control m-input--air m-input--pill" id="totalItemCount" style="width: 150%; background-color: yellow" readonly="readonly" />
+                                                            </strong>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5 col-md-5 col-sm-5">
+                                                    <div class="form-group m-form__group row">
+                                                        <label class="col-lg-4 col-md-4 col-sm-4  col-form-label"><b>Scan Qty:</b></label>
+                                                        <div class="col-lg-5 col-md-5 col-sm-5">
+                                                            <strong>
+                                                                <input type="text" class="form-control m-input--air m-input--pill" id="scanTotalItemCount" style="width: 200%; background-color: azure" readonly="readonly" />
+                                                            </strong>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="m-portlet__body" style="background-color: gainsboro">
+                                        <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <table class="table table-responsive-sm  table-striped- table-bordered table-hover dataTable dtr-inline" id="m_table_1" role="grid" aria-describedby="m_table_1_info" style="width: 1528px;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>BarCode</th>
+                                                                <th>Name</th>
+                                                                <th>Rec.QTY</th>
+                                                                <th>Remain QTY</th>
+                                                                <th>UOM</th>
+                                                                <th>MRP</th>
+                                                                <th>Brand</th>
+                                                                <th>Category</th>
+                                                                <th>SubCategory</th>
+                                                                <th>ExcessQty</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="storeReceiveGridTableBody"></tbody>
+
+                                                    </table>
+                                                    <button type="submit" id="receiveDataSave" class="btn m-btn--pill btn-primary m-btn--wide">Receive Product</button>
+                                                    <button type="button" id="ExcexxQtyDetails" class="btn m-btn--pill btn-danger m-btn--wide">Invalid/Excess Product</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade show" id="excessModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="padding-right: 17px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--rounded" style="border: 1px solid darkgreen;">
+
+                    <div class="m-portlet__body">
+
+                        <table class="table table-responsive-sm  table-striped- table-bordered table-hover dataTable dtr-inline" id="ReceiveItemInvalidTable">
+                            <thead>
+                                <tr>
+                                    <th><strong>BarCode</strong></th>
+                                    <th><strong>ScanCount</strong></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="receiveItemInvalidTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id ="hidemodal" class="btn m-btn--pill btn-outline-danger" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
+<script>
+    // Local Storage a add
+    function manageGridForScan(addItem) {
+            filterData = {
+                'Barcode': addItem,
+                'Scancount': 1
+      
+            };
+            var productItemList = JSON.parse(localStorage.getItem('invalidReceiveProduct'));
+            if (filterData) {
+                if (productItemList == null) {
+                    productItemList = [];
+                    productItemList.push(filterData);
+                } else {
+                    var checker = true;
+                    var barcode = filterData.Barcode;
+                    for (var i = 0; i < productItemList.length; i++) {
+                        if (productItemList[i].Barcode === barcode) {
+                            var invalidScanQty = parseInt(productItemList[i].Scancount);
+                            productItemList[i].Scancount = invalidScanQty + 1;
+                            checker = false;
+                            //toastr.success("Add Same Item.");
+                        }
+                    }
+                    if (checker) {
+                        productItemList.push(filterData);
+                    }
+                }
+            }
+
+        localStorage.setItem('invalidReceiveProduct', JSON.stringify(productItemList));
+   
+        
+    };
+    function scrollStopNumberField() {
+        $('input[type=number]').on('mousewheel', function(e) {
+            $(e.target).blur();
+        });
+    }
+
+    function totalItemCount() {
+        var total = 0;
+        $("#storeReceiveGridTableBody tr").each(function() {
+            total += parseInt($(this).find('#remainingQuantity').val());
+
+        });
+        $("#totalItemCount").val(total);
+    }
+
+    function totalScanItemCount() {
+        var total = 0;
+        $("#storeReceiveGridTableBody tr").each(function () {
+            total += parseInt($(this).find('#receiveQuantity').val());
+
+        });
+        $("#scanTotalItemCount").val(total);
+    }
+    function validationCheckWithStock() {
+        var totalRemainingStock = 0;
+        var totalReceiveItem = 0;
+        $("#storeReceiveGridTableBody tr").each(function() {
+            totalRemainingStock += parseInt($(this).find('#remainingQuantity').val());
+            totalReceiveItem += parseInt($(this).find('#receiveQuantity').val());
+        });
+        if (totalRemainingStock === 0) {
+            if (totalRemainingStock !== 0) {
+                toastr.warning("Receive Quantity Must Be Equal Or Less Than Remaining Stock.");
+                $.each($("#storeReceiveGridTableBody tr"), function () {
+
+                    var quantity = $(this).find('#receiveQuantity').val();
+                    var remainQuantity = $(this).find('#remainingQuantity').val();
+
+                    if (quantity !== remainQuantity) {
+                        $(this).css("background-color", "#e9967a");
+                    }
+                });
+                return false;
+            }
+
+        } else {
+            if (totalReceiveItem !== totalRemainingStock) {
+                toastr.warning("Receive Quantity Must Be Equal Or Less Than Remaining Stock.");
+
+                $.each($("#storeReceiveGridTableBody tr"), function () {
+
+                    var quantity = $(this).find('#receiveQuantity').val();
+                    var remainQuantity = $(this).find('#remainingQuantity').val();
+
+                        if (quantity !== remainQuantity) {
+                                $(this).css("background-color", "#e9967a");
+                        }
+                });
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function receiveTableDataSave() {
+        var date = $(".datepicker").val();
+        var storeReceiveChallanNo = $("#StoreReceiveChallanNo").val();
+        var returnChallanReceive = $("#ReturnChallanReceive").val();
+        if (storeReceiveChallanNo === "") {
+            storeReceiveChallanNo = $("#ReturnChallanReceive").val();
+        }
+        var receiveShopId = $("#receiveShopId").val();
+        var seasonName = $("#seasonName").val();
+        var allShopItem = [];
+        allShopItem.length = 0;
+        $.each($("#storeReceiveGridTableBody tr"),
+            function() {
+                allShopItem.push({
+                    ProductId: $(this).find('td:eq(0)').html(),
+                    ItemId: $(this).find('td:eq(1)').html(),
+                    Barcode: $(this).find('td:eq(2)').html(),
+                    ItemName: $(this).find('td:eq(3)').text(),
+                    ReceiveQuantity: $(this).find('#receiveQuantity').val(),
+                    UMO: $(this).find('td:eq(6)').html(),
+                    SalePrice: $(this).find('td:eq(7)').html(),
+                    BrandName: $(this).find('td:eq(8)').html(),
+                    CategoryName: $(this).find('td:eq(9)').html(),
+                    SubCategoryName: $(this).find('td:eq(10)').html(),
+                    Vat: $(this).find('td:eq(11)').html()
+
+                });
+            });
+        var dataObject = {
+            'StoreReceiveChallanNo': storeReceiveChallanNo,
+            'ReturnChallanNoReceive': returnChallanReceive,
+            'SeasonName': seasonName,
+            'ReceiveFrom': receiveShopId,
+            'ReceivedDate': date,
+            'StoreReceiveItemList': allShopItem
+        }
+        var dataList = JSON.stringify({ objStoreReceiveModel: dataObject });
+        if (allShopItem.length) {
+            if (validationCheckWithStock()) {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    url: '@Url.Action("Save", "ProductReceive")',
+                    data: dataList,
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data.m !== "0") {
+                            if (data.isRedirect) {
+                                window.setTimeout(function() {
+                                    window.location = data.redirectUrl;
+                                },1000);
+                                toastr.success("Save Successfully.");
+                                localStorage.removeItem("invalidReceiveProduct");
+                            }
+                            if (storeReceiveChallanNo !== "") {
+                                window.open('/ProductReceive/ShowReport?storeReceiveChallanNo=' + storeReceiveChallanNo, '_blank');
+                            }
+                        } else {
+                            toastr.error("Connection Problem.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+            }
+        } else {
+            toastr.error("Table Data Cann't Be Empty!");
+            $('#cover-spin').hide();
+        }
+    }
+
+    jQuery(document).ready(function () {
+        localStorage.removeItem("invalidReceiveProduct");
+        //corsor focus change korar jonno
+        $(document).on('keydown', '.receiveQuantity', function (e) {
+                if (e.keyCode === 13) //if its a enter key
+                {
+                    var tabindex = $(this).attr('tabindex');
+                    tabindex++; //increment tabindex
+                    $('[tabindex=' + tabindex + ']').focus();
+                }
+        });
+        //End
+
+        localStorage.removeItem("transferObjectArray");
+        $('#ReturnChallanReceive').attr('disabled', true);
+
+        $("#StoreReceiveChallanNo").change(function () {
+            var storeReceiveChallanNo = $("#StoreReceiveChallanNo").val();
+            $.ajax({
+                type: 'GET',
+                url: '/ProductReceive/ViewAllDataByStoreReceiveChallanNo/',
+                dataType: 'json',
+                data: { storeReceiveChallanNo: storeReceiveChallanNo },
+                success: function (data) {
+                    var storeReceiveDataDeliveryQuantity = data.length;
+                    $("#storeReceiveGridTableBody").html("");
+                    var receiveShopId = 0;
+                    var seasonName = "";
+                    for (var i = 0; i < storeReceiveDataDeliveryQuantity; i++) {
+                        receiveShopId = data[0].ReceivedShopId;
+                        seasonName = data[0].SeasonName;
+
+                        $("#storeReceiveGridTableBody").append('<tr>' +
+                            '<td style="display:none;">' +
+                            data[i].ProductId +
+                            '</td>' +
+                            '<td style="display:none;">' +
+                            data[i].ItemId +
+                            '</td>' +
+                            '<td>' +
+                            data[i].BarCode +
+                            '</td>' +
+                            '<td>' +
+                            data[i].ItemName +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="number" class="form-control input-circle receiveQuantity" min="0" id="receiveQuantity" value="' + 0 +'" tabindex="'+(i+1)+'">' +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="text" class="form-control remainingQuantity" id="remainingQuantity"  readonly="readonly" value="' + data[i].DeliveryQuantity + '">' +
+                            '</td>' +
+                            '<td>' +
+                            data[i].UMO +
+                            '</td>' +
+                            '<td>' +
+                            data[i].SalePrice +
+                            '</td>' +
+                            '<td>' +
+                            data[i].Brand +
+                            '</td>' +
+                            '<td style ="width: 13%">' +
+                            data[i].Category +
+                            '</td>' +
+                            '<td>' +
+                            data[i].SubCategory +
+                            '</td>' +
+                            '<td style="display:none;">' +
+                            data[i].Vat +
+                            '</td>' +
+                            '<td style="width: 11%">' +
+                            '<input type="text" class="form-control input-circle extraScanQty" readonly="readonly" id="extraScanQty" value="' +
+                            0 +
+                            '" placeholder="Qty">' +
+                            '</td>' +
+                            '</tr>');
+                    }
+                    $('[tabindex=' + 1 + ']').focus();
+                    $("#receiveShopId").val(receiveShopId);
+                    $("#seasonName").val(seasonName);
+                    scrollStopNumberField();
+                    totalItemCount();
+                }
+
+
+            });
+        });
+
+        $("#ReturnChallanReceive").change(function () {
+            var retrievedproGridObject = JSON.parse(localStorage.getItem('transferObjectArray'));
+            var returnChallanReceive = $("#ReturnChallanReceive").val();
+
+            if (retrievedproGridObject != null) {
+                //$("#receiveShopId").val(retrievedproGridObject[0].TransferShopIdFrom);
+                //$("#receiveShopName").val(retrievedproGridObject[0].TransferShopIdFromName);
+                var tableQuantity = retrievedproGridObject.length;
+
+                $("#storeReceiveGridTableBody").html("");
+                for (var i = 0; i < tableQuantity; i++) {
+                    if (returnChallanReceive == retrievedproGridObject[i].StockTranferChallanNo) {
+                        $("#receiveShopId").val(retrievedproGridObject[i].TransferShopIdFrom);
+                        $("#receiveShopName").val(retrievedproGridObject[i].TransferShopIdFromName);
+                        $("#storeReceiveGridTableBody").append('<tr>' +
+                            '<td style="display:none;">' +
+                            retrievedproGridObject[i].ProductId +
+                            '</td>' +
+                            '<td style="display:none;">' +
+                            retrievedproGridObject[i].ItemId +
+                            '</td>' +
+                            '<td>' +
+                            retrievedproGridObject[i].BarCode +
+                            '</td>' +
+                            '<td>' +
+                            retrievedproGridObject[i].ItemName +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="number" class="form-control input-circle receiveQuantity" min="0" id="receiveQuantity" value="' + 0 + '" tabindex="' + (i + 1) +'">' +
+                            '</td>' +
+                            '<td style="width: 13%">' +
+                            '<input type="text" class="form-control remainingQuantity" id="remainingQuantity"  readonly="readonly" value="' + retrievedproGridObject[i].TransferQuantity + '">' +
+                            '</td>' +
+                            '<td>' +
+                            retrievedproGridObject[i].Umo +
+                            '</td>' +
+                            '<td>' +
+                            retrievedproGridObject[i].SalePrice +
+                            '</td>' +
+                            '<td>' +
+                            retrievedproGridObject[i].Brand +
+                            '</td>' +
+                            '<td style ="width: 13%">' +
+                            retrievedproGridObject[i].Category +
+                            '</td>' +
+                            '<td>' +
+                            retrievedproGridObject[i].SubCategory +
+                            '</td>' +
+                            '<td style="display:none;">' +
+                            retrievedproGridObject[i].Vat +
+                            '</td>' +
+                            '<td style="width: 11%">' +
+                            '<input type="text" class="form-control input-circle readonly="readonly" extraScanQty" id="extraScanQty" value="' +
+                            0 +
+                            '" placeholder="Qty">' +
+                            '</td>' +
+                            '</tr>');
+
+                    }
+                    $('[tabindex=' + 1 + ']').focus();
+                    scrollStopNumberField();
+                    totalItemCount();
+
+                }
+
+
+            }
+
+        });
+
+        function getItemValue(barcode) {
+            $.each($("#storeReceiveGridTableBody tr"), function () {
+                var itemBarcode = $(this).find('td:eq(2)').text();
+                if (barcode.toLowerCase() === itemBarcode.toLowerCase()) {
+                    var itemName = $(this).find('td:eq(3)').text();
+                    var salePrice = $(this).find('td:eq(7)').text();
+                    var brand = $(this).find('td:eq(8)').text();
+                    var category = $(this).find('td:eq(9)').text();
+                    var subCategory = $(this).find('td:eq(10)').text();
+
+                    $("#name").val(itemName);
+                    $("#salePrice").val(salePrice);
+                    $("#category").val(category);
+                    $("#subCategory").val(subCategory);
+                    $("#brand").val(brand);
+                }
+            });
+        }
+
+        $('#barcode').on('change', function () {
+            var barcode = $("#barcode").val();
+            //var table = document.getElementById("storeReceiveGridTableBody");
+            //var tr = table.getElementsByTagName("tr");
+
+            //for (i = 0; i < tr.length; i++) {
+            //    var td = tr[i].getElementsByTagName("td")[2];
+            //    var q = tr[i].getElementsByTagName("td")[5].innerHTML;
+            //    var z = tr[i].querySelectorAll("#remainingQuantity td");/*document.getElementById("remainingQuantity");*/
+            //    var inputValue = q.getElementById('remainingQuantity').value;
+            //    if (td) {
+            //        var txtValue =  td.innerText;
+            //    }
+            //}
+            var checker = false;
+            $.each($("#storeReceiveGridTableBody tr"), function () {
+                $('.receiveQuantity').attr('readonly', true);
+                var value = $(this).find('td:eq(2)').text();
+                var quantity = $(this).find('#receiveQuantity').val();
+                var remainQuantity = $(this).find('#remainingQuantity').val();
+                var excessScanQty = $(this).find('#extraScanQty').val();
+                if (value.toLowerCase() === barcode.toLowerCase()) {
+                    getItemValue(barcode);
+                    checker = true;
+                    $(this).css("background-color", "#ffff00");
+                    toastr.success("Add Same Item.");
+                    if (remainQuantity > 0) {
+                        $(this).find('#receiveQuantity').val(parseInt(quantity) + 1);
+                        $(this).find('#remainingQuantity').val(parseInt(remainQuantity) - 1);
+                        
+                        if ((remainQuantity - 1) == 0) {
+                            $(this).css("background-color", "#6b8e23");
+                            toastr.error("All Item Received.");
+                            $("#barcode").val("");
+                        }
+                    } else  {
+                        //$(this).css("background-color", "#6b8e23");
+                        //toastr.error("All Item Received.");
+                        //$("#barcode").val("");
+                        $(this).css("background-color", "#cd5c5c");
+                        toastr.error("This Item Already Received.");
+                        $(this).find('.extraScanQty').val(parseInt(excessScanQty) + 1);
+                        $("#barcode").val("");
+                    }
+
+                    $("#barcode").val("");
+                }
+                totalScanItemCount();
+            });
+            if (!checker) {
+                toastr.error("Invalid Barcode!.");
+                manageGridForScan(barcode);
+                $("#barcode").val("");
+            }
+
+        });
+
+        $("#receiveDataSave").click(function() {
+            receiveTableDataSave();
+        });
+
+        $("#ExcexxQtyDetails").click(function () {
+            var data = JSON.parse(localStorage.getItem('invalidReceiveProduct'));
+            if (data !== null) {
+                var receiveInvalidData = data.length;
+                if (receiveInvalidData != null) {
+                    $("#receiveItemInvalidTableBody").html("");
+                    if (receiveInvalidData !== 0) {
+                        for (var i = 0; i < receiveInvalidData; i++) {
+                            $("#receiveItemInvalidTableBody").append('<tr>' +
+                                '<td>' +
+                                data[i].Barcode +
+                                '</td>' +
+                                '<td>' +
+                                data[i].Scancount +
+                                '</td>' +
+                                '</tr>');
+                        }
+                    }
+                    $("#excessModal").show();
+                } 
+            } else {
+                toastr.error("No Data Found.");
+            }
+        });
+
+        $("#hidemodal").click(function () {
+            $("#excessModal").hide();
+        });
+        
+        //$(".datepicker").;
+
+        $("#checkbox").change(function () {
+            if (this.checked) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/ProductReceive/GetAllReturnChallanNumFromWarehouse/',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $('#cover-spin').show();
+                    },
+                    success: function (data) {
+                        if (data != null) {
+                            $('#ReturnChallanReceive').attr('disabled', false);
+                            $("#totalItemCount").val("");
+                            $("#scanTotalItemCount").val("");
+                            $("#storeReceiveGridTableBody").html("");
+                            $("#StoreReceiveChallanNo").empty().append("<option value>Select Challan</option>").append($.trim());
+
+                            $('#StoreReceiveChallanNo').attr('disabled', true);
+                            var getshopTransferItem = JSON.parse(localStorage.getItem('transferObjectArray'));
+                            if (getshopTransferItem != null) {
+                                localStorage.removeItem("transferObjectArray");
+                            }
+                            localStorage.setItem('transferObjectArray', JSON.stringify(data));
+
+                            var chalanNo = [];
+                            for (var i = 0; i < data.length; i++) {
+                                var checker = true;
+                                for (var j = 0; j < chalanNo.length; j++) {
+                                    if (chalanNo[j] === data[i].StockTranferChallanNo) {
+                                        checker = false;
+                                    }
+                                }
+                                if (checker) {
+                                    chalanNo.push(data[i].StockTranferChallanNo);
+                                    $("#ReturnChallanReceive").append('<option  value="' + data[i].StockTranferChallanNo + '">' + data[i].StockTranferChallanNo + '</option>');
+                                    $('#cover-spin').hide();
+                                }
+                            }
+                            $('#cover-spin').hide();
+                        } else {
+                            $('#ReturnChallanReceive').attr('disabled', true);
+                            toastr.error("No Data Found.");
+                            $('#cover-spin').hide();
+                        }
+
+                    }
+                });
+            } else {
+                $('#ReturnChallanReceive').attr('disabled', true);
+                $('#StoreReceiveChallanNo').attr('disabled', false);
+                $("#ReturnChallanReceive").empty().append("<option value='0'>--Select Return ChallanNo--</option>").append($.trim());
+                $("#totalItemCount").val("");
+                $("#scanTotalItemCount").val("");
+                $("#storeReceiveGridTableBody").html("");
+                localStorage.removeItem("transferObjectArray");
+                $('#cover-spin').hide();
+            }
+        });
+    });
+</script>
